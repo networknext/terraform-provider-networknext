@@ -11,8 +11,8 @@ provider "networknext" {
   api_key  = "test123"
 }
 
-data "networknext_customer" "example" {}
+data "networknext_customers" "example" {}
 
-output "example_customer" {
-  value = data.networknext_customer.example
+output "customers" {
+  value = data.networknext_customers.example
 }
