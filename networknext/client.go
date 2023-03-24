@@ -1,12 +1,15 @@
 package networknext
 
 import (
+    "context"
     "net/http"
     "encoding/json"
     "bytes"
     "time"
     "fmt"
     "io/ioutil"
+
+    "github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 type Client struct {
@@ -14,24 +17,29 @@ type Client struct {
     APIKey   string
 }
 
-func NewClient(hostname string, api_key string) (*Client, error) {
+func NewClient(ctx context.Context, hostname string, api_key string) (*Client, error) {
     client := Client{hostname, api_key}
-    response, err := client.GetText("ping")
+    response, err := client.GetText(ctx, "ping")
     if err != nil {
         return nil, fmt.Errorf("could not ping networknext API: %v", err)
     }
-    if response != "Not Authorized" {
+    if response == "Not Authorized" {
         return nil, fmt.Errorf("could not authenticate with networknext API")
     }
-    if response != "ping" {
+    if response != "pong" {
         return nil, fmt.Errorf("invalid response from networknext API ping: '%s'", response)
     }
     return &client, nil
 }
 
-func (client *Client) GetText(path string) (string, error) {
+func (client *Client) GetText(ctx context.Context, path string) (string, error) {
 
     url := client.HostName + "/" + path
+
+    ctx = tflog.SetField(ctx, "networknext_url", url)
+    ctx = tflog.SetField(ctx, "networknext_api_key", client.APIKey)
+
+    tflog.Debug(ctx, "Network Next client GetText")
 
     var err error
     var response *http.Response

@@ -128,7 +128,7 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
     
     tflog.Debug(ctx, "Creating networknext client")
 
-    client, err := NewClient(hostname, api_key)
+    client, err := NewClient(ctx, hostname, api_key)
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create networknext API client",
