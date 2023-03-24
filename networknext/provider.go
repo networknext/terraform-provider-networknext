@@ -152,7 +152,9 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
 }
 
 func (p *networknextProvider) DataSources(_ context.Context) []func() datasource.DataSource {
-    return nil
+    return []func() datasource.DataSource {
+        NewCustomerDataSource,
+    }
 }
 
 func (p *networknextProvider) Resources(_ context.Context) []func() resource.Resource {

@@ -11,10 +11,8 @@ provider "networknext" {
   api_key  = "test123"
 }
 
-/*
-data "hashicups_coffees" "edu" {}
+data "networknext_customer" "example" {}
 
-output "edu_coffees" {
-  value = data.hashicups_coffees.edu
+output "example_customer" {
+  value = data.networknext_customer.example
 }
-*/
