@@ -21,7 +21,7 @@ type networknextProvider struct{}
 
 type networknextProviderModel struct {
     HostName types.String `tfsdk:"hostname"`
-    ApiKey   types.String `tfsdk:"api_key"`
+    APIKey   types.String `tfsdk:"api_key"`
 }
 
 func New() provider.Provider {
@@ -70,7 +70,7 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
         )
     }
 
-    if config.ApiKey.IsUnknown() {
+    if config.APIKey.IsUnknown() {
         resp.Diagnostics.AddAttributeError(
             path.Root("api_key"),
             "Unknown networknext API key",
@@ -92,8 +92,8 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
         hostname = config.HostName.ValueString()
     }
 
-    if !config.ApiKey.IsNull() {
-        api_key = config.ApiKey.ValueString()
+    if !config.APIKey.IsNull() {
+        api_key = config.APIKey.ValueString()
     }
 
     // if any of the expected configurations are missing, return errors
@@ -128,25 +128,20 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
     
     tflog.Debug(ctx, "Creating networknext client")
 
-    // todo
-    /*
-    client, err := hashicups.NewClient(&host, &username, &password)
+    client, err := NewClient(hostname, api_key)
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to Create HashiCups API Client",
-            "An unexpected error occurred when creating the HashiCups API client. "+
-                "If the error is not clear, please contact the provider developers.\n\n"+
-                "HashiCups Client Error: "+err.Error(),
+            "Unable to create networknext API client",
+            "An error occurred when creating the networknext API client. "+
+                "Please check that the hostname is correct and your api key is valid.\n\n"+
+                "Network Next Client Error: "+err.Error(),
         )
         return
     }
-    */
 
-    /*
-    // Make the HashiCups client available during DataSource and Resource type Configure methods.
     resp.DataSourceData = client
+
     resp.ResourceData = client
-    */
 
     tflog.Info(ctx, "Configured networknext client", map[string]any{"success": true})
 }

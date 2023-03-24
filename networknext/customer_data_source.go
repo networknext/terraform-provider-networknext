@@ -17,7 +17,9 @@ func NewCustomersDataSource() datasource.DataSource {
     return &customersDataSource{}
 }
 
-type customersDataSource struct{}
+type customersDataSource struct {
+    client *Client
+}
 
 type customersDataSourceModel struct {
     Customers []customersModel `tfsdk:"customers"`
@@ -70,10 +72,7 @@ func (d *customersDataSource) Configure(_ context.Context, req datasource.Config
         return
     }
 
-    // todo
-    /*
-    d.client = req.ProviderData.(*hashicups.Client)
-    */
+    d.client = req.ProviderData.(*Client)
 }
 
 func (d *customersDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
