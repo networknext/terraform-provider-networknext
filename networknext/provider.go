@@ -151,6 +151,7 @@ func (p *networknextProvider) DataSources(_ context.Context) []func() datasource
         NewCustomersDataSource,
         NewBuyersDataSource,
         NewSellersDataSource,
+        NewDatacentersDataSource,
     }
 }
 

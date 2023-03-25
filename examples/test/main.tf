@@ -17,6 +17,8 @@ data "networknext_buyers" "example" {}
 
 data "networknext_sellers" "example" {}
 
+data "networknext_datacenters" "example" {}
+
 output "customers" {
   value = data.networknext_customers.example
 }
@@ -27,4 +29,8 @@ output "buyers" {
 
 output "sellers" {
   value = data.networknext_sellers.example
+}
+
+output "datacenters" {
+  value = data.networknext_datacenters.example
 }
