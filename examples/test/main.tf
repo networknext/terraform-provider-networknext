@@ -18,11 +18,13 @@ resource "networknext_customer" "test" {
   debug = false
 }
 
+/*
 data "networknext_customers" "example" {}
 
 output "customers" {
   value = data.networknext_customers.example
 }
+*/
 
 
 /*
