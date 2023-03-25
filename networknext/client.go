@@ -76,7 +76,7 @@ func (client *Client) GetText(ctx context.Context, path string) (string, error) 
     return string(body), nil
 }
 
-func (client *Client) GetJSON(path string, object interface{}) {
+func (client *Client) GetJSON(path string, object interface{}) error {
 
     url := client.HostName + "/" + path
 
@@ -94,22 +94,24 @@ func (client *Client) GetJSON(path string, object interface{}) {
     }
 
     if err != nil {
-        panic(fmt.Sprintf("failed to read %s: %v", url, err))
+        return fmt.Errorf("failed to read %s: %v", url, err)
     }
 
     if response == nil {
-        panic(fmt.Sprintf("no response from %s", url))
+        return fmt.Errorf("no response from %s", url)
     }
 
     body, error := ioutil.ReadAll(response.Body)
     if error != nil {
-        panic(fmt.Sprintf("could not read response body for %s: %v", url, err))
+        return fmt.Errorf("could not read response body for %s: %v", url, err)
     }
 
     response.Body.Close()
 
     err = json.Unmarshal([]byte(body), &object)
     if err != nil {
-        panic(fmt.Sprintf("could not parse json response for %s: %v", url, err))
+        return fmt.Errorf("could not parse json response for %s: %v", url, err)
     }
+
+    return nil
 }
