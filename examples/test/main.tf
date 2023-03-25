@@ -21,6 +21,8 @@ data "networknext_datacenters" "example" {}
 
 data "networknext_relays" "example" {}
 
+data "networknext_route_shaders" "example" {}
+
 output "customers" {
   value = data.networknext_customers.example
 }
@@ -39,4 +41,8 @@ output "datacenters" {
 
 output "relays" {
   value = data.networknext_relays.example
+}
+
+output "route_shaders" {
+  value = data.networknext_route_shaders.example
 }
