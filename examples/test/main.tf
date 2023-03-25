@@ -15,10 +15,16 @@ data "networknext_customers" "example" {}
 
 data "networknext_buyers" "example" {}
 
+data "networknext_sellers" "example" {}
+
 output "customers" {
   value = data.networknext_customers.example
 }
 
 output "buyers" {
   value = data.networknext_buyers.example
+}
+
+output "sellers" {
+  value = data.networknext_sellers.example
 }
