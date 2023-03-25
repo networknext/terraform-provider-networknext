@@ -8,6 +8,7 @@ import (
     "time"
     "fmt"
     "io/ioutil"
+    "strconv"
 
     "github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -114,4 +115,55 @@ func (client *Client) GetJSON(path string, object interface{}) error {
     }
 
     return nil
+}
+
+func (client *Client) PostJSON(path string, object interface{}) (uint64, error) {
+
+    url := client.HostName + "/" + path
+
+    buffer := new(bytes.Buffer)
+
+    json.NewEncoder(buffer).Encode(object)
+
+    request, _ := http.NewRequest("POST", url, buffer)
+
+    request.Header.Set("Authorization", "Bearer " + client.APIKey)
+
+    httpClient := &http.Client{}
+
+    var err error
+    var response *http.Response
+    for i := 0; i < 30; i++ {
+        response, err = httpClient.Do(request)
+        if err == nil {
+            break
+        }
+        time.Sleep(time.Second)
+    }
+
+    if err != nil {
+        return 0, fmt.Errorf("create failed on %s: %v\n", url, err)
+    }
+
+    if response.StatusCode != 200 {
+        return 0, fmt.Errorf("bad http response for %s: %d", url, response.StatusCode)
+    }
+
+    body, err := ioutil.ReadAll(response.Body)
+    if err != nil {
+        panic(fmt.Sprintf("could not read response for %s: %v", url, err))
+    }
+
+    id, err := strconv.ParseUint(string(body), 10, 64)
+    if err != nil {
+        panic(fmt.Sprintf("could not id response for %s: %v\n", url, err))
+    }
+
+    if id == 0 {
+        panic(fmt.Sprintf("id returned from %s should be non-zero", url))
+    }
+
+    response.Body.Close()
+
+    return id, nil
 }
