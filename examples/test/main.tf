@@ -13,21 +13,11 @@ provider "networknext" {
 
 resource "networknext_customer" "test" {
   name = "Test Customer"
-  code = "anus"
+  code = "test"
   live = true
   debug = false
 }
 
-/*
-data "networknext_customers" "example" {}
-
-output "customers" {
-  value = data.networknext_customers.example
-}
-*/
-
-
-/*
 data "networknext_customers" "example" {}
 
 data "networknext_buyers" "example" {}
@@ -63,4 +53,3 @@ output "relays" {
 output "route_shaders" {
   value = data.networknext_route_shaders.example
 }
-*/
