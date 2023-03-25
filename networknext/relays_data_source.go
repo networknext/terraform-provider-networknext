@@ -155,7 +155,7 @@ func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 
     relaysResponse := RelaysResponse{}
     
-    err := d.client.GetJSON("admin/relays", &relaysResponse)
+    err := d.client.GetJSON(ctx, "admin/relays", &relaysResponse)
     
     if err != nil {
         resp.Diagnostics.AddError(

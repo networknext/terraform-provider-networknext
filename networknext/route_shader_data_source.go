@@ -185,7 +185,7 @@ func (d *routeShadersDataSource) Read(ctx context.Context, req datasource.ReadRe
 
     routeShadersResponse := RouteShadersResponse{}
     
-    err := d.client.GetJSON("admin/route_shaders", &routeShadersResponse)
+    err := d.client.GetJSON(ctx, "admin/route_shaders", &routeShadersResponse)
     
     if err != nil {
         resp.Diagnostics.AddError(

@@ -90,7 +90,7 @@ func (d *customersDataSource) Read(ctx context.Context, req datasource.ReadReque
 
     customersResponse := CustomersResponse{}
     
-    err := d.client.GetJSON("admin/customers", &customersResponse)
+    err := d.client.GetJSON(ctx, "admin/customers", &customersResponse)
     
     if err != nil {
         resp.Diagnostics.AddError(

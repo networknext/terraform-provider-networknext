@@ -80,7 +80,7 @@ func (d *sellersDataSource) Read(ctx context.Context, req datasource.ReadRequest
 
     sellersResponse := SellersResponse{}
     
-    err := d.client.GetJSON("admin/sellers", &sellersResponse)
+    err := d.client.GetJSON(ctx, "admin/sellers", &sellersResponse)
     
     if err != nil {
         resp.Diagnostics.AddError(
