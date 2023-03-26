@@ -4,8 +4,6 @@ import (
     "context"
 
     "github.com/hashicorp/terraform-plugin-framework/datasource"
-    "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -26,32 +24,7 @@ func (d *buyersDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 }
 
 func (d *buyersDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-    resp.Schema = schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "buyers": schema.ListNestedAttribute{
-                Computed: true,
-                NestedObject: schema.NestedAttributeObject{
-                    Attributes: map[string]schema.Attribute{
-                        "id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "name": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "public_key_base64": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "customer_id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "route_shader_id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                    },
-                },
-            },
-        },
-    }
+    resp.Schema = BuyersSchema()
 }
 
 func (d *buyersDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
@@ -90,15 +63,8 @@ func (d *buyersDataSource) Read(ctx context.Context, req datasource.ReadRequest,
     var state BuyersModel
 
     for i := range buyersResponse.Buyers {
-
-        buyerState := BuyerModel{
-            Id:              types.Int64Value(int64(buyersResponse.Buyers[i].BuyerId)),
-            Name:            types.StringValue(buyersResponse.Buyers[i].BuyerName),
-            PublicKeyBase64: types.StringValue(buyersResponse.Buyers[i].PublicKeyBase64),
-            CustomerId:      types.Int64Value(int64(buyersResponse.Buyers[i].CustomerId)),
-            RouteShaderId:   types.Int64Value(int64(buyersResponse.Buyers[i].RouteShaderId)),
-        }
-
+        var buyerState BuyerModel
+        BuyerDataToModel(&buyersResponse.Buyers[i], &buyerState)
         state.Buyers = append(state.Buyers, buyerState)
     }
 
