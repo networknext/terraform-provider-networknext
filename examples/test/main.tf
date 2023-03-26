@@ -34,6 +34,22 @@ resource "networknext_datacenter" "test" {
 
 resource "networknext_relay" "test" {
   name = "test.relay"
+  datacenter_id = networknext_datacenter.test.id
+  public_ip = "127.0.0.1"
+  public_port = 40000
+  internal_ip = "0.0.0.0"
+  internal_port = 0
+  internal_group = ""
+  ssh_ip = "127.0.0.1"
+  ssh_port = 22
+  ssh_user = "ubuntu"
+  public_key_base64="9SKtwe4Ear59iQyBOggxutzdtVLLc1YQ2qnArgiiz14="
+  private_key_base64="lypnDfozGRHepukundjYAF5fKY1Tw2g7Dxh0rAgMCt8="
+  version = "1.0.19"
+  mrc = 0
+  port_speed = 1000
+  max_sessions = 100
+  notes = ""
 }
 
 data "networknext_customers" "example" {}
