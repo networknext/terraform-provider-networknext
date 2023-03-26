@@ -4,8 +4,6 @@ import (
     "context"
 
     "github.com/hashicorp/terraform-plugin-framework/datasource"
-    "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -26,32 +24,7 @@ func (d *customersDataSource) Metadata(_ context.Context, req datasource.Metadat
 }
 
 func (d *customersDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-    resp.Schema = schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "customers": schema.ListNestedAttribute{
-                Computed: true,
-                NestedObject: schema.NestedAttributeObject{
-                    Attributes: map[string]schema.Attribute{
-                        "id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "name": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "code": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "live": schema.BoolAttribute{
-                            Computed: true,
-                        },
-                        "debug": schema.BoolAttribute{
-                            Computed: true,
-                        },
-                    },
-                },
-            },
-        },
-    }
+    resp.Schema = CustomersSchema()
 }
 
 func (d *customersDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
@@ -90,15 +63,8 @@ func (d *customersDataSource) Read(ctx context.Context, req datasource.ReadReque
     var state CustomersModel
 
     for i := range customersResponse.Customers {
-
-        customerState := CustomerModel{
-            Id:          types.Int64Value(int64(customersResponse.Customers[i].CustomerId)),
-            Name:        types.StringValue(customersResponse.Customers[i].CustomerName),
-            Code:        types.StringValue(customersResponse.Customers[i].CustomerCode),
-            Live:        types.BoolValue(customersResponse.Customers[i].Live),
-            Debug:       types.BoolValue(customersResponse.Customers[i].Debug),
-        }
-
+        var customerState CustomerModel
+        CustomerDataToModel(&customersResponse.Customers[i], &customerState)
         state.Customers = append(state.Customers, customerState)
     }
 
