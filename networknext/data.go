@@ -473,6 +473,111 @@ type RelaysModel struct {
     Relays []RelayModel `tfsdk:"relays"`
 }
 
+func RelayModelToData(model *RelayModel, data *RelayData) {
+    data.RelayName = model.Name.ValueString()
+    data.DatacenterId = uint64(model.DatacenterId.ValueInt64())
+    data.PublicIP = model.PublicIP.ValueString()
+    data.PublicPort = int(model.PublicPort.ValueInt64())
+    data.InternalIP = model.InternalIP.ValueString()
+    data.InternalPort = int(model.InternalPort.ValueInt64())
+    data.InternalGroup = model.InternalGroup.ValueString()
+    data.SSH_IP = model.SSH_IP.ValueString()
+    data.SSH_Port = int(model.SSH_Port.ValueInt64())
+    data.SSH_User = model.SSH_User.ValueString()
+    data.PublicKeyBase64 = model.PublicKeyBase64.ValueString()
+    data.PrivateKeyBase64 = model.PrivateKeyBase64.ValueString()
+    data.Version = model.Version.ValueString()
+    data.MRC = int(model.MRC.ValueInt64())
+    data.PortSpeed = int(model.PortSpeed.ValueInt64())
+    data.MaxSessions = int(model.MaxSessions.ValueInt64())
+    data.Notes = model.Notes.ValueString()
+}
+
+func RelayDataToModel(data *RelayData, model *RelayModel) {
+    model.Id = types.Int64Value(int64(data.RelayId))
+    model.Name = types.StringValue(data.RelayName)
+    model.DatacenterId = types.Int64Value(int64(data.DatacenterId))
+    model.PublicIP = types.StringValue(data.PublicIP)
+    model.PublicPort = types.Int64Value(int64(data.PublicPort))
+    model.InternalIP = types.StringValue(data.InternalIP)
+    model.InternalPort = types.Int64Value(int64(data.InternalPort))
+    model.InternalGroup = types.StringValue(data.InternalGroup)
+    model.SSH_IP = types.StringValue(data.SSH_IP)
+    model.SSH_Port = types.Int64Value(int64(data.SSH_Port))
+    model.SSH_User = types.StringValue(data.SSH_User)
+    model.PublicKeyBase64 = types.StringValue(data.PublicKeyBase64)
+    model.PrivateKeyBase64 = types.StringValue(data.PrivateKeyBase64)
+    model.Version = types.StringValue(data.Version)
+    model.MRC = types.Int64Value(int64(data.MRC))
+    model.PortSpeed = types.Int64Value(int64(data.PortSpeed))
+    model.MaxSessions = types.Int64Value(int64(data.MaxSessions))
+    model.Notes = types.StringValue(data.Notes)
+}
+
+func RelaySchema() schema.Schema {
+    return schema.Schema{
+        Attributes: map[string]schema.Attribute{
+            "id": schema.Int64Attribute{
+                Computed: true,
+                PlanModifiers: []planmodifier.Int64{
+                    int64planmodifier.UseStateForUnknown(),
+                },
+            },
+            "name": schema.StringAttribute{
+                Required: true,
+            },
+            "datacenter_id": schema.Int64Attribute{
+                Required: true,
+            },
+            "public_ip": schema.StringAttribute{
+                Required: true,
+            },
+            "public_port": schema.Int64Attribute{
+                Required: true,
+            },
+            "internal_ip": schema.StringAttribute{
+                Required: true,
+            },
+            "internal_port": schema.Int64Attribute{
+                Required: true,
+            },
+            "internal_group": schema.StringAttribute{
+                Required: true,
+            },
+            "ssh_ip": schema.StringAttribute{
+                Required: true,
+            },
+            "ssh_port": schema.Int64Attribute{
+                Required: true,
+            },
+            "ssh_user": schema.StringAttribute{
+                Required: true,
+            },
+            "private_key_base64": schema.StringAttribute{
+                Required: true,
+            },
+            "public_key_base64": schema.StringAttribute{
+                Required: true,
+            },
+            "version": schema.StringAttribute{
+                Required: true,
+            },
+            "mrc": schema.Int64Attribute{
+                Required: true,
+            },
+            "port_speed": schema.Int64Attribute{
+                Required: true,
+            },
+            "max_sessions": schema.Int64Attribute{
+                Required: true,
+            },
+            "notes": schema.StringAttribute{
+                Required: true,
+            },
+        },
+    }
+}
+
 // -------------------------------------------------------------------
 
 type RouteShaderData struct {
