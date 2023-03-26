@@ -238,6 +238,62 @@ type SellersModel struct {
     Sellers []SellerModel `tfsdk:"sellers"`
 }
 
+func SellerDataToModel(data *SellerData, model *SellerModel) {
+    model.Id = types.Int64Value(int64(data.SellerId))
+    model.Name = types.StringValue(data.SellerName)
+    model.CustomerId = types.Int64Value(int64(data.CustomerId))
+}
+
+func SellerModelToData(model *SellerModel, data *SellerData) {
+    data.SellerId = uint64(model.Id.ValueInt64())
+    data.SellerName = model.Name.ValueString()
+    data.CustomerId = uint64(model.CustomerId.ValueInt64())    
+}
+
+func SellerSchema() schema.Schema {
+    return schema.Schema{
+        Attributes: map[string]schema.Attribute{
+            "id": schema.Int64Attribute{
+                Computed: true,
+                PlanModifiers: []planmodifier.Int64{
+                    int64planmodifier.UseStateForUnknown(),
+                },
+            },
+            "name": schema.StringAttribute{
+                Required: true,
+            },
+            "customer_id": schema.Int64Attribute{
+                Required: true,
+                // Optional: true,
+                // Default: int64default.StaticValue(0),
+            },
+        },
+    }
+}
+
+func SellersSchema() datasource_schema.Schema {
+    return datasource_schema.Schema{
+        Attributes: map[string]datasource_schema.Attribute{
+            "sellers": schema.ListNestedAttribute{
+                Computed: true,
+                NestedObject: schema.NestedAttributeObject{
+                    Attributes: map[string]schema.Attribute{
+                        "id": schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "name": schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "customer_id": schema.Int64Attribute{
+                            Computed: true,
+                        },
+                    },
+                },
+            },
+        },
+    }
+}
+
 // -------------------------------------------------------------------
 
 type DatacenterData struct {

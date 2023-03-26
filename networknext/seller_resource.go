@@ -6,10 +6,6 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-    // "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
     "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -39,24 +35,7 @@ func (r *sellerResource) Metadata(_ context.Context, req resource.MetadataReques
 }
 
 func (r *sellerResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
-    resp.Schema = schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "id": schema.Int64Attribute{
-                Computed: true,
-                PlanModifiers: []planmodifier.Int64{
-                    int64planmodifier.UseStateForUnknown(),
-                },
-            },
-            "name": schema.StringAttribute{
-                Required: true,
-            },
-            "customer_id": schema.Int64Attribute{
-                Required: true,
-                // Optional: true,
-                // Default: int64default.StaticValue(0),
-            },
-        },
-    }
+    resp.Schema = SellerSchema()
 }
 
 func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -131,10 +110,7 @@ func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, res
     }
 
     data := &response.Seller
-
-    state.Id = types.Int64Value(int64(data.SellerId))
-    state.Name = types.StringValue(data.SellerName)
-    state.CustomerId = types.Int64Value(int64(data.CustomerId))
+    SellerDataToModel(data, &state)
 
     diags = resp.State.Set(ctx, &state)
     resp.Diagnostics.Append(diags...)
@@ -153,9 +129,7 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
     }
 
     var data SellerData
-    data.SellerId = uint64(plan.Id.ValueInt64())
-    data.SellerName = plan.Name.ValueString()
-    data.CustomerId = uint64(plan.CustomerId.ValueInt64())
+    SellerModelToData(&plan, &data)
 
     err := r.client.Update(ctx, "admin/update_seller", &data)
     

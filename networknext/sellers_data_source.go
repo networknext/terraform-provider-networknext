@@ -4,8 +4,6 @@ import (
     "context"
 
     "github.com/hashicorp/terraform-plugin-framework/datasource"
-    "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -26,26 +24,7 @@ func (d *sellersDataSource) Metadata(_ context.Context, req datasource.MetadataR
 }
 
 func (d *sellersDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-    resp.Schema = schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "sellers": schema.ListNestedAttribute{
-                Computed: true,
-                NestedObject: schema.NestedAttributeObject{
-                    Attributes: map[string]schema.Attribute{
-                        "id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "name": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "customer_id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                    },
-                },
-            },
-        },
-    }
+    resp.Schema = SellersSchema()
 }
 
 func (d *sellersDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
@@ -84,14 +63,8 @@ func (d *sellersDataSource) Read(ctx context.Context, req datasource.ReadRequest
     var state SellersModel
 
     for i := range sellersResponse.Sellers {
-
-        sellerState := SellerModel{
-            Id:              types.Int64Value(int64(sellersResponse.Sellers[i].SellerId)),
-            Name:            types.StringValue(sellersResponse.Sellers[i].SellerName),
-            CustomerId:      types.Int64Value(int64(sellersResponse.Sellers[i].CustomerId)),
-        }
-
-        state.Sellers = append(state.Sellers, sellerState)
+        var sellerState SellerModel
+        SellerDataToModel(&(sellersResponse.Sellers[i]), &sellerState)
     }
 
     diags := resp.State.Set(ctx, &state)
