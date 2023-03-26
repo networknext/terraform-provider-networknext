@@ -18,6 +18,11 @@ resource "networknext_customer" "test" {
   debug = false
 }
 
+resource "networknext_seller" "test" {
+  name = "Test Seller"
+  customer_id = 0
+}
+
 data "networknext_customers" "example" {}
 
 data "networknext_buyers" "example" {}
