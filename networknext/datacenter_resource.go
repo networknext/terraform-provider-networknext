@@ -6,9 +6,6 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
     "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -38,34 +35,7 @@ func (r *datacenterResource) Metadata(_ context.Context, req resource.MetadataRe
 }
 
 func (r *datacenterResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
-    resp.Schema = schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "id": schema.Int64Attribute{
-                Computed: true,
-                PlanModifiers: []planmodifier.Int64{
-                    int64planmodifier.UseStateForUnknown(),
-                },
-            },
-            "name": schema.StringAttribute{
-                Required: true,
-            },
-            "native_name": schema.StringAttribute{
-                Required: true,
-            },
-            "latitude": schema.Float64Attribute{
-                Required: true,
-            },
-            "longitude": schema.Float64Attribute{
-                Required: true,
-            },
-            "seller_id": schema.Int64Attribute{
-                Required: true,
-            },
-            "notes": schema.StringAttribute{
-                Required: true,
-            },
-        },
-    }
+    resp.Schema = DatacenterSchema()
 }
 
 func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -78,24 +48,21 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     }
 
     var data DatacenterData
-    data.DatacenterName = plan.Name.ValueString()
-    data.NativeName = plan.NativeName.ValueString()
-    data.Latitude = float32(plan.Latitude.ValueFloat64())
-    data.Longitude = float32(plan.Longitude.ValueFloat64())
-    data.SellerId = uint64(plan.SellerId.ValueInt64())
-    data.Notes = plan.Notes.ValueString()
+    DatacenterModelToData(&plan, &data)
 
     id, err := r.client.Create("admin/create_datacenter", &data)
     
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create networknext datacenter",
-            "An error occurred when calling the networknext API to create a datacenter. "+
+            "An unexpected error occurred when calling the networknext API to create a datacenter. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
         return
     }
+
+    // todo: we really need an error string here 
 
     plan.Id = types.Int64Value(int64(id))
 
@@ -140,13 +107,7 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
 
     data := &response.Datacenter
 
-    state.Id = types.Int64Value(int64(data.DatacenterId))
-    state.Name = types.StringValue(data.DatacenterName)
-    state.NativeName = types.StringValue(data.NativeName)
-    state.Latitude = types.Float64Value(float64(data.Latitude))
-    state.Longitude = types.Float64Value(float64(data.Longitude))
-    state.SellerId = types.Int64Value(int64(data.SellerId))
-    state.Notes = types.StringValue(data.Notes)
+    DatacenterDataToModel(data, &state)
 
     diags = resp.State.Set(ctx, &state)
     resp.Diagnostics.Append(diags...)
@@ -165,25 +126,21 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     }
 
     var data DatacenterData
-    data.DatacenterId = uint64(plan.Id.ValueInt64())
-    data.DatacenterName = plan.Name.ValueString()
-    data.NativeName = plan.NativeName.ValueString()
-    data.Latitude = float32(plan.Latitude.ValueFloat64())
-    data.Longitude = float32(plan.Longitude.ValueFloat64())
-    data.SellerId = uint64(plan.SellerId.ValueInt64())
-    data.Notes = plan.Notes.ValueString()
+    DatacenterModelToData(&plan, &data)
 
     err := r.client.Update(ctx, "admin/update_datacenter", &data)
     
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update networknext datacenter",
-            "An error occurred when calling the networknext API to update a datacenter. "+
+            "An unexpected error occurred when calling the networknext API to update a datacenter. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
         return
     }
+
+    // todo: we really need a proper error string here from the API
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -207,8 +164,10 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext datacenter",
-            "Could not delete datacenter, unexpected error: "+err.Error(),
+            "Unable to delete networknext datacenter",
+            "An unexpected error occurred when calling the networknext API to delete a datacenter. "+
+                "Please check that your network next instance is running and properly configured.\n\n"+
+                "Network Next Client Error: "+err.Error(),
         )
         return
     }

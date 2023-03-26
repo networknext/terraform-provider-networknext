@@ -264,6 +264,7 @@ func SellerSchema() schema.Schema {
             },
             "customer_id": schema.Int64Attribute{
                 Required: true,
+                // todo: this should have a default of 0, but I can't get it to work... =p
                 // Optional: true,
                 // Default: int64default.StaticValue(0),
             },
@@ -328,6 +329,90 @@ type DatacenterModel struct {
 
 type DatacentersModel struct {
     Datacenters []DatacenterModel `tfsdk:"datacenters"`
+}
+
+func DatacenterDataToModel(data *DatacenterData, model *DatacenterModel) {
+    model.Id = types.Int64Value(int64(data.DatacenterId))
+    model.Name = types.StringValue(data.DatacenterName)
+    model.NativeName = types.StringValue(data.NativeName)
+    model.Latitude = types.Float64Value(float64(data.Latitude))
+    model.Longitude = types.Float64Value(float64(data.Longitude))
+    model.SellerId = types.Int64Value(int64(data.SellerId))
+}
+
+func DatacenterModelToData(model *DatacenterModel, data *DatacenterData) {
+    data.DatacenterName = model.Name.ValueString()
+    data.NativeName = model.NativeName.ValueString()
+    data.Latitude = float32(model.Latitude.ValueFloat64())
+    data.Longitude = float32(model.Longitude.ValueFloat64())
+    data.SellerId = uint64(model.SellerId.ValueInt64())
+    data.Notes = model.Notes.ValueString()
+}
+
+func DatacenterSchema() schema.Schema {
+    return schema.Schema{
+        Attributes: map[string]schema.Attribute{
+            "id": schema.Int64Attribute{
+                Computed: true,
+                PlanModifiers: []planmodifier.Int64{
+                    int64planmodifier.UseStateForUnknown(),
+                },
+            },
+            "name": schema.StringAttribute{
+                Required: true,
+            },
+            "native_name": schema.StringAttribute{
+                Required: true,
+            },
+            "latitude": schema.Float64Attribute{
+                Required: true,
+            },
+            "longitude": schema.Float64Attribute{
+                Required: true,
+            },
+            "seller_id": schema.Int64Attribute{
+                Required: true,
+            },
+            "notes": schema.StringAttribute{
+                Required: true,
+            },
+        },
+    }
+}
+
+func DatacentersSchema() datasource_schema.Schema {
+    return datasource_schema.Schema{
+        Attributes: map[string]datasource_schema.Attribute{
+            "datacenters": datasource_schema.ListNestedAttribute{
+                Computed: true,
+                NestedObject: datasource_schema.NestedAttributeObject{
+                    Attributes: map[string]datasource_schema.Attribute{
+                        "id": schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "name": schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "native_name": schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "longitude": schema.Float64Attribute{
+                            Computed: true,
+                        },
+                        "latitude": schema.Float64Attribute{
+                            Computed: true,
+                        },
+                        "seller_id": schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "notes": schema.StringAttribute{
+                            Computed: true,
+                        },
+                    },
+                },
+            },
+        },
+    }
 }
 
 // -------------------------------------------------------------------
