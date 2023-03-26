@@ -21,10 +21,6 @@ type sellersDataSource struct {
     client *Client
 }
 
-type sellersDataSourceModel struct {
-    Sellers []SellerModel `tfsdk:"sellers"`
-}
-
 func (d *sellersDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
     resp.TypeName = req.ProviderTypeName + "_sellers"
 }
@@ -59,26 +55,9 @@ func (d *sellersDataSource) Configure(_ context.Context, req datasource.Configur
     d.client = req.ProviderData.(*Client)
 }
 
-type SellerModel struct {
-    Id              types.Int64  `tfsdk:"id"`
-    Name            types.String `tfsdk:"name"`
-    CustomerId      types.Int64  `tfsdk:"customer_id"`
-}
-
-type SellerData struct {
-    SellerId         uint64 `json:"seller_id"`
-    SellerName       string `json:"seller_name"`
-    CustomerId      uint64 `json:"customer_id"`
-}
-
-type SellersResponse struct {
-    Sellers []SellerData `json:"sellers"`
-    Error  string        `json:"error"`
-}
-
 func (d *sellersDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 
-    sellersResponse := SellersResponse{}
+    sellersResponse := ReadSellersResponse{}
     
     err := d.client.GetJSON(ctx, "admin/sellers", &sellersResponse)
     
@@ -102,7 +81,7 @@ func (d *sellersDataSource) Read(ctx context.Context, req datasource.ReadRequest
         return
     }
 
-    var state sellersDataSourceModel
+    var state SellersModel
 
     for i := range sellersResponse.Sellers {
 

@@ -21,10 +21,6 @@ type routeShadersDataSource struct {
     client *Client
 }
 
-type routeShadersDataSourceModel struct {
-    RouteShaders []RouteShaderModel `tfsdk:"route_shaders"`
-}
-
 func (d *routeShadersDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
     resp.TypeName = req.ProviderTypeName + "_route_shaders"
 }
@@ -122,68 +118,9 @@ func (d *routeShadersDataSource) Configure(_ context.Context, req datasource.Con
     d.client = req.ProviderData.(*Client)
 }
 
-type RouteShaderModel struct {
-    Id                        types.Int64   `tfsdk:"id"`
-    Name                      types.String  `tfsdk:"name"`
-    ABTest                    types.Bool    `tfsdk:"ab_test"`
-    AcceptableLatency         types.Int64   `tfsdk:"acceptable_latency"`
-    AcceptablePacketLoss      types.Float64 `tfsdk:"acceptable_packet_loss"`
-    PacketLossSustained       types.Float64 `tfsdk:"packet_loss_sustained"`
-    AnalysisOnly              types.Bool    `tfsdk:"analysis_only"`
-    BandwidthEnvelopeUpKbps   types.Int64   `tfsdk:"bandwidth_envelope_up_kbps"`
-    BandwidthEnvelopeDownKbps types.Int64   `tfsdk:"bandwidth_envelope_down_kbps"`
-    DisableNetworkNext        types.Bool    `tfsdk:"disable_network_next"`
-    LatencyThreshold          types.Int64   `tfsdk:"latency_threshold"`
-    Multipath                 types.Bool    `tfsdk:"multipath"`
-    ReduceLatency             types.Bool    `tfsdk:"reduce_latency"`
-    ReducePacketLoss          types.Bool    `tfsdk:"reduce_packet_loss"`
-    SelectionPercent          types.Float64 `tfsdk:"selection_percent"`
-    MaxLatencyTradeOff        types.Int64   `tfsdk:"max_latency_trade_off"`
-    MaxNextRTT                types.Int64   `tfsdk:"max_next_rtt"`
-    RouteSwitchThreshold      types.Int64   `tfsdk:"route_switch_threshold"`
-    RouteSelectThreshold      types.Int64   `tfsdk:"route_select_threshold"`
-    RTTVeto_Default           types.Int64   `tfsdk:"rtt_veto_default"`
-    RTTVeto_Multipath         types.Int64   `tfsdk:"rtt_veto_multipath"`
-    RTTVeto_PacketLoss        types.Int64   `tfsdk:"rtt_veto_packetloss"`
-    ForceNext                 types.Bool    `tfsdk:"force_next"`
-    RouteDiversity            types.Int64   `tfsdk:"route_diversity"`
-}
-
-type RouteShaderData struct {
-    RouteShaderId             uint64  `json:"route_shader_id"`
-    RouteShaderName           string  `json:"route_shader_name"`
-    ABTest                    bool    `json:"ab_test"`
-    AcceptableLatency         int     `json:"acceptable_latency"`
-    AcceptablePacketLoss      float32 `json:"acceptable_packet_loss"`
-    PacketLossSustained       float32 `json:"packet_loss_sustained"`
-    AnalysisOnly              bool    `json:"analysis_only"`
-    BandwidthEnvelopeUpKbps   int     `json:"bandwidth_envelope_up_kbps"`
-    BandwidthEnvelopeDownKbps int     `json:"bandwidth_envelope_down_kbps"`
-    DisableNetworkNext        bool    `json:"disable_network_next"`
-    LatencyThreshold          int     `json:"latency_threshold"`
-    Multipath                 bool    `json:"multipath"`
-    ReduceLatency             bool    `json:"reduce_latency"`
-    ReducePacketLoss          bool    `json:"reduce_packet_loss"`
-    SelectionPercent          float32 `json:"selection_percent"`
-    MaxLatencyTradeOff        int     `json:"max_latency_trade_off"`
-    MaxNextRTT                int     `json:"max_next_rtt"`
-    RouteSwitchThreshold      int     `json:"route_switch_threshold"`
-    RouteSelectThreshold      int     `json:"route_select_threshold"`
-    RTTVeto_Default           int     `json:"rtt_veto_default"`
-    RTTVeto_Multipath         int     `json:"rtt_veto_multipath"`
-    RTTVeto_PacketLoss        int     `json:"rtt_veto_packetloss"`
-    ForceNext                 bool    `json:"force_next"`
-    RouteDiversity            int     `json:"route_diversity"`
-}
-
-type RouteShadersResponse struct {
-    RouteShaders []RouteShaderData `json:"route_shaders"`
-    Error        string            `json:"error"`
-}
-
 func (d *routeShadersDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 
-    routeShadersResponse := RouteShadersResponse{}
+    routeShadersResponse := ReadRouteShadersResponse{}
     
     err := d.client.GetJSON(ctx, "admin/route_shaders", &routeShadersResponse)
     
@@ -207,7 +144,7 @@ func (d *routeShadersDataSource) Read(ctx context.Context, req datasource.ReadRe
         return
     }
 
-    var state routeShadersDataSourceModel
+    var state RouteShadersModel
 
     for i := range routeShadersResponse.RouteShaders {
 

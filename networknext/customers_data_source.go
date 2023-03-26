@@ -21,10 +21,6 @@ type customersDataSource struct {
     client *Client
 }
 
-type customersDataSourceModel struct {
-    Customers []CustomerModel `tfsdk:"customers"`
-}
-
 func (d *customersDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
     resp.TypeName = req.ProviderTypeName + "_customers"
 }
@@ -65,30 +61,9 @@ func (d *customersDataSource) Configure(_ context.Context, req datasource.Config
     d.client = req.ProviderData.(*Client)
 }
 
-type CustomerModel struct {
-    Id    types.Int64  `tfsdk:"id"`
-    Name  types.String `tfsdk:"name"`
-    Code  types.String `tfsdk:"code"`
-    Live  types.Bool   `tfsdk:"live"`
-    Debug types.Bool   `tfsdk:"debug"`
-}
-
-type CustomerData struct {
-    CustomerId   uint64 `json:"customer_id"`
-    CustomerName string `json:"customer_name"`
-    CustomerCode string `json:"customer_code"`
-    Live         bool   `json:"live"`
-    Debug        bool   `json:"debug"`
-}
-
-type CustomersResponse struct {
-    Customers []CustomerData `json:"customers"`
-    Error     string         `json:"error"`
-}
-
 func (d *customersDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 
-    customersResponse := CustomersResponse{}
+    customersResponse := ReadCustomersResponse{}
     
     err := d.client.GetJSON(ctx, "admin/customers", &customersResponse)
     
@@ -112,7 +87,7 @@ func (d *customersDataSource) Read(ctx context.Context, req datasource.ReadReque
         return
     }
 
-    var state customersDataSourceModel
+    var state CustomersModel
 
     for i := range customersResponse.Customers {
 

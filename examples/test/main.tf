@@ -24,12 +24,16 @@ resource "networknext_seller" "test" {
 }
 
 resource "networknext_datacenter" "test" {
-  name = "test.datacenter"
+  name = "test"
   native_name = "test native name"
   seller_id = networknext_seller.test.id
   latitude = 100
   longitude = 50
   notes = ""
+}
+
+resource "networknext_relay" "test" {
+  name = "test.relay"
 }
 
 data "networknext_customers" "example" {}

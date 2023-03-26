@@ -26,14 +26,6 @@ type customerResource struct {
     client *Client
 }
 
-type customerResourceModel struct {
-    Id    types.Int64      `tfsdk:"id"`
-    Name  types.String     `tfsdk:"name"`
-    Code  types.String     `tfsdk:"code"`
-    Live  types.Bool       `tfsdk:"live"`
-    Debug types.Bool       `tfsdk:"debug"`
-}
-
 func (r *customerResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
     if req.ProviderData == nil {
         return
@@ -72,7 +64,7 @@ func (r *customerResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 
 func (r *customerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 
-    var plan customerResourceModel
+    var plan CustomerModel
     diags := req.Plan.Get(ctx, &plan)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -113,7 +105,7 @@ type ReadCustomerResponse struct {
 
 func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 
-    var state customerResourceModel
+    var state CustomerModel
     diags := req.State.Get(ctx, &state)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -160,7 +152,7 @@ func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 func (r *customerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 
-    var plan customerResourceModel
+    var plan CustomerModel
     diags := req.Plan.Get(ctx, &plan)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -195,7 +187,7 @@ func (r *customerResource) Update(ctx context.Context, req resource.UpdateReques
 
 func (r *customerResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 
-    var state customerResourceModel
+    var state CustomerModel
     diags := req.State.Get(ctx, &state)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {

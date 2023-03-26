@@ -162,5 +162,6 @@ func (p *networknextProvider) Resources(_ context.Context) []func() resource.Res
         NewCustomerResource,
         NewSellerResource,
         NewDatacenterResource,
+        NewRelayResource,
     }
 }

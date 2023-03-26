@@ -27,12 +27,6 @@ type sellerResource struct {
     client *Client
 }
 
-type sellerResourceModel struct {
-    Id          types.Int64     `tfsdk:"id"`
-    Name        types.String    `tfsdk:"name"`
-    CustomerId  types.Int64     `tfsdk:"customer_id"`
-}
-
 func (r *sellerResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
     if req.ProviderData == nil {
         return
@@ -67,7 +61,7 @@ func (r *sellerResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 
 func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 
-    var plan sellerResourceModel
+    var plan SellerModel
     diags := req.Plan.Get(ctx, &plan)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -106,7 +100,7 @@ type ReadSellerResponse struct {
 
 func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 
-    var state sellerResourceModel
+    var state SellerModel
     diags := req.State.Get(ctx, &state)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -151,7 +145,7 @@ func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 
-    var plan sellerResourceModel
+    var plan SellerModel
     diags := req.Plan.Get(ctx, &plan)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -184,7 +178,7 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
 
 func (r *sellerResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 
-    var state sellerResourceModel
+    var state SellerModel
     diags := req.State.Get(ctx, &state)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {

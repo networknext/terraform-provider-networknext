@@ -21,10 +21,6 @@ type relaysDataSource struct {
     client *Client
 }
 
-type relaysDataSourceModel struct {
-    Relays []RelayModel `tfsdk:"relays"`
-}
-
 func (d *relaysDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
     resp.TypeName = req.ProviderTypeName + "_relays"
 }
@@ -104,56 +100,9 @@ func (d *relaysDataSource) Configure(_ context.Context, req datasource.Configure
     d.client = req.ProviderData.(*Client)
 }
 
-type RelayModel struct {
-    Id               types.Int64   `tfsdk:"id"`
-    Name             types.String  `tfsdk:"name"`
-    DatacenterId     types.Int64   `tfsdk:"datacenter_id"`
-    PublicIP         types.String  `tfsdk:"public_ip"`
-    PublicPort       types.Int64   `tfsdk:"public_port"`
-    InternalIP       types.String  `tfsdk:"internal_ip"`
-    InternalPort     types.Int64   `tfsdk:"internal_port"`
-    InternalGroup    types.String  `tfsdk:"internal_group"`
-    SSH_IP           types.String  `tfsdk:"ssh_ip"`
-    SSH_Port         types.Int64   `tfsdk:"ssh_port"`
-    SSH_User         types.String  `tfsdk:"ssh_user"`
-    PublicKeyBase64  types.String  `tfsdk:"public_key_base64"`
-    PrivateKeyBase64 types.String  `tfsdk:"private_key_base64"`
-    Version          types.String  `tfsdk:"version"`
-    MRC              types.Int64   `tfsdk:"mrc"`
-    PortSpeed        types.Int64   `tfsdk:"port_speed"`
-    MaxSessions      types.Int64   `tfsdk:"max_sessions"`
-    Notes            types.String  `tfsdk:"notes"`
-}
-
-type RelayData struct {
-    RelayId          uint64 `json:"relay_id"`
-    RelayName        string `json:"relay_name"`
-    DatacenterId     uint64 `json:"datacenter_id"`
-    PublicIP         string `json:"public_ip"`
-    PublicPort       int    `json:"public_port"`
-    InternalIP       string `json:"internal_ip"`
-    InternalPort     int    `json:"internal_port`
-    InternalGroup    string `json:"internal_group`
-    SSH_IP           string `json:"ssh_ip"`
-    SSH_Port         int    `json:"ssh_port`
-    SSH_User         string `json:"ssh_user`
-    PublicKeyBase64  string `json:"public_key_base64"`
-    PrivateKeyBase64 string `json:"private_key_base64"`
-    Version          string `json:"version"`
-    MRC              int    `json:"mrc"`
-    PortSpeed        int    `json:"port_speed"`
-    MaxSessions      int    `json:"max_sessions"`
-    Notes            string `json:"notes"`
-}
-
-type RelaysResponse struct {
-    Relays []RelayData `json:"relays"`
-    Error  string      `json:"error"`
-}
-
 func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 
-    relaysResponse := RelaysResponse{}
+    relaysResponse := ReadRelaysResponse{}
     
     err := d.client.GetJSON(ctx, "admin/relays", &relaysResponse)
     
@@ -177,7 +126,7 @@ func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest,
         return
     }
 
-    var state relaysDataSourceModel
+    var state RelaysModel
 
     for i := range relaysResponse.Relays {
 

@@ -21,10 +21,6 @@ type buyersDataSource struct {
     client *Client
 }
 
-type buyersDataSourceModel struct {
-    Buyers []BuyerModel `tfsdk:"buyers"`
-}
-
 func (d *buyersDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
     resp.TypeName = req.ProviderTypeName + "_buyers"
 }
@@ -65,30 +61,9 @@ func (d *buyersDataSource) Configure(_ context.Context, req datasource.Configure
     d.client = req.ProviderData.(*Client)
 }
 
-type BuyerModel struct {
-    Id              types.Int64  `tfsdk:"id"`
-    Name            types.String `tfsdk:"name"`
-    PublicKeyBase64 types.String `tfsdk:"public_key_base64"`
-    CustomerId      types.Int64  `tfsdk:"customer_id"`
-    RouteShaderId   types.Int64  `tfsdk:"route_shader_id"`
-}
-
-type BuyerData struct {
-    BuyerId         uint64 `json:"buyer_id"`
-    BuyerName       string `json:"buyer_name"`
-    PublicKeyBase64 string `json:"public_key_base64"`
-    CustomerId      uint64 `json:"customer_id"`
-    RouteShaderId   uint64 `json:"route_shader_id"`
-}
-
-type BuyersResponse struct {
-    Buyers []BuyerData `json:"buyers"`
-    Error  string      `json:"error"`
-}
-
 func (d *buyersDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 
-    buyersResponse := BuyersResponse{}
+    buyersResponse := ReadBuyersResponse{}
     
     err := d.client.GetJSON(ctx, "admin/buyers", &buyersResponse)
     
@@ -112,7 +87,7 @@ func (d *buyersDataSource) Read(ctx context.Context, req datasource.ReadRequest,
         return
     }
 
-    var state buyersDataSourceModel
+    var state BuyersModel
 
     for i := range buyersResponse.Buyers {
 

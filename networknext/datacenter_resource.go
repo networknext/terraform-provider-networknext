@@ -26,16 +26,6 @@ type datacenterResource struct {
     client *Client
 }
 
-type datacenterResourceModel struct {
-    Id          types.Int64     `tfsdk:"id"`
-    Name        types.String    `tfsdk:"name"`
-    NativeName  types.String    `tfsdk:"native_name"`
-    Latitude    types.Float64   `tfsdk:"latitude"`
-    Longitude   types.Float64   `tfsdk:"longitude"`
-    SellerId    types.Int64     `tfsdk:"seller_id"`
-    Notes       types.String    `tfsdk:"notes"`
-}
-
 func (r *datacenterResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
     if req.ProviderData == nil {
         return
@@ -80,7 +70,7 @@ func (r *datacenterResource) Schema(_ context.Context, _ resource.SchemaRequest,
 
 func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 
-    var plan datacenterResourceModel
+    var plan DatacenterModel
     diags := req.Plan.Get(ctx, &plan)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -116,14 +106,9 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     }
 }
 
-type ReadDatacenterResponse struct {
-    Datacenter DatacenterData `json:"datacenter"`
-    Error      string         `json:"error"`
-}
-
 func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 
-    var state datacenterResourceModel
+    var state DatacenterModel
     diags := req.State.Get(ctx, &state)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -172,7 +157,7 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
 
 func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 
-    var plan datacenterResourceModel
+    var plan DatacenterModel
     diags := req.Plan.Get(ctx, &plan)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -209,7 +194,7 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
 
 func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 
-    var state datacenterResourceModel
+    var state DatacenterModel
     diags := req.State.Get(ctx, &state)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
