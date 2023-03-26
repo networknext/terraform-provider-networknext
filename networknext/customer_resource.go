@@ -6,9 +6,6 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-    "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
     "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -38,28 +35,7 @@ func (r *customerResource) Metadata(_ context.Context, req resource.MetadataRequ
 }
 
 func (r *customerResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
-    resp.Schema = schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "id": schema.Int64Attribute{
-                Computed: true,
-                PlanModifiers: []planmodifier.Int64{
-                    int64planmodifier.UseStateForUnknown(),
-                },
-            },
-            "name": schema.StringAttribute{
-                Required: true,
-            },
-            "code": schema.StringAttribute{
-                Required: true,
-            },
-            "live": schema.BoolAttribute{
-                Optional: true,
-            },
-            "debug": schema.BoolAttribute{
-                Optional: true,
-            },
-        },
-    }
+    resp.Schema = CustomerSchema()
 }
 
 func (r *customerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -72,10 +48,7 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
     }
 
     var data CustomerData
-    data.CustomerName = plan.Name.ValueString()
-    data.CustomerCode = plan.Code.ValueString()
-    data.Live = plan.Live.ValueBool()
-    data.Debug = plan.Debug.ValueBool()
+    CustomerModelToData(&plan, &data)
 
     id, err := r.client.Create("admin/create_customer", &data)
     
@@ -89,6 +62,8 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
         return
     }
 
+    // todo: we need to return a better error here, not just an id value
+
     plan.Id = types.Int64Value(int64(id))
 
     diags = resp.State.Set(ctx, plan)
@@ -96,11 +71,6 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
     if resp.Diagnostics.HasError() {
         return
     }
-}
-
-type ReadCustomerResponse struct {
-    Customer CustomerData `json:"customer"`
-    Error    string       `json:"error"`
 }
 
 func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
@@ -136,12 +106,7 @@ func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, r
     }
 
     data := &response.Customer
-
-    state.Id = types.Int64Value(int64(data.CustomerId))
-    state.Name = types.StringValue(data.CustomerName)
-    state.Code = types.StringValue(data.CustomerCode)
-    state.Live = types.BoolValue(data.Live)
-    state.Debug = types.BoolValue(data.Debug)
+    CustomerDataToModel(data, &state)
 
     diags = resp.State.Set(ctx, &state)
     resp.Diagnostics.Append(diags...)
@@ -160,12 +125,8 @@ func (r *customerResource) Update(ctx context.Context, req resource.UpdateReques
     }
 
     var data CustomerData
-    data.CustomerId = uint64(plan.Id.ValueInt64())
-    data.CustomerName = plan.Name.ValueString()
-    data.CustomerCode = plan.Code.ValueString()
-    data.Live = plan.Live.ValueBool()
-    data.Debug = plan.Debug.ValueBool()
-
+    CustomerModelToData(&plan, &data)
+    
     err := r.client.Update(ctx, "admin/update_customer", &data)
     
     if err != nil {
