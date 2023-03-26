@@ -19,8 +19,17 @@ resource "networknext_customer" "test" {
 }
 
 resource "networknext_seller" "test" {
-  name = "Test Seller"
+  name = "test"
   customer_id = 0
+}
+
+resource "networknext_datacenter" "test" {
+  name = "test.datacenter"
+  native_name = "test native name"
+  seller_id = networknext_seller.test.id
+  latitude = 100
+  longitude = 50
+  notes = ""
 }
 
 data "networknext_customers" "example" {}

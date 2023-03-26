@@ -161,5 +161,6 @@ func (p *networknextProvider) Resources(_ context.Context) []func() resource.Res
     return []func() resource.Resource {
         NewCustomerResource,
         NewSellerResource,
+        NewDatacenterResource,
     }
 }
