@@ -18,11 +18,6 @@ type CustomerData struct {
     Debug        bool   `json:"debug"`
 }
 
-type ReadCustomersResponse struct {
-    Customers []CustomerData `json:"customers"`
-    Error     string         `json:"error"`
-}
-
 type CustomersModel struct {
     Customers []CustomerModel `tfsdk:"customers"`
 }
@@ -40,19 +35,24 @@ type ReadCustomerResponse struct {
     Error    string       `json:"error"`
 }
 
+type ReadCustomersResponse struct {
+    Customers []CustomerData `json:"customers"`
+    Error     string         `json:"error"`
+}
+
 func CustomerModelToData(model *CustomerModel, data *CustomerData) {
+    data.CustomerName = model.Name.ValueString()
+    data.CustomerCode = model.Code.ValueString()
+    data.Live = model.Live.ValueBool()
+    data.Debug = model.Debug.ValueBool()    
+}
+
+func CustomerDataToModel(data *CustomerData, model *CustomerModel) {
     model.Id = types.Int64Value(int64(data.CustomerId))
     model.Name = types.StringValue(data.CustomerName)
     model.Code = types.StringValue(data.CustomerCode)
     model.Live = types.BoolValue(data.Live)
     model.Debug = types.BoolValue(data.Debug)
-}
-
-func CustomerDataToModel(data *CustomerData, model *CustomerModel) {
-    data.CustomerName = model.Name.ValueString()
-    data.CustomerCode = model.Code.ValueString()
-    data.Live = model.Live.ValueBool()
-    data.Debug = model.Debug.ValueBool()    
 }
 
 func CustomerSchema() schema.Schema {
@@ -743,25 +743,6 @@ func RouteShaderDataToModel(data *RouteShaderData, model *RouteShaderModel) {
     model.RouteDiversity = types.Int64Value(int64(data.RouteDiversity))
 }
 
-/*
-    data.RelayName = model.Name.ValueString()
-    data.DatacenterId = uint64(model.DatacenterId.ValueInt64())
-    data.PublicIP = model.PublicIP.ValueString()
-    data.PublicPort = int(model.PublicPort.ValueInt64())
-    data.InternalIP = model.InternalIP.ValueString()
-    data.InternalPort = int(model.InternalPort.ValueInt64())
-    data.InternalGroup = model.InternalGroup.ValueString()
-    data.SSH_IP = model.SSH_IP.ValueString()
-    data.SSH_Port = int(model.SSH_Port.ValueInt64())
-    data.SSH_User = model.SSH_User.ValueString()
-    data.PublicKeyBase64 = model.PublicKeyBase64.ValueString()
-    data.PrivateKeyBase64 = model.PrivateKeyBase64.ValueString()
-    data.Version = model.Version.ValueString()
-    data.MRC = int(model.MRC.ValueInt64())
-    data.PortSpeed = int(model.PortSpeed.ValueInt64())
-    data.MaxSessions = int(model.MaxSessions.ValueInt64())
-*/
-
 func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
     data.RouteShaderId = uint64(model.Id.ValueInt64())
     data.RouteShaderName = model.Name.ValueString()
@@ -946,6 +927,85 @@ func RouteShadersSchema() datasource_schema.Schema {
                         },
                         "route_diversity": datasource_schema.Int64Attribute{
                             Computed: true,
+                        },
+                    },
+                },
+            },
+        },
+    }
+}
+
+// -------------------------------------------------------------------
+
+type BuyerDatacenterSettingsData struct {
+    BuyerId            uint64 `json:"buyer_id"`
+    DatacenterId       uint64 `json:"datacenter_id"`
+    EnableAcceleration bool   `json:"enable_acceleration"`
+}
+
+type BuyerDatacenterSettingsListModel struct {
+    Settings []BuyerDatacenterSettingsModel `tfsdk:"settings"`
+}
+
+type BuyerDatacenterSettingsModel struct {
+    BuyerId             types.Int64  `tfsdk:"buyer_id"`
+    DatacenterId        types.Int64  `tfsdk:"datacenter_id"`
+    EnableAcceleration  types.Bool   `tfsdk:"enable_acceleration"`
+}
+
+type ReadBuyerDatacenterSettingsResponse struct {
+    Settings BuyerDatacenterSettingsData    `json:"customer"`
+    Error    string                         `json:"error"`
+}
+
+type ReadBuyerDatacenterSettingsListResponse struct {
+    Settings     []BuyerDatacenterSettingsData  `json:"settings"`
+    Error        string                         `json:"error"`
+}
+
+func BuyerDatacenterSettingsModelToData(model *BuyerDatacenterSettingsModel, data *BuyerDatacenterSettingsData) {
+    model.BuyerId = types.Int64Value(int64(data.BuyerId))
+    model.DatacenterId = types.Int64Value(int64(data.DatacenterId))
+    model.EnableAcceleration = types.BoolValue(data.EnableAcceleration)
+}
+
+func BuyerDatacenterSettingsDataToModel(data *BuyerDatacenterSettingsData, model *BuyerDatacenterSettingsModel) {
+    data.BuyerId = uint64(model.BuyerId.ValueInt64())
+    data.DatacenterId = uint64(model.DatacenterId.ValueInt64())
+    data.EnableAcceleration = model.EnableAcceleration.ValueBool()    
+}
+
+func BuyerDatacenterSettingsSchema() schema.Schema {
+    return schema.Schema{
+        Attributes: map[string]schema.Attribute{
+            "buyer_id": schema.Int64Attribute{
+                Required: true,
+            },
+            "datacenter_id": schema.Int64Attribute{
+                Required: true,
+            },
+            "live": schema.BoolAttribute{
+                Optional: true,
+            },
+        },
+    }
+}
+
+func BuyerDatacenterSettingsListSchema() datasource_schema.Schema {
+    return datasource_schema.Schema{
+        Attributes: map[string]datasource_schema.Attribute{
+            "customers": datasource_schema.ListNestedAttribute{
+                Computed: true,
+                NestedObject: datasource_schema.NestedAttributeObject{
+                    Attributes: map[string]datasource_schema.Attribute{
+                        "buyer_id": datasource_schema.Int64Attribute{
+                            Required: true,
+                        },
+                        "datacenter_id": datasource_schema.Int64Attribute{
+                            Required: true,
+                        },
+                        "enable_acceleration": datasource_schema.BoolAttribute{
+                            Required: true,
                         },
                     },
                 },
