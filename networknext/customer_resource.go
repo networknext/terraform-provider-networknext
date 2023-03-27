@@ -50,7 +50,9 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
     var data CustomerData
     CustomerModelToData(&plan, &data)
 
-    id, err := r.client.Create("admin/create_customer", &data)
+    var response CreateCustomerResponse
+    
+    err := r.client.Create(ctx, "admin/create_customer", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -62,9 +64,15 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
         return
     }
 
-    // todo: we need to return a better error here, not just an id value
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to create networknext customer",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
-    plan.Id = types.Int64Value(int64(id))
+    plan.Id = types.Int64Value(int64(response.Customer.CustomerId))
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -99,8 +107,7 @@ func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, r
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read networknext customer",
-            "The networknext API returned an error while trying to read a customer. "+
-                "Network Next Client Error: "+response.Error,
+            "The networknext API returned an error: "+response.Error,
         )
         return
     }
@@ -126,8 +133,10 @@ func (r *customerResource) Update(ctx context.Context, req resource.UpdateReques
 
     var data CustomerData
     CustomerModelToData(&plan, &data)
+
+    var response UpdateCustomerResponse
     
-    err := r.client.Update(ctx, "admin/update_customer", &data)
+    err := r.client.Update(ctx, "admin/update_customer", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -139,7 +148,13 @@ func (r *customerResource) Update(ctx context.Context, req resource.UpdateReques
         return
     }
 
-    // todo: we need a real error message here
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to update networknext customer",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -159,12 +174,22 @@ func (r *customerResource) Delete(ctx context.Context, req resource.DeleteReques
 
     id := state.Id.ValueInt64()
 
-    err := r.client.Delete(ctx, "admin/delete_customer", uint64(id))
+    var response UpdateCustomerResponse
+
+    err := r.client.Delete(ctx, "admin/delete_customer", uint64(id), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
             "Error deleting networknext customer",
             "Could not delete customer, unexpected error: "+err.Error(),
+        )
+        return
+    }
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to delete networknext customer",
+            "The networknext API returned an error: "+response.Error,
         )
         return
     }

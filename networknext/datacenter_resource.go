@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/types"
+    // "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,6 +50,8 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     var data DatacenterData
     DatacenterModelToData(&plan, &data)
 
+    // todo
+    /*
     id, err := r.client.Create("admin/create_datacenter", &data)
     
     if err != nil {
@@ -65,6 +67,7 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     // todo: we really need an error string here 
 
     plan.Id = types.Int64Value(int64(id))
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -128,6 +131,9 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     var data DatacenterData
     DatacenterModelToData(&plan, &data)
 
+    // todo
+    
+    /*
     err := r.client.Update(ctx, "admin/update_datacenter", &data)
     
     if err != nil {
@@ -141,6 +147,7 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     }
 
     // todo: we really need a proper error string here from the API
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -158,6 +165,7 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
         return
     }
 
+    /*
     id := state.Id.ValueInt64()
 
     err := r.client.Delete(ctx, "admin/delete_datacenter", uint64(id))
@@ -171,6 +179,7 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
         )
         return
     }
+    */
 }
 
 func (r *datacenterResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

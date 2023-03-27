@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/types"
+    // "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,6 +50,9 @@ func (r *routeShaderResource) Create(ctx context.Context, req resource.CreateReq
     var data RouteShaderData
     RouteShaderModelToData(&plan, &data)
 
+    // todo
+
+    /*
     id, err := r.client.Create("admin/create_route_shader", &data)
     
     if err != nil {
@@ -65,6 +68,7 @@ func (r *routeShaderResource) Create(ctx context.Context, req resource.CreateReq
     // todo: we really need an error string here 
 
     plan.Id = types.Int64Value(int64(id))
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -128,6 +132,8 @@ func (r *routeShaderResource) Update(ctx context.Context, req resource.UpdateReq
     var data RouteShaderData
     RouteShaderModelToData(&plan, &data)
 
+    // todo
+    /*
     err := r.client.Update(ctx, "admin/update_route_shader", &data)
     
     if err != nil {
@@ -141,6 +147,7 @@ func (r *routeShaderResource) Update(ctx context.Context, req resource.UpdateReq
     }
 
     // todo: we really need a proper error string here from the API
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -158,6 +165,7 @@ func (r *routeShaderResource) Delete(ctx context.Context, req resource.DeleteReq
         return
     }
 
+    /*
     id := state.Id.ValueInt64()
 
     err := r.client.Delete(ctx, "admin/delete_route_shader", uint64(id))
@@ -171,6 +179,7 @@ func (r *routeShaderResource) Delete(ctx context.Context, req resource.DeleteReq
         )
         return
     }
+    */
 }
 
 func (r *routeShaderResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/types"
+    // "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,6 +50,8 @@ func (r *buyerResource) Create(ctx context.Context, req resource.CreateRequest, 
     var data BuyerData
     BuyerModelToData(&plan, &data)
 
+    // todo
+    /*
     id, err := r.client.Create("admin/create_buyer", &data)
     
     if err != nil {
@@ -61,10 +63,14 @@ func (r *buyerResource) Create(ctx context.Context, req resource.CreateRequest, 
         )
         return
     }
+    */
 
+    // todo
+    /*
     // todo: we need to return a better error here, not just an id value
 
     plan.Id = types.Int64Value(int64(id))
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -127,6 +133,7 @@ func (r *buyerResource) Update(ctx context.Context, req resource.UpdateRequest, 
     var data BuyerData
     BuyerModelToData(&plan, &data)
     
+    /*
     err := r.client.Update(ctx, "admin/update_buyer", &data)
     
     if err != nil {
@@ -138,6 +145,7 @@ func (r *buyerResource) Update(ctx context.Context, req resource.UpdateRequest, 
         )
         return
     }
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -155,6 +163,8 @@ func (r *buyerResource) Delete(ctx context.Context, req resource.DeleteRequest, 
         return
     }
 
+    // todo
+    /*
     id := state.Id.ValueInt64()
 
     err := r.client.Delete(ctx, "admin/delete_buyer", uint64(id))
@@ -166,6 +176,7 @@ func (r *buyerResource) Delete(ctx context.Context, req resource.DeleteRequest, 
         )
         return
     }
+    */
 }
 
 func (r *buyerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

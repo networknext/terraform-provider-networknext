@@ -49,7 +49,9 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
     var data BuyerDatacenterSettingsData
     BuyerDatacenterSettingsModelToData(&plan, &data)
 
-    _, err := r.client.Create("admin/create_buyer_datacenter_settings", &data)
+    // todo
+    /*
+    err := r.client.Create("admin/create_buyer_datacenter_settings", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -60,6 +62,7 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
         )
         return
     }
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -122,6 +125,8 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
     var data BuyerDatacenterSettingsData
     BuyerDatacenterSettingsModelToData(&plan, &data)
     
+    // todo
+    /*
     err := r.client.Update(ctx, "admin/update_buyer_datacenter_settings", &data)
     
     if err != nil {
@@ -133,6 +138,7 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
         )
         return
     }
+    */
 
     // todo: we need a real error message here
 

@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/types"
+    // "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,6 +50,8 @@ func (r *relayResource) Create(ctx context.Context, req resource.CreateRequest, 
     var data RelayData
     RelayModelToData(&plan, &data)
 
+    // todo
+    /*
     id, err := r.client.Create("admin/create_relay", &data)
     
     if err != nil {
@@ -65,6 +67,7 @@ func (r *relayResource) Create(ctx context.Context, req resource.CreateRequest, 
     // todo: we need a real error here
 
     plan.Id = types.Int64Value(int64(id))
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -127,6 +130,8 @@ func (r *relayResource) Update(ctx context.Context, req resource.UpdateRequest, 
     var data RelayData
     RelayModelToData(&plan, &data)
 
+    // todo
+    /*
     err := r.client.Update(ctx, "admin/update_relay", &data)
     
     if err != nil {
@@ -140,6 +145,7 @@ func (r *relayResource) Update(ctx context.Context, req resource.UpdateRequest, 
     }
 
     // todo: we need a real error message here
+    */
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -157,6 +163,7 @@ func (r *relayResource) Delete(ctx context.Context, req resource.DeleteRequest, 
         return
     }
 
+    /*
     id := state.Id.ValueInt64()
 
     err := r.client.Delete(ctx, "admin/delete_relay", uint64(id))
@@ -170,6 +177,7 @@ func (r *relayResource) Delete(ctx context.Context, req resource.DeleteRequest, 
         )
         return
     }
+    */
 }
 
 func (r *relayResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

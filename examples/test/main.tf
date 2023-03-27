@@ -12,10 +12,44 @@ provider "networknext" {
 }
 
 resource "networknext_customer" "test" {
-  name = "Test Customer"
+  name = "Test Customer (nuts)"
   code = "test"
   live = true
   debug = false
+}
+
+/*
+resource "networknext_route_shader" test {
+  name = "test"
+  ab_test = false
+  acceptable_latency = 20
+  acceptable_packet_loss = 1.0
+  packet_loss_sustained = 0.1
+  analysis_only = false
+  bandwidth_envelope_up_kbps = 1024
+  bandwidth_envelope_down_kbps = 1024
+  disable_network_next = false
+  latency_threshold = 10
+  multipath = true
+  reduce_latency = true
+  reduce_packet_loss = true
+  selection_percent = 100
+  max_latency_trade_off = 20
+  max_next_rtt = 250
+  route_switch_threshold = 10
+  route_select_threshold = 5
+  rtt_veto_default = 10
+  rtt_veto_multipath = 20
+  rtt_veto_packetloss = 30
+  force_next = false
+  route_diversity = 0
+}
+
+resource "networknext_buyer" "test" {
+  name = "Test Buyer"
+  customer_id = networknext_customer.test.id
+  route_shader_id = networknext_route_shader.test.id
+  public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
 }
 
 resource "networknext_seller" "test" {
@@ -51,9 +85,11 @@ resource "networknext_relay" "test" {
   max_sessions = 100
   notes = ""
 }
+*/
 
 data "networknext_customers" "example" {}
 
+/*
 data "networknext_buyers" "example" {}
 
 data "networknext_sellers" "example" {}
@@ -87,3 +123,4 @@ output "relays" {
 output "route_shaders" {
   value = data.networknext_route_shaders.example
 }
+*/

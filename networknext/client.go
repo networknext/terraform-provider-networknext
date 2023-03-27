@@ -8,7 +8,7 @@ import (
     "time"
     "fmt"
     "io/ioutil"
-    "strconv"
+    // "strconv"
     "strings"
 
     "github.com/hashicorp/terraform-plugin-log/tflog"
@@ -120,21 +120,23 @@ func (client *Client) GetJSON(ctx context.Context, path string, object interface
     return nil
 }
 
-func (client *Client) Create(path string, object interface{}) (uint64, error) {
+func (client *Client) Create(ctx context.Context, path string, requestData interface{}, responseData interface{}) error {
 
     url := client.HostName + "/" + path
 
     buffer := new(bytes.Buffer)
 
-    json.NewEncoder(buffer).Encode(object)
+    json.NewEncoder(buffer).Encode(requestData)
 
-    request, _ := http.NewRequest("POST", url, buffer)
+    request, err := http.NewRequest("POST", url, buffer)
+    if err != nil {
+        return fmt.Errorf("could not create HTTP POST request for %s: %v", url, err)
+    }
 
     request.Header.Set("Authorization", "Bearer " + client.APIKey)
 
     httpClient := &http.Client{}
 
-    var err error
     var response *http.Response
     for i := 0; i < 5; i++ {
         response, err = httpClient.Do(request)
@@ -145,39 +147,50 @@ func (client *Client) Create(path string, object interface{}) (uint64, error) {
     }
 
     if err != nil {
-        return 0, fmt.Errorf("create failed on %s: %v\n", url, err)
+        return fmt.Errorf("create failed on %s: %v", url, err)
     }
 
     if response.StatusCode != 200 {
-        return 0, fmt.Errorf("bad http response for %s: %d", url, response.StatusCode)
+        return fmt.Errorf("bad http response for %s: %d", url, response.StatusCode)
     }
 
     body, err := ioutil.ReadAll(response.Body)
     if err != nil {
-        return 0, fmt.Errorf("could not read response for %s: %v", url, err)
+        return fmt.Errorf("could not read response for %s: %v", url, err)
     }
 
-    id, err := strconv.ParseUint(string(body), 10, 64)
     if err != nil {
-        return 0, fmt.Errorf("could not id response for %s: %v\n", url, err)
+        return fmt.Errorf("failed to read %s: %v", url, err)
     }
 
-    if id == 0 {
-        return 0, fmt.Errorf("id returned from %s should be non-zero", url)
+    if response == nil {
+        return fmt.Errorf("no response from %s", url)
+    }
+
+    body, error := ioutil.ReadAll(response.Body)
+    if error != nil {
+        return fmt.Errorf("could not read response body for %s: %v", url, err)
     }
 
     response.Body.Close()
 
-    return id, nil
+    tflog.Info(ctx, string(body))
+
+    err = json.Unmarshal([]byte(body), &responseData)
+    if err != nil {
+        return fmt.Errorf("could not parse json response for %s: %v", url, err)
+    }
+
+    return nil
 }
 
-func (client *Client) Update(ctx context.Context, path string, object interface{}) error {
+func (client *Client) Update(ctx context.Context, path string, requestData interface{}, responseData interface{}) error {
 
     url := client.HostName + "/" + path
 
     buffer := new(bytes.Buffer)
 
-    json.NewEncoder(buffer).Encode(object)
+    json.NewEncoder(buffer).Encode(requestData)
 
     request, _ := http.NewRequest("PUT", url, buffer)
 
@@ -196,27 +209,31 @@ func (client *Client) Update(ctx context.Context, path string, object interface{
     }
 
     if err != nil {
-        return fmt.Errorf("create failed on %s: %v\n", url, err)
+        return fmt.Errorf("failed to read %s: %v", url, err)
     }
 
-    if response.StatusCode != 200 {
-        return fmt.Errorf("bad http response for %s: %d", url, response.StatusCode)
+    if response == nil {
+        return fmt.Errorf("no response from %s", url)
     }
 
-    body, err := ioutil.ReadAll(response.Body)
-    if err != nil {
-        return fmt.Errorf("could not read response for %s: %v", url, err)
+    body, error := ioutil.ReadAll(response.Body)
+    if error != nil {
+        return fmt.Errorf("could not read response body for %s: %v", url, err)
     }
-
-    // todo: probably want to add a response here and parse it, so we can report errors on update
-    _ = body
 
     response.Body.Close()
+
+    tflog.Info(ctx, string(body))
+
+    err = json.Unmarshal([]byte(body), &responseData)
+    if err != nil {
+        return fmt.Errorf("could not parse json response for %s: %v", url, err)
+    }
 
     return nil
 }
 
-func (client *Client) Delete(ctx context.Context, path string, id uint64) error {
+func (client *Client) Delete(ctx context.Context, path string, id uint64, responseData interface{}) error {
 
     url := client.HostName + "/" + path
 
@@ -231,15 +248,31 @@ func (client *Client) Delete(ctx context.Context, path string, id uint64) error 
     for i := 0; i < 5; i++ {
         response, err = httpClient.Do(request)
         if err == nil {
-            body, err := ioutil.ReadAll(response.Body)
-            if err != nil {
-                panic(fmt.Sprintf("could not read delete response for %s: %v", url, err))
-            }
-            _ = body
-            response.Body.Close()
-            return nil
+            break
         }
         time.Sleep(time.Second)
+    }
+
+    if err != nil {
+        return fmt.Errorf("failed to read %s: %v", url, err)
+    }
+
+    if response == nil {
+        return fmt.Errorf("no response from %s", url)
+    }
+
+    body, error := ioutil.ReadAll(response.Body)
+    if error != nil {
+        return fmt.Errorf("could not read response body for %s: %v", url, err)
+    }
+
+    response.Body.Close()
+
+    tflog.Info(ctx, string(body))
+
+    err = json.Unmarshal([]byte(body), &responseData)
+    if err != nil {
+        return fmt.Errorf("could not parse json response for %s: %v", url, err)
     }
 
     return err
