@@ -154,6 +154,7 @@ func (p *networknextProvider) DataSources(_ context.Context) []func() datasource
         NewDatacentersDataSource,
         NewRelaysDataSource,
         NewRouteShadersDataSource,
+        NewBuyerDatacenterSettingsDataSource,
     }
 }
 
@@ -161,7 +162,10 @@ func (p *networknextProvider) Resources(_ context.Context) []func() resource.Res
     return []func() resource.Resource {
         NewCustomerResource,
         NewSellerResource,
+        NewBuyerResource,
         NewDatacenterResource,
         NewRelayResource,
+        NewRouteShaderResource,
+        NewBuyerDatacenterSettingsResource,
     }
 }
