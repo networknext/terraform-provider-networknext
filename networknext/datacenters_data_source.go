@@ -43,7 +43,7 @@ func (d *datacentersDataSource) Read(ctx context.Context, req datasource.ReadReq
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to get networknext datacenters",
-            "An unexpected error occurred when calling the networknext API to get datacenters. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )

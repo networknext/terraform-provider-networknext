@@ -55,7 +55,7 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create networknext customer",
-            "An error occurred when calling the networknext API to create a customer. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -89,7 +89,7 @@ func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, r
     if err != nil {        
         resp.Diagnostics.AddError(
             "Unable to read networknext customer",
-            "An unexpected error occurred when calling the networknext API to read a customer. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -132,12 +132,14 @@ func (r *customerResource) Update(ctx context.Context, req resource.UpdateReques
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update networknext customer",
-            "An error occurred when calling the networknext API to update a customer. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
         return
     }
+
+    // todo: we need a real error message here
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)

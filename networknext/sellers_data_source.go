@@ -43,7 +43,7 @@ func (d *sellersDataSource) Read(ctx context.Context, req datasource.ReadRequest
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to get networknext sellers",
-            "An error occurred when calling the networknext API to get sellers. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )

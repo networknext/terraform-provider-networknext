@@ -4,8 +4,6 @@ import (
     "context"
 
     "github.com/hashicorp/terraform-plugin-framework/datasource"
-    "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -26,71 +24,7 @@ func (d *relaysDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 }
 
 func (d *relaysDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-    resp.Schema = schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "relays": schema.ListNestedAttribute{
-                Computed: true,
-                NestedObject: schema.NestedAttributeObject{
-                    Attributes: map[string]schema.Attribute{
-                        "id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "name": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "datacenter_id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "public_ip": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "public_port": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "internal_ip": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "internal_port": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "internal_group": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "ssh_ip": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "ssh_port": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "ssh_user": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "public_key_base64": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "private_key_base64": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "version": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "mrc": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "port_speed": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "max_sessions": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "notes": schema.StringAttribute{
-                            Computed: true,
-                        },
-                    },
-                },
-            },
-        },
-    }
+    resp.Schema = RelaysSchema()
 }
 
 func (d *relaysDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
@@ -109,7 +43,7 @@ func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest,
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to get networknext relays",
-            "An error occurred when calling the networknext API to get relays. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -120,7 +54,6 @@ func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest,
         resp.Diagnostics.AddError(
             "Unable to get networknext relays",
             "An error occurred when calling the networknext API to get relays. "+
-                "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+relaysResponse.Error,
         )
         return
@@ -129,27 +62,8 @@ func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest,
     var state RelaysModel
 
     for i := range relaysResponse.Relays {
-
-        relayState := RelayModel{
-            Id:               types.Int64Value(int64(relaysResponse.Relays[i].RelayId)),
-            Name:             types.StringValue(relaysResponse.Relays[i].RelayName),
-            DatacenterId:     types.Int64Value(int64(relaysResponse.Relays[i].DatacenterId)),
-            PublicIP:         types.StringValue(relaysResponse.Relays[i].PublicIP),
-            PublicPort:       types.Int64Value(int64(relaysResponse.Relays[i].PublicPort)),
-            InternalIP:       types.StringValue(relaysResponse.Relays[i].InternalIP),
-            InternalPort:     types.Int64Value(int64(relaysResponse.Relays[i].InternalPort)),
-            InternalGroup:    types.StringValue(relaysResponse.Relays[i].InternalGroup),
-            SSH_IP:           types.StringValue(relaysResponse.Relays[i].SSH_IP),
-            SSH_Port:         types.Int64Value(int64(relaysResponse.Relays[i].SSH_Port)),
-            SSH_User:         types.StringValue(relaysResponse.Relays[i].SSH_User),
-            PublicKeyBase64:  types.StringValue(relaysResponse.Relays[i].PublicKeyBase64),
-            PrivateKeyBase64: types.StringValue(relaysResponse.Relays[i].PrivateKeyBase64),
-            Version:          types.StringValue(relaysResponse.Relays[i].Version),
-            MRC:              types.Int64Value(int64(relaysResponse.Relays[i].MRC)),
-            PortSpeed:        types.Int64Value(int64(relaysResponse.Relays[i].PortSpeed)),
-            MaxSessions:      types.Int64Value(int64(relaysResponse.Relays[i].MaxSessions)),
-        }
-
+        var relayState RelayModel
+        RelayDataToModel(&relaysResponse.Relays[i], &relayState)
         state.Relays = append(state.Relays, relayState)
     }
 

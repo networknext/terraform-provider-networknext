@@ -578,6 +578,74 @@ func RelaySchema() schema.Schema {
     }
 }
 
+func RelaysSchema() datasource_schema.Schema {
+    return datasource_schema.Schema{
+        Attributes: map[string]datasource_schema.Attribute{
+            "relays": datasource_schema.ListNestedAttribute{
+                Computed: true,
+                NestedObject: datasource_schema.NestedAttributeObject{
+                    Attributes: map[string]datasource_schema.Attribute{
+                        "id": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "name": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "datacenter_id": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "public_ip": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "public_port": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "internal_ip": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "internal_port": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "internal_group": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "ssh_ip": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "ssh_port": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "ssh_user": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "public_key_base64": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "private_key_base64": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "version": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "mrc": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "port_speed": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "max_sessions": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "notes": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                    },
+                },
+            },
+        },
+    }
+}
+
 // -------------------------------------------------------------------
 
 type RouteShaderData struct {
@@ -643,4 +711,116 @@ type RouteShadersModel struct {
     RouteShaders []RouteShaderModel `tfsdk:"route_shaders"`
 }
 
+func RouteShaderDataToModel(data *RouteShaderData, model *RouteShaderModel) {
+    model.Id = types.Int64Value(int64(data.RouteShaderId))
+    model.Name = types.StringValue(data.RouteShaderName)
+    model.ABTest = types.BoolValue(data.ABTest)
+    model.AcceptableLatency = types.Int64Value(int64(data.AcceptableLatency))
+    model.AcceptablePacketLoss = types.Float64Value(float64(data.AcceptablePacketLoss))
+    model.PacketLossSustained = types.Float64Value(float64(data.PacketLossSustained))
+    model.AnalysisOnly = types.BoolValue(data.AnalysisOnly)
+    model.BandwidthEnvelopeUpKbps = types.Int64Value(int64(data.BandwidthEnvelopeUpKbps))
+    model.BandwidthEnvelopeDownKbps = types.Int64Value(int64(data.BandwidthEnvelopeDownKbps))
+    model.DisableNetworkNext = types.BoolValue(data.DisableNetworkNext)
+    model.LatencyThreshold = types.Int64Value(int64(data.LatencyThreshold))
+    model.Multipath = types.BoolValue(data.Multipath)
+    model.ReduceLatency = types.BoolValue(data.ReduceLatency)
+    model.ReducePacketLoss = types.BoolValue(data.ReducePacketLoss)
+    model.SelectionPercent = types.Float64Value(float64(data.SelectionPercent))
+    model.MaxLatencyTradeOff = types.Int64Value(int64(data.MaxLatencyTradeOff))
+    model.MaxNextRTT = types.Int64Value(int64(data.MaxNextRTT))
+    model.RouteSwitchThreshold = types.Int64Value(int64(data.RouteSwitchThreshold))
+    model.RouteSelectThreshold = types.Int64Value(int64(data.RouteSelectThreshold))
+    model.RTTVeto_Default = types.Int64Value(int64(data.RTTVeto_Default))
+    model.RTTVeto_Multipath = types.Int64Value(int64(data.RTTVeto_Multipath))
+    model.RTTVeto_PacketLoss = types.Int64Value(int64(data.RTTVeto_PacketLoss))
+    model.ForceNext = types.BoolValue(data.ForceNext)
+    model.RouteDiversity = types.Int64Value(int64(data.RouteDiversity))
+}
+
+func RouteShadersSchema() datasource_schema.Schema {
+    return datasource_schema.Schema{
+        Attributes: map[string]datasource_schema.Attribute{
+            "route_shaders": datasource_schema.ListNestedAttribute{
+                Computed: true,
+                NestedObject: datasource_schema.NestedAttributeObject{
+                    Attributes: map[string]datasource_schema.Attribute{
+                        "id": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "name": datasource_schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "ab_test": datasource_schema.BoolAttribute{
+                            Computed: true,
+                        },
+                        "acceptable_latency": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "acceptable_packet_loss": datasource_schema.Float64Attribute{
+                            Computed: true,
+                        },
+                        "packet_loss_sustained": datasource_schema.Float64Attribute{
+                            Computed: true,
+                        },
+                        "analysis_only": datasource_schema.BoolAttribute{
+                            Computed: true,
+                        },
+                        "bandwidth_envelope_up_kbps": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "bandwidth_envelope_down_kbps": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "disable_network_next": datasource_schema.BoolAttribute{
+                            Computed: true,
+                        },
+                        "latency_threshold": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "multipath": datasource_schema.BoolAttribute{
+                            Computed: true,
+                        },
+                        "reduce_latency": datasource_schema.BoolAttribute{
+                            Computed: true,
+                        },
+                        "reduce_packet_loss": datasource_schema.BoolAttribute{
+                            Computed: true,
+                        },
+                        "selection_percent": datasource_schema.Float64Attribute{
+                            Computed: true,
+                        },
+                        "max_latency_trade_off": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "max_next_rtt": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "route_switch_threshold": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "route_select_threshold": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "rtt_veto_default": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "rtt_veto_multipath": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "rtt_veto_packetloss": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "force_next": datasource_schema.BoolAttribute{
+                            Computed: true,
+                        },
+                        "route_diversity": datasource_schema.Int64Attribute{
+                            Computed: true,
+                        },
+                    },
+                },
+            },
+        },
+    }
+}
 // -------------------------------------------------------------------

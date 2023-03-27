@@ -55,7 +55,7 @@ func (r *buyerResource) Create(ctx context.Context, req resource.CreateRequest, 
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create networknext buyer",
-            "An error occurred when calling the networknext API to create a buyer. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -89,7 +89,7 @@ func (r *buyerResource) Read(ctx context.Context, req resource.ReadRequest, resp
     if err != nil {        
         resp.Diagnostics.AddError(
             "Unable to read networknext buyer",
-            "An unexpected error occurred when calling the networknext API to read a buyer. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -132,7 +132,7 @@ func (r *buyerResource) Update(ctx context.Context, req resource.UpdateRequest, 
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update networknext buyer",
-            "An error occurred when calling the networknext API to update a buyer. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )

@@ -56,12 +56,14 @@ func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest,
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create networknext seller",
-            "An error occurred when calling the networknext API to create a seller. "+
+            "An error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
         return
     }
+
+    // todo: we need a real error message here
 
     plan.Id = types.Int64Value(int64(id))
 
@@ -93,7 +95,7 @@ func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, res
     if err != nil {        
         resp.Diagnostics.AddError(
             "Unable to read networknext seller",
-            "An unexpected error occurred when calling the networknext API to read a seller. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -136,12 +138,14 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update networknext seller",
-            "An error occurred when calling the networknext API to update a seller. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
         return
     }
+
+    // todo: we need an error message here
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)

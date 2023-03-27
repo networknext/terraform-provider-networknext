@@ -55,7 +55,7 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create networknext datacenter",
-            "An unexpected error occurred when calling the networknext API to create a datacenter. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -89,7 +89,7 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
     if err != nil {        
         resp.Diagnostics.AddError(
             "Unable to read networknext datacenter",
-            "An unexpected error occurred when calling the networknext API to read a datacenter. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -133,7 +133,7 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update networknext datacenter",
-            "An unexpected error occurred when calling the networknext API to update a datacenter. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -165,7 +165,7 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to delete networknext datacenter",
-            "An unexpected error occurred when calling the networknext API to delete a datacenter. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
