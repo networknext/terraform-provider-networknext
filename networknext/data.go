@@ -675,6 +675,11 @@ type RouteShaderData struct {
     RouteDiversity            int     `json:"route_diversity"`
 }
 
+type ReadRouteShaderResponse struct {
+    RouteShader  RouteShaderData   `json:"route_shader"`
+    Error        string            `json:"error"`
+}
+
 type ReadRouteShadersResponse struct {
     RouteShaders []RouteShaderData `json:"route_shaders"`
     Error        string            `json:"error"`
@@ -736,6 +741,131 @@ func RouteShaderDataToModel(data *RouteShaderData, model *RouteShaderModel) {
     model.RTTVeto_PacketLoss = types.Int64Value(int64(data.RTTVeto_PacketLoss))
     model.ForceNext = types.BoolValue(data.ForceNext)
     model.RouteDiversity = types.Int64Value(int64(data.RouteDiversity))
+}
+
+/*
+    data.RelayName = model.Name.ValueString()
+    data.DatacenterId = uint64(model.DatacenterId.ValueInt64())
+    data.PublicIP = model.PublicIP.ValueString()
+    data.PublicPort = int(model.PublicPort.ValueInt64())
+    data.InternalIP = model.InternalIP.ValueString()
+    data.InternalPort = int(model.InternalPort.ValueInt64())
+    data.InternalGroup = model.InternalGroup.ValueString()
+    data.SSH_IP = model.SSH_IP.ValueString()
+    data.SSH_Port = int(model.SSH_Port.ValueInt64())
+    data.SSH_User = model.SSH_User.ValueString()
+    data.PublicKeyBase64 = model.PublicKeyBase64.ValueString()
+    data.PrivateKeyBase64 = model.PrivateKeyBase64.ValueString()
+    data.Version = model.Version.ValueString()
+    data.MRC = int(model.MRC.ValueInt64())
+    data.PortSpeed = int(model.PortSpeed.ValueInt64())
+    data.MaxSessions = int(model.MaxSessions.ValueInt64())
+*/
+
+func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
+    data.RouteShaderId = uint64(model.Id.ValueInt64())
+    data.RouteShaderName = model.Name.ValueString()
+    data.ABTest = model.ABTest.ValueBool()
+    data.AcceptableLatency = int(model.AcceptableLatency.ValueInt64())
+    data.AcceptablePacketLoss = float32(model.AcceptablePacketLoss.ValueFloat64())
+    data.PacketLossSustained = float32(model.PacketLossSustained.ValueFloat64())
+    data.AnalysisOnly = model.AnalysisOnly.ValueBool()
+    data.BandwidthEnvelopeUpKbps = int(model.BandwidthEnvelopeUpKbps.ValueInt64())
+    data.BandwidthEnvelopeDownKbps = int(model.BandwidthEnvelopeDownKbps.ValueInt64())
+    data.DisableNetworkNext = model.DisableNetworkNext.ValueBool()
+    data.LatencyThreshold = int(model.LatencyThreshold.ValueInt64())
+    data.Multipath = model.Multipath.ValueBool()
+    data.ReduceLatency = model.ReduceLatency.ValueBool()
+    data.ReducePacketLoss = model.ReducePacketLoss.ValueBool()
+    data.SelectionPercent = float32(model.SelectionPercent.ValueFloat64())
+    data.MaxLatencyTradeOff = int(model.MaxLatencyTradeOff.ValueInt64())
+    data.MaxNextRTT = int(model.MaxNextRTT.ValueInt64())
+    data.RouteSwitchThreshold = int(model.RouteSwitchThreshold.ValueInt64())
+    data.RouteSelectThreshold = int(model.RouteSelectThreshold.ValueInt64())
+    data.RTTVeto_Default = int(model.RTTVeto_Default.ValueInt64())
+    data.RTTVeto_Multipath = int(model.RTTVeto_Multipath.ValueInt64())
+    data.RTTVeto_PacketLoss = int(model.RTTVeto_PacketLoss.ValueInt64())
+    data.ForceNext = model.ForceNext.ValueBool()
+    data.RouteDiversity = int(model.RouteDiversity.ValueInt64())
+}
+
+func RouteShaderSchema() schema.Schema {
+    return schema.Schema{
+        Attributes: map[string]schema.Attribute{
+            "id": schema.Int64Attribute{
+                Computed: true,
+            },
+            "name": schema.StringAttribute{
+                Computed: true,
+            },
+            "ab_test": schema.BoolAttribute{
+                Computed: true,
+            },
+            "acceptable_latency": schema.Int64Attribute{
+                Computed: true,
+            },
+            "acceptable_packet_loss": schema.Float64Attribute{
+                Computed: true,
+            },
+            "packet_loss_sustained": schema.Float64Attribute{
+                Computed: true,
+            },
+            "analysis_only": schema.BoolAttribute{
+                Computed: true,
+            },
+            "bandwidth_envelope_up_kbps": schema.Int64Attribute{
+                Computed: true,
+            },
+            "bandwidth_envelope_down_kbps": schema.Int64Attribute{
+                Computed: true,
+            },
+            "disable_network_next": schema.BoolAttribute{
+                Computed: true,
+            },
+            "latency_threshold": schema.Int64Attribute{
+                Computed: true,
+            },
+            "multipath": schema.BoolAttribute{
+                Computed: true,
+            },
+            "reduce_latency": schema.BoolAttribute{
+                Computed: true,
+            },
+            "reduce_packet_loss": schema.BoolAttribute{
+                Computed: true,
+            },
+            "selection_percent": schema.Float64Attribute{
+                Computed: true,
+            },
+            "max_latency_trade_off": schema.Int64Attribute{
+                Computed: true,
+            },
+            "max_next_rtt": schema.Int64Attribute{
+                Computed: true,
+            },
+            "route_switch_threshold": schema.Int64Attribute{
+                Computed: true,
+            },
+            "route_select_threshold": schema.Int64Attribute{
+                Computed: true,
+            },
+            "rtt_veto_default": schema.Int64Attribute{
+                Computed: true,
+            },
+            "rtt_veto_multipath": schema.Int64Attribute{
+                Computed: true,
+            },
+            "rtt_veto_packetloss": schema.Int64Attribute{
+                Computed: true,
+            },
+            "force_next": schema.BoolAttribute{
+                Computed: true,
+            },
+            "route_diversity": schema.Int64Attribute{
+                Computed: true,
+            },
+        },
+    }
 }
 
 func RouteShadersSchema() datasource_schema.Schema {
@@ -823,4 +953,5 @@ func RouteShadersSchema() datasource_schema.Schema {
         },
     }
 }
+
 // -------------------------------------------------------------------
