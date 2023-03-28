@@ -52,31 +52,6 @@ resource "networknext_relay" "test" {
   notes = ""
 }
 
-data "networknext_customers" "example" {}
-
-data "networknext_sellers" "example" {}
-
-data "networknext_datacenters" "example" {}
-
-data "networknext_relays" "example" {}
-
-output "customers" {
-  value = data.networknext_customers.example
-}
-
-output "sellers" {
-  value = data.networknext_sellers.example
-}
-
-output "datacenters" {
-  value = data.networknext_datacenters.example
-}
-
-output "relays" {
-  value = data.networknext_relays.example
-}
-
-/*
 resource "networknext_route_shader" test {
   name = "test"
   ab_test = false
@@ -103,14 +78,9 @@ resource "networknext_route_shader" test {
   route_diversity = 0
 }
 
-resource "networknext_buyer" "test" {
-  name = "Test Buyer"
-  customer_id = networknext_customer.test.id
-  route_shader_id = networknext_route_shader.test.id
-  public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
-}
+data "networknext_customers" "example" {}
 
-data "networknext_buyers" "example" {}
+data "networknext_sellers" "example" {}
 
 data "networknext_datacenters" "example" {}
 
@@ -118,8 +88,12 @@ data "networknext_relays" "example" {}
 
 data "networknext_route_shaders" "example" {}
 
-output "buyers" {
-  value = data.networknext_buyers.example
+output "customers" {
+  value = data.networknext_customers.example
+}
+
+output "sellers" {
+  value = data.networknext_sellers.example
 }
 
 output "datacenters" {
@@ -132,5 +106,27 @@ output "relays" {
 
 output "route_shaders" {
   value = data.networknext_route_shaders.example
+}
+
+
+
+
+
+
+
+
+
+/*
+resource "networknext_buyer" "test" {
+  name = "Test Buyer"
+  customer_id = networknext_customer.test.id
+  route_shader_id = networknext_route_shader.test.id
+  public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
+}
+
+data "networknext_buyers" "example" {}
+
+output "buyers" {
+  value = data.networknext_buyers.example
 }
 */

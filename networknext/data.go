@@ -723,16 +723,6 @@ type RouteShaderData struct {
     RouteDiversity            int     `json:"route_diversity"`
 }
 
-type ReadRouteShaderResponse struct {
-    RouteShader  RouteShaderData   `json:"route_shader"`
-    Error        string            `json:"error"`
-}
-
-type ReadRouteShadersResponse struct {
-    RouteShaders []RouteShaderData `json:"route_shaders"`
-    Error        string            `json:"error"`
-}
-
 type RouteShaderModel struct {
     Id                        types.Int64   `tfsdk:"id"`
     Name                      types.String  `tfsdk:"name"`
@@ -762,6 +752,30 @@ type RouteShaderModel struct {
 
 type RouteShadersModel struct {
     RouteShaders []RouteShaderModel `tfsdk:"route_shaders"`
+}
+
+type CreateRouteShaderResponse struct {
+    RouteShader RouteShaderData `json:"route_shader"`
+    Error       string          `json:"error"`
+}
+
+type ReadRouteShaderResponse struct {
+    RouteShader RouteShaderData `json:"route_shader"`
+    Error       string          `json:"error"`
+}
+
+type ReadRouteShadersResponse struct {
+    RouteShaders []RouteShaderData `json:"route_shader"`
+    Error        string            `json:"error"`
+}
+
+type UpdateRouteShaderResponse struct {
+    RouteShader RouteShaderData `json:"route_shader"`
+    Error       string          `json:"error"`
+}
+
+type DeleteRouteShaderResponse struct {
+    Error    string       `json:"error"`
 }
 
 func RouteShaderDataToModel(data *RouteShaderData, model *RouteShaderModel) {
@@ -823,6 +837,9 @@ func RouteShaderSchema() schema.Schema {
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
                 Computed: true,
+                PlanModifiers: []planmodifier.Int64{
+                    int64planmodifier.UseStateForUnknown(),
+                },
             },
             "name": schema.StringAttribute{
                 Required: true,

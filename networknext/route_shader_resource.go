@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    // "github.com/hashicorp/terraform-plugin-framework/types"
+    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,10 +50,9 @@ func (r *routeShaderResource) Create(ctx context.Context, req resource.CreateReq
     var data RouteShaderData
     RouteShaderModelToData(&plan, &data)
 
-    // todo
-
-    /*
-    id, err := r.client.Create("admin/create_route_shader", &data)
+    var response CreateRouteShaderResponse
+    
+    err := r.client.Create(ctx, "admin/create_route_shader", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -65,10 +64,15 @@ func (r *routeShaderResource) Create(ctx context.Context, req resource.CreateReq
         return
     }
 
-    // todo: we really need an error string here 
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to create networknext route shader",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
-    plan.Id = types.Int64Value(int64(id))
-    */
+    plan.Id = types.Int64Value(int64(response.RouteShader.RouteShaderId))
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -103,14 +107,12 @@ func (r *routeShaderResource) Read(ctx context.Context, req resource.ReadRequest
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read networknext route shader",
-            "The networknext API returned an error while trying to read a route shader. "+
-                "Network Next Client Error: "+response.Error,
+            "The networknext API returned an error: "+response.Error,
         )
         return
     }
 
     data := &response.RouteShader
-
     RouteShaderDataToModel(data, &state)
 
     diags = resp.State.Set(ctx, &state)
@@ -132,9 +134,9 @@ func (r *routeShaderResource) Update(ctx context.Context, req resource.UpdateReq
     var data RouteShaderData
     RouteShaderModelToData(&plan, &data)
 
-    // todo
-    /*
-    err := r.client.Update(ctx, "admin/update_route_shader", &data)
+    var response UpdateRouteShaderResponse
+    
+    err := r.client.Update(ctx, "admin/update_route_shader", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -146,8 +148,13 @@ func (r *routeShaderResource) Update(ctx context.Context, req resource.UpdateReq
         return
     }
 
-    // todo: we really need a proper error string here from the API
-    */
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to update networknext route shader",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -165,24 +172,29 @@ func (r *routeShaderResource) Delete(ctx context.Context, req resource.DeleteReq
         return
     }
 
-    /*
     id := state.Id.ValueInt64()
 
-    err := r.client.Delete(ctx, "admin/delete_route_shader", uint64(id))
+    var response UpdateRouteShaderResponse
+
+    err := r.client.Delete(ctx, "admin/delete_route_shader", uint64(id), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext route shader",
-            "An unexpected error occurred when calling the networknext API. "+
-                "Please check that your network next instance is running and properly configured.\n\n"+
-                "Network Next Client Error: "+err.Error(),
+            "Error deleting networknext route shader",
+            "Could not delete route shader, unexpected error: "+err.Error(),
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to delete networknext route shader",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 }
 
 func (r *routeShaderResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
     resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
-

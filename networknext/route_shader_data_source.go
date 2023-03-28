@@ -53,9 +53,7 @@ func (d *routeShadersDataSource) Read(ctx context.Context, req datasource.ReadRe
     if routeShadersResponse.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to get networknext route shaders",
-            "An error occurred when calling the networknext API to get route shaders. "+
-                "Please check that your network next instance is running and properly configured.\n\n"+
-                "Network Next Client Error: "+routeShadersResponse.Error,
+            "The networknext API returned an error: "+routeShadersResponse.Error,
         )
         return
     }
