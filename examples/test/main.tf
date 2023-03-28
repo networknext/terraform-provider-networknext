@@ -12,7 +12,7 @@ provider "networknext" {
 }
 
 resource "networknext_customer" "test" {
-  name = "Test Customer (nuts)"
+  name = "Test Customer nuts"
   code = "test"
   live = true
   debug = false
@@ -99,11 +99,13 @@ data "networknext_datacenters" "example" {}
 data "networknext_relays" "example" {}
 
 data "networknext_route_shaders" "example" {}
+*/
 
 output "customers" {
   value = data.networknext_customers.example
 }
 
+/*
 output "buyers" {
   value = data.networknext_buyers.example
 }

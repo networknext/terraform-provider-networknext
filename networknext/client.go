@@ -150,19 +150,6 @@ func (client *Client) Create(ctx context.Context, path string, requestData inter
         return fmt.Errorf("create failed on %s: %v", url, err)
     }
 
-    if response.StatusCode != 200 {
-        return fmt.Errorf("bad http response for %s: %d", url, response.StatusCode)
-    }
-
-    body, err := ioutil.ReadAll(response.Body)
-    if err != nil {
-        return fmt.Errorf("could not read response for %s: %v", url, err)
-    }
-
-    if err != nil {
-        return fmt.Errorf("failed to read %s: %v", url, err)
-    }
-
     if response == nil {
         return fmt.Errorf("no response from %s", url)
     }

@@ -55,6 +55,7 @@ type DeleteCustomerResponse struct {
 }
 
 func CustomerModelToData(model *CustomerModel, data *CustomerData) {
+    data.CustomerId = uint64(model.Id.ValueInt64())
     data.CustomerName = model.Name.ValueString()
     data.CustomerCode = model.Code.ValueString()
     data.Live = model.Live.ValueBool()
