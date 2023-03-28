@@ -325,16 +325,6 @@ type DatacenterData struct {
     Notes          string  `json:"notes"`
 }
 
-type ReadDatacentersResponse struct {
-    Datacenters []DatacenterData `json:"datacenters"`
-    Error       string           `json:"error"`
-}
-
-type ReadDatacenterResponse struct {
-    Datacenter DatacenterData `json:"datacenter"`
-    Error      string         `json:"error"`
-}
-
 type DatacenterModel struct {
     Id              types.Int64   `tfsdk:"id"`
     Name            types.String  `tfsdk:"name"`
@@ -347,6 +337,30 @@ type DatacenterModel struct {
 
 type DatacentersModel struct {
     Datacenters []DatacenterModel `tfsdk:"datacenters"`
+}
+
+type CreateDatacenterResponse struct {
+    Datacenter  DatacenterData  `json:"datacenter"`
+    Error       string          `json:"error"`
+}
+
+type ReadDatacentersResponse struct {
+    Datacenters []DatacenterData `json:"datacenters"`
+    Error       string           `json:"error"`
+}
+
+type UpdateDatacenterResponse struct {
+    Datacenter  DatacenterData  `json:"datacenter"`
+    Error       string          `json:"error"`
+}
+
+type ReadDatacenterResponse struct {
+    Datacenter DatacenterData `json:"datacenter"`
+    Error      string         `json:"error"`
+}
+
+type DeleteDatacenterResponse struct {
+    Error    string       `json:"error"`
 }
 
 func DatacenterDataToModel(data *DatacenterData, model *DatacenterModel) {

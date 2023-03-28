@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    // "github.com/hashicorp/terraform-plugin-framework/types"
+    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,9 +50,9 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     var data DatacenterData
     DatacenterModelToData(&plan, &data)
 
-    // todo
-    /*
-    id, err := r.client.Create("admin/create_datacenter", &data)
+    var response CreateDatacenterResponse
+    
+    err := r.client.Create(ctx, "admin/create_datacenter", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -64,10 +64,15 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
         return
     }
 
-    // todo: we really need an error string here 
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to create networknext datacenter",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
-    plan.Id = types.Int64Value(int64(id))
-    */
+    plan.Id = types.Int64Value(int64(response.Datacenter.DatacenterId))
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -102,14 +107,12 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read networknext datacenter",
-            "The networknext API returned an error while trying to read a datacenter. "+
-                "Network Next Client Error: "+response.Error,
+            "The networknext API returned an error: "+response.Error,
         )
         return
     }
 
     data := &response.Datacenter
-
     DatacenterDataToModel(data, &state)
 
     diags = resp.State.Set(ctx, &state)
@@ -131,10 +134,9 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     var data DatacenterData
     DatacenterModelToData(&plan, &data)
 
-    // todo
+    var response UpdateDatacenterResponse
     
-    /*
-    err := r.client.Update(ctx, "admin/update_datacenter", &data)
+    err := r.client.Update(ctx, "admin/update_datacenter", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -146,8 +148,13 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
         return
     }
 
-    // todo: we really need a proper error string here from the API
-    */
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to update networknext datacenter",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -165,24 +172,29 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
         return
     }
 
-    /*
     id := state.Id.ValueInt64()
 
-    err := r.client.Delete(ctx, "admin/delete_datacenter", uint64(id))
+    var response UpdateDatacenterResponse
+
+    err := r.client.Delete(ctx, "admin/delete_datacenter", uint64(id), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext datacenter",
-            "An unexpected error occurred when calling the networknext API. "+
-                "Please check that your network next instance is running and properly configured.\n\n"+
-                "Network Next Client Error: "+err.Error(),
+            "Error deleting networknext datacenter",
+            "Could not delete datacenter, unexpected error: "+err.Error(),
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to delete networknext datacenter",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 }
 
 func (r *datacenterResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
     resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
-

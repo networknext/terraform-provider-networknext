@@ -23,9 +23,20 @@ resource "networknext_seller" "test" {
   customer_id = 0
 }
 
+resource "networknext_datacenter" "test" {
+  name = "test"
+  native_name = "test native name"
+  seller_id = networknext_seller.test.id
+  latitude = 100
+  longitude = 50
+  notes = ""
+}
+
 data "networknext_customers" "example" {}
 
 data "networknext_sellers" "example" {}
+
+data "networknext_datacenters" "example" {}
 
 output "customers" {
   value = data.networknext_customers.example
@@ -33,6 +44,10 @@ output "customers" {
 
 output "sellers" {
   value = data.networknext_sellers.example
+}
+
+output "datacenters" {
+  value = data.networknext_datacenters.example
 }
 
 /*
@@ -67,15 +82,6 @@ resource "networknext_buyer" "test" {
   customer_id = networknext_customer.test.id
   route_shader_id = networknext_route_shader.test.id
   public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
-}
-
-resource "networknext_datacenter" "test" {
-  name = "test"
-  native_name = "test native name"
-  seller_id = networknext_seller.test.id
-  latitude = 100
-  longitude = 50
-  notes = ""
 }
 
 resource "networknext_relay" "test" {
