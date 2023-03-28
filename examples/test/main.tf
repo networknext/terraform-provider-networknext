@@ -12,14 +12,14 @@ provider "networknext" {
 }
 
 resource "networknext_customer" "test" {
-  name = "Test Customer (anus)"
+  name = "Test Customer"
   code = "test"
   live = true
   debug = false
 }
 
 resource "networknext_seller" "test" {
-  name = "test (nuts)"
+  name = "test"
   customer_id = 0
 }
 

@@ -178,10 +178,11 @@ func (r *sellerResource) Delete(ctx context.Context, req resource.DeleteRequest,
         return
     }
 
-    /*
     id := state.Id.ValueInt64()
 
-    err := r.client.Delete(ctx, "admin/delete_seller", uint64(id))
+    var response UpdateSellerResponse
+
+    err := r.client.Delete(ctx, "admin/delete_seller", uint64(id), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
@@ -190,7 +191,14 @@ func (r *sellerResource) Delete(ctx context.Context, req resource.DeleteRequest,
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to delete networknext seller",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 }
 
 func (r *sellerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
