@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    // "github.com/hashicorp/terraform-plugin-framework/types"
+    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -48,27 +48,31 @@ func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest,
     }
 
     var data SellerData
-    data.SellerName = plan.Name.ValueString()
-    data.CustomerId = uint64(plan.CustomerId.ValueInt64())
+    SellerModelToData(&plan, &data)
 
-    // todo
-    /*
-    id, err := r.client.Create("admin/create_seller", &data)
+    var response CreateSellerResponse
+
+    err := r.client.Create(ctx, "admin/create_seller", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create networknext seller",
-            "An error occurred when calling the networknext API. "+
+            "An unexpected error occurred when calling the networknext API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
         return
     }
 
-    // todo: we need a real error message here
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to create networknext seller",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
-    plan.Id = types.Int64Value(int64(id))
-    */
+    plan.Id = types.Int64Value(int64(response.Seller.SellerId))
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -136,9 +140,9 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
     var data SellerData
     SellerModelToData(&plan, &data)
 
-    // todo
-    /*
-    err := r.client.Update(ctx, "admin/update_seller", &data)
+    var response UpdateSellerResponse
+    
+    err := r.client.Update(ctx, "admin/update_seller", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -150,8 +154,13 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
         return
     }
 
-    // todo: we need an error message here
-    */
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to update networknext seller",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)

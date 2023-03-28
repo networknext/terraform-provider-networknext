@@ -126,6 +126,96 @@ func CustomersSchema() datasource_schema.Schema {
 
 // -------------------------------------------------------------------
 
+type SellerData struct {
+    SellerId         uint64 `json:"seller_id"`
+    SellerName       string `json:"seller_name"`
+    CustomerId      uint64 `json:"customer_id"`
+}
+
+type SellerModel struct {
+    Id              types.Int64  `tfsdk:"id"`
+    Name            types.String `tfsdk:"name"`
+    CustomerId      types.Int64  `tfsdk:"customer_id"`
+}
+
+type SellersModel struct {
+    Sellers []SellerModel `tfsdk:"sellers"`
+}
+
+type CreateSellerResponse struct {
+    Seller   SellerData   `json:"seller"`
+    Error    string       `json:"error"`
+}
+
+type ReadSellersResponse struct {
+    Sellers []SellerData `json:"sellers"`
+    Error  string        `json:"error"`
+}
+
+type UpdateSellerResponse struct {
+    Seller   SellerData   `json:"seller"`
+    Error    string       `json:"error"`
+}
+
+func SellerDataToModel(data *SellerData, model *SellerModel) {
+    model.Id = types.Int64Value(int64(data.SellerId))
+    model.Name = types.StringValue(data.SellerName)
+    model.CustomerId = types.Int64Value(int64(data.CustomerId))
+}
+
+func SellerModelToData(model *SellerModel, data *SellerData) {
+    data.SellerId = uint64(model.Id.ValueInt64())
+    data.SellerName = model.Name.ValueString()
+    data.CustomerId = uint64(model.CustomerId.ValueInt64())    
+}
+
+func SellerSchema() schema.Schema {
+    return schema.Schema{
+        Attributes: map[string]schema.Attribute{
+            "id": schema.Int64Attribute{
+                Computed: true,
+                PlanModifiers: []planmodifier.Int64{
+                    int64planmodifier.UseStateForUnknown(),
+                },
+            },
+            "name": schema.StringAttribute{
+                Required: true,
+            },
+            "customer_id": schema.Int64Attribute{
+                Required: true,
+                // todo: this should have a default of 0, but I can't get it to work... =p
+                // Optional: true,
+                // Default: int64default.StaticValue(0),
+            },
+        },
+    }
+}
+
+func SellersSchema() datasource_schema.Schema {
+    return datasource_schema.Schema{
+        Attributes: map[string]datasource_schema.Attribute{
+            "sellers": schema.ListNestedAttribute{
+                Computed: true,
+                NestedObject: schema.NestedAttributeObject{
+                    Attributes: map[string]schema.Attribute{
+                        "id": schema.Int64Attribute{
+                            Computed: true,
+                        },
+                        "name": schema.StringAttribute{
+                            Computed: true,
+                        },
+                        "customer_id": schema.Int64Attribute{
+                            Computed: true,
+                        },
+                    },
+                },
+            },
+        },
+    }
+}
+
+// -------------------------------------------------------------------
+
 type BuyerData struct {
     BuyerId         uint64 `json:"buyer_id"`
     BuyerName       string `json:"buyer_name"`
@@ -221,86 +311,6 @@ func BuyersSchema() datasource_schema.Schema {
             },
         },
     }    
-}
-
-// -------------------------------------------------------------------
-
-type SellerData struct {
-    SellerId         uint64 `json:"seller_id"`
-    SellerName       string `json:"seller_name"`
-    CustomerId      uint64 `json:"customer_id"`
-}
-
-type ReadSellersResponse struct {
-    Sellers []SellerData `json:"sellers"`
-    Error  string        `json:"error"`
-}
-
-type SellerModel struct {
-    Id              types.Int64  `tfsdk:"id"`
-    Name            types.String `tfsdk:"name"`
-    CustomerId      types.Int64  `tfsdk:"customer_id"`
-}
-
-type SellersModel struct {
-    Sellers []SellerModel `tfsdk:"sellers"`
-}
-
-func SellerDataToModel(data *SellerData, model *SellerModel) {
-    model.Id = types.Int64Value(int64(data.SellerId))
-    model.Name = types.StringValue(data.SellerName)
-    model.CustomerId = types.Int64Value(int64(data.CustomerId))
-}
-
-func SellerModelToData(model *SellerModel, data *SellerData) {
-    data.SellerId = uint64(model.Id.ValueInt64())
-    data.SellerName = model.Name.ValueString()
-    data.CustomerId = uint64(model.CustomerId.ValueInt64())    
-}
-
-func SellerSchema() schema.Schema {
-    return schema.Schema{
-        Attributes: map[string]schema.Attribute{
-            "id": schema.Int64Attribute{
-                Computed: true,
-                PlanModifiers: []planmodifier.Int64{
-                    int64planmodifier.UseStateForUnknown(),
-                },
-            },
-            "name": schema.StringAttribute{
-                Required: true,
-            },
-            "customer_id": schema.Int64Attribute{
-                Required: true,
-                // todo: this should have a default of 0, but I can't get it to work... =p
-                // Optional: true,
-                // Default: int64default.StaticValue(0),
-            },
-        },
-    }
-}
-
-func SellersSchema() datasource_schema.Schema {
-    return datasource_schema.Schema{
-        Attributes: map[string]datasource_schema.Attribute{
-            "sellers": schema.ListNestedAttribute{
-                Computed: true,
-                NestedObject: schema.NestedAttributeObject{
-                    Attributes: map[string]schema.Attribute{
-                        "id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                        "name": schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "customer_id": schema.Int64Attribute{
-                            Computed: true,
-                        },
-                    },
-                },
-            },
-        },
-    }
 }
 
 // -------------------------------------------------------------------

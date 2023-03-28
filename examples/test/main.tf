@@ -12,10 +12,27 @@ provider "networknext" {
 }
 
 resource "networknext_customer" "test" {
-  name = "Test Customer nuts"
+  name = "Test Customer (anus)"
   code = "test"
   live = true
   debug = false
+}
+
+resource "networknext_seller" "test" {
+  name = "test (nuts)"
+  customer_id = 0
+}
+
+data "networknext_customers" "example" {}
+
+data "networknext_sellers" "example" {}
+
+output "customers" {
+  value = data.networknext_customers.example
+}
+
+output "sellers" {
+  value = data.networknext_sellers.example
 }
 
 /*
@@ -52,11 +69,6 @@ resource "networknext_buyer" "test" {
   public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
 }
 
-resource "networknext_seller" "test" {
-  name = "test"
-  customer_id = 0
-}
-
 resource "networknext_datacenter" "test" {
   name = "test"
   native_name = "test native name"
@@ -85,33 +97,17 @@ resource "networknext_relay" "test" {
   max_sessions = 100
   notes = ""
 }
-*/
 
-data "networknext_customers" "example" {}
-
-/*
 data "networknext_buyers" "example" {}
-
-data "networknext_sellers" "example" {}
 
 data "networknext_datacenters" "example" {}
 
 data "networknext_relays" "example" {}
 
 data "networknext_route_shaders" "example" {}
-*/
 
-output "customers" {
-  value = data.networknext_customers.example
-}
-
-/*
 output "buyers" {
   value = data.networknext_buyers.example
-}
-
-output "sellers" {
-  value = data.networknext_sellers.example
 }
 
 output "datacenters" {

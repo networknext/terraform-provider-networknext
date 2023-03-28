@@ -53,9 +53,7 @@ func (d *customersDataSource) Read(ctx context.Context, req datasource.ReadReque
     if customersResponse.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to get networknext customers",
-            "An error occurred when calling the networknext API to get customers. "+
-                "Please check that your network next instance is running and properly configured.\n\n"+
-                "Network Next Client Error: "+customersResponse.Error,
+            "The networknext API returned an error: "+customersResponse.Error,
         )
         return
     }
