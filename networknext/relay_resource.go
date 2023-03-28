@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    // "github.com/hashicorp/terraform-plugin-framework/types"
+    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,9 +50,9 @@ func (r *relayResource) Create(ctx context.Context, req resource.CreateRequest, 
     var data RelayData
     RelayModelToData(&plan, &data)
 
-    // todo
-    /*
-    id, err := r.client.Create("admin/create_relay", &data)
+    var response CreateRelayResponse
+    
+    err := r.client.Create(ctx, "admin/create_relay", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -64,10 +64,15 @@ func (r *relayResource) Create(ctx context.Context, req resource.CreateRequest, 
         return
     }
 
-    // todo: we need a real error here
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to create networknext relay",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
-    plan.Id = types.Int64Value(int64(id))
-    */
+    plan.Id = types.Int64Value(int64(response.Relay.RelayId))
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -102,8 +107,7 @@ func (r *relayResource) Read(ctx context.Context, req resource.ReadRequest, resp
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read networknext relay",
-            "The networknext API returned an error while trying to read a relay. "+
-                "Network Next Client Error: "+response.Error,
+            "The networknext API returned an error: "+response.Error,
         )
         return
     }
@@ -130,9 +134,9 @@ func (r *relayResource) Update(ctx context.Context, req resource.UpdateRequest, 
     var data RelayData
     RelayModelToData(&plan, &data)
 
-    // todo
-    /*
-    err := r.client.Update(ctx, "admin/update_relay", &data)
+    var response UpdateRelayResponse
+    
+    err := r.client.Update(ctx, "admin/update_relay", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -144,8 +148,13 @@ func (r *relayResource) Update(ctx context.Context, req resource.UpdateRequest, 
         return
     }
 
-    // todo: we need a real error message here
-    */
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to update networknext relay",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -163,21 +172,27 @@ func (r *relayResource) Delete(ctx context.Context, req resource.DeleteRequest, 
         return
     }
 
-    /*
     id := state.Id.ValueInt64()
 
-    err := r.client.Delete(ctx, "admin/delete_relay", uint64(id))
+    var response UpdateRelayResponse
+
+    err := r.client.Delete(ctx, "admin/delete_relay", uint64(id), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext relay",
-            "An unexpected error occurred when calling the networknext API. "+
-                "Please check that your network next instance is running and properly configured.\n\n"+
-                "Network Next Client Error: "+err.Error(),
+            "Error deleting networknext relay",
+            "Could not delete relay, unexpected error: "+err.Error(),
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to delete networknext relay",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 }
 
 func (r *relayResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

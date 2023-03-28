@@ -373,6 +373,7 @@ func DatacenterDataToModel(data *DatacenterData, model *DatacenterModel) {
 }
 
 func DatacenterModelToData(model *DatacenterModel, data *DatacenterData) {
+    data.DatacenterId = uint64(model.Id.ValueInt64())
     data.DatacenterName = model.Name.ValueString()
     data.NativeName = model.NativeName.ValueString()
     data.Latitude = float32(model.Latitude.ValueFloat64())
@@ -470,16 +471,6 @@ type RelayData struct {
     Notes            string `json:"notes"`
 }
 
-type ReadRelaysResponse struct {
-    Relays []RelayData `json:"relays"`
-    Error  string      `json:"error"`
-}
-
-type ReadRelayResponse struct {
-    Relay   RelayData `json:"relay"`
-    Error   string    `json:"error"`
-}
-
 type RelayModel struct {
     Id               types.Int64   `tfsdk:"id"`
     Name             types.String  `tfsdk:"name"`
@@ -505,7 +496,32 @@ type RelaysModel struct {
     Relays []RelayModel `tfsdk:"relays"`
 }
 
+type CreateRelayResponse struct {
+    Relay    RelayData    `json:"relay"`
+    Error    string       `json:"error"`
+}
+
+type ReadRelaysResponse struct {
+    Relays []RelayData `json:"relays"`
+    Error  string      `json:"error"`
+}
+
+type ReadRelayResponse struct {
+    Relay   RelayData `json:"relay"`
+    Error   string    `json:"error"`
+}
+
+type UpdateRelayResponse struct {
+    Relay    RelayData    `json:"relay"`
+    Error    string       `json:"error"`
+}
+
+type DeleteRelayResponse struct {
+    Error    string       `json:"error"`
+}
+
 func RelayModelToData(model *RelayModel, data *RelayData) {
+    data.RelayId = uint64(model.Id.ValueInt64())
     data.RelayName = model.Name.ValueString()
     data.DatacenterId = uint64(model.DatacenterId.ValueInt64())
     data.PublicIP = model.PublicIP.ValueString()
@@ -987,7 +1003,7 @@ type BuyerDatacenterSettingsModel struct {
 }
 
 type ReadBuyerDatacenterSettingsResponse struct {
-    Settings BuyerDatacenterSettingsData    `json:"customer"`
+    Settings BuyerDatacenterSettingsData    `json:"settings"`
     Error    string                         `json:"error"`
 }
 
@@ -1027,7 +1043,7 @@ func BuyerDatacenterSettingsSchema() schema.Schema {
 func BuyerDatacenterSettingsListSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
         Attributes: map[string]datasource_schema.Attribute{
-            "customers": datasource_schema.ListNestedAttribute{
+            "settings": datasource_schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: datasource_schema.NestedAttributeObject{
                     Attributes: map[string]datasource_schema.Attribute{
