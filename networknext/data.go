@@ -1080,8 +1080,8 @@ func BuyerDatacenterSettingsSchema() schema.Schema {
             "datacenter_id": schema.Int64Attribute{
                 Required: true,
             },
-            "live": schema.BoolAttribute{
-                Optional: true,
+            "enable_acceleration": schema.BoolAttribute{
+                Required: true,
             },
         },
     }

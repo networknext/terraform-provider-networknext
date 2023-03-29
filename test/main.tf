@@ -85,6 +85,12 @@ resource "networknext_buyer" "test" {
   public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
 }
 
+resource "networknext_buyer_datacenter_settings" "test" {
+  buyer_id = networknext_buyer.test.id
+  datacenter_id = networknext_datacenter.test.id
+  enable_acceleration = true
+}
+
 data "networknext_customers" "example" {}
 
 data "networknext_sellers" "example" {}
