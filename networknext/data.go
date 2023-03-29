@@ -281,6 +281,9 @@ func BuyerSchema() schema.Schema {
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
                 Computed: true,
+                PlanModifiers: []planmodifier.Int64{
+                    int64planmodifier.UseStateForUnknown(),
+                },
             },
             "name": schema.StringAttribute{
                 Required: true,
