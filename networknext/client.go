@@ -8,8 +8,6 @@ import (
     "time"
     "fmt"
     "io/ioutil"
-    // "strconv"
-    "strings"
 
     "github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -220,11 +218,11 @@ func (client *Client) Update(ctx context.Context, path string, requestData inter
     return nil
 }
 
-func (client *Client) Delete(ctx context.Context, path string, id uint64, responseData interface{}) error {
+func (client *Client) Delete(ctx context.Context, path string, responseData interface{}) error {
 
     url := client.HostName + "/" + path
 
-    request, _ := http.NewRequest("DELETE", url, strings.NewReader(fmt.Sprintf("%d", id)))
+    request, _ := http.NewRequest("DELETE", url, nil)
 
     request.Header.Set("Authorization", "Bearer " + client.APIKey)
 

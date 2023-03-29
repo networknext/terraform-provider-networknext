@@ -49,9 +49,9 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
     var data BuyerDatacenterSettingsData
     BuyerDatacenterSettingsModelToData(&plan, &data)
 
-    // todo
-    /*
-    err := r.client.Create("admin/create_buyer_datacenter_settings", &data, &response)
+    var response CreateBuyerDatacenterSettingsResponse
+    
+    err := r.client.Create(ctx, "admin/create_buyer_datacenter_settings", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -62,7 +62,14 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to create networknext buyer datacenter settings",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -82,7 +89,7 @@ func (r *buyerDatacenterSettingsResource) Read(ctx context.Context, req resource
 
     response := ReadBuyerDatacenterSettingsResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer_datacenter_settings/%x/%x", int64(state.BuyerId.ValueInt64()), int64(state.DatacenterId.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer_datacenter_settings/%x/%x", uint64(state.BuyerId.ValueInt64()), uint64(state.DatacenterId.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -97,8 +104,7 @@ func (r *buyerDatacenterSettingsResource) Read(ctx context.Context, req resource
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read networknext buyer datacenter settings",
-            "The networknext API returned an error while trying to read a buyer datacenter settings. "+
-                "Network Next Client Error: "+response.Error,
+            "The networknext API returned an error: "+response.Error,
         )
         return
     }
@@ -124,10 +130,10 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
 
     var data BuyerDatacenterSettingsData
     BuyerDatacenterSettingsModelToData(&plan, &data)
+
+    var response UpdateBuyerDatacenterSettingsResponse
     
-    // todo
-    /*
-    err := r.client.Update(ctx, "admin/update_buyer_datacenter_settings", &data)
+    err := r.client.Update(ctx, "admin/update_buyer_datacenter_settings", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -138,9 +144,14 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
         )
         return
     }
-    */
 
-    // todo: we need a real error message here
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to update networknext buyer datacenter settings",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -158,12 +169,12 @@ func (r *buyerDatacenterSettingsResource) Delete(ctx context.Context, req resour
         return
     }
 
-    // todo: wait, we need an id...
+    buyerId := state.BuyerId.ValueInt64()
+    datacenterId := state.DatacenterId.ValueInt64()
 
-    /*
-    id := state.Id.ValueInt64()
+    var response UpdateBuyerDatacenterSettingsResponse
 
-    err := r.client.Delete(ctx, "admin/delete_buyer_datacenter_settings", uint64(id))
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_buyer_datacenter_settings/%x/%x", uint64(buyerId), uint64(datacenterId)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
@@ -172,7 +183,14 @@ func (r *buyerDatacenterSettingsResource) Delete(ctx context.Context, req resour
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to delete networknext buyer datacenter settings",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 }
 
 func (r *buyerDatacenterSettingsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

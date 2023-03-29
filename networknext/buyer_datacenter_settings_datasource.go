@@ -53,9 +53,7 @@ func (d *buyerDatacenterSettingsDataSource) Read(ctx context.Context, req dataso
     if buyerDatacenterSettingsListResponse.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to get networknext buyer datacenter settings",
-            "An error occurred when calling the networknext API to get buyer datacenter settings. "+
-                "Please check that your network next instance is running and properly configured.\n\n"+
-                "Network Next Client Error: "+buyerDatacenterSettingsListResponse.Error,
+            "The networknext API returned an error: "+buyerDatacenterSettingsListResponse.Error,
         )
         return
     }

@@ -176,7 +176,7 @@ func (r *customerResource) Delete(ctx context.Context, req resource.DeleteReques
 
     var response UpdateCustomerResponse
 
-    err := r.client.Delete(ctx, "admin/delete_customer", uint64(id), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_customer/%x", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

@@ -6,7 +6,6 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -72,7 +71,7 @@ func (r *routeShaderResource) Create(ctx context.Context, req resource.CreateReq
         return
     }
 
-    plan.Id = types.Int64Value(int64(response.RouteShader.RouteShaderId))
+    RouteShaderDataToModel(&response.RouteShader, &plan)
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -176,7 +175,7 @@ func (r *routeShaderResource) Delete(ctx context.Context, req resource.DeleteReq
 
     var response UpdateRouteShaderResponse
 
-    err := r.client.Delete(ctx, "admin/delete_route_shader", uint64(id), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_route_shader/%x", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

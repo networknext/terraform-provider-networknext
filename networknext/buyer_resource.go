@@ -6,7 +6,7 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    // "github.com/hashicorp/terraform-plugin-framework/types"
+    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -50,9 +50,9 @@ func (r *buyerResource) Create(ctx context.Context, req resource.CreateRequest, 
     var data BuyerData
     BuyerModelToData(&plan, &data)
 
-    // todo
-    /*
-    id, err := r.client.Create("admin/create_buyer", &data)
+    var response CreateBuyerResponse
+    
+    err := r.client.Create(ctx, "admin/create_buyer", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -63,14 +63,16 @@ func (r *buyerResource) Create(ctx context.Context, req resource.CreateRequest, 
         )
         return
     }
-    */
 
-    // todo
-    /*
-    // todo: we need to return a better error here, not just an id value
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to create networknext buyer",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
-    plan.Id = types.Int64Value(int64(id))
-    */
+    plan.Id = types.Int64Value(int64(response.Buyer.BuyerId))
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -105,8 +107,7 @@ func (r *buyerResource) Read(ctx context.Context, req resource.ReadRequest, resp
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read networknext buyer",
-            "The networknext API returned an error while trying to read a buyer. "+
-                "Network Next Client Error: "+response.Error,
+            "The networknext API returned an error: "+response.Error,
         )
         return
     }
@@ -132,9 +133,10 @@ func (r *buyerResource) Update(ctx context.Context, req resource.UpdateRequest, 
 
     var data BuyerData
     BuyerModelToData(&plan, &data)
+
+    var response UpdateBuyerResponse
     
-    /*
-    err := r.client.Update(ctx, "admin/update_buyer", &data)
+    err := r.client.Update(ctx, "admin/update_buyer", &data, &response)
     
     if err != nil {
         resp.Diagnostics.AddError(
@@ -145,7 +147,14 @@ func (r *buyerResource) Update(ctx context.Context, req resource.UpdateRequest, 
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to update networknext buyer",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)
@@ -163,11 +172,11 @@ func (r *buyerResource) Delete(ctx context.Context, req resource.DeleteRequest, 
         return
     }
 
-    // todo
-    /*
     id := state.Id.ValueInt64()
 
-    err := r.client.Delete(ctx, "admin/delete_buyer", uint64(id))
+    var response UpdateBuyerResponse
+
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_buyer/%x", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
@@ -176,7 +185,14 @@ func (r *buyerResource) Delete(ctx context.Context, req resource.DeleteRequest, 
         )
         return
     }
-    */
+
+    if response.Error != "" {
+        resp.Diagnostics.AddError(
+            "Unable to delete networknext buyer",
+            "The networknext API returned an error: "+response.Error,
+        )
+        return
+    }
 }
 
 func (r *buyerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

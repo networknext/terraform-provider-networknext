@@ -176,7 +176,7 @@ func (r *relayResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 
     var response UpdateRelayResponse
 
-    err := r.client.Delete(ctx, "admin/delete_relay", uint64(id), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_relay/%x", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

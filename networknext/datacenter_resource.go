@@ -176,7 +176,7 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
 
     var response UpdateDatacenterResponse
 
-    err := r.client.Delete(ctx, "admin/delete_datacenter", uint64(id), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_datacenter/%x", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

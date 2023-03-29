@@ -224,16 +224,6 @@ type BuyerData struct {
     RouteShaderId   uint64 `json:"route_shader_id"`
 }
 
-type ReadBuyerResponse struct {
-    Buyer  BuyerData `json:"buyer"`
-    Error  string    `json:"error"`
-}
-
-type ReadBuyersResponse struct {
-    Buyers []BuyerData `json:"buyers"`
-    Error  string      `json:"error"`
-}
-
 type BuyerModel struct {
     Id              types.Int64  `tfsdk:"id"`
     Name            types.String `tfsdk:"name"`
@@ -244,6 +234,30 @@ type BuyerModel struct {
 
 type BuyersModel struct {
     Buyers []BuyerModel `tfsdk:"buyers"`
+}
+
+type CreateBuyerResponse struct {
+    Buyer    BuyerData    `json:"buyer"`
+    Error    string       `json:"error"`
+}
+
+type ReadBuyerResponse struct {
+    Buyer    BuyerData    `json:"buyer"`
+    Error    string       `json:"error"`
+}
+
+type ReadBuyersResponse struct {
+    Buyers    []BuyerData    `json:"buyers"`
+    Error     string         `json:"error"`
+}
+
+type UpdateBuyerResponse struct {
+    Buyer    BuyerData    `json:"buyer"`
+    Error    string       `json:"error"`
+}
+
+type DeleteBuyerResponse struct {
+    Error    string       `json:"error"`
 }
 
 func BuyerDataToModel(data *BuyerData, model *BuyerModel) {
@@ -319,8 +333,8 @@ type DatacenterData struct {
     DatacenterId   uint64  `json:"datacenter_id"`
     DatacenterName string  `json:"datacenter_name"`
     NativeName     string  `json:"native_name"`
-    Latitude       float32 `json:"latitude"`
-    Longitude      float32 `json:"longitude"`
+    Latitude       float64 `json:"latitude"`
+    Longitude      float64 `json:"longitude"`
     SellerId       uint64  `json:"seller_id"`
     Notes          string  `json:"notes"`
 }
@@ -376,8 +390,8 @@ func DatacenterModelToData(model *DatacenterModel, data *DatacenterData) {
     data.DatacenterId = uint64(model.Id.ValueInt64())
     data.DatacenterName = model.Name.ValueString()
     data.NativeName = model.NativeName.ValueString()
-    data.Latitude = float32(model.Latitude.ValueFloat64())
-    data.Longitude = float32(model.Longitude.ValueFloat64())
+    data.Latitude = model.Latitude.ValueFloat64()
+    data.Longitude = model.Longitude.ValueFloat64()
     data.SellerId = uint64(model.SellerId.ValueInt64())
     data.Notes = model.Notes.ValueString()
 }
@@ -701,8 +715,8 @@ type RouteShaderData struct {
     RouteShaderName           string  `json:"route_shader_name"`
     ABTest                    bool    `json:"ab_test"`
     AcceptableLatency         int     `json:"acceptable_latency"`
-    AcceptablePacketLoss      float32 `json:"acceptable_packet_loss"`
-    PacketLossSustained       float32 `json:"packet_loss_sustained"`
+    AcceptablePacketLoss      float64 `json:"acceptable_packet_loss"`
+    PacketLossSustained       float64 `json:"packet_loss_sustained"`
     AnalysisOnly              bool    `json:"analysis_only"`
     BandwidthEnvelopeUpKbps   int     `json:"bandwidth_envelope_up_kbps"`
     BandwidthEnvelopeDownKbps int     `json:"bandwidth_envelope_down_kbps"`
@@ -711,7 +725,7 @@ type RouteShaderData struct {
     Multipath                 bool    `json:"multipath"`
     ReduceLatency             bool    `json:"reduce_latency"`
     ReducePacketLoss          bool    `json:"reduce_packet_loss"`
-    SelectionPercent          float32 `json:"selection_percent"`
+    SelectionPercent          float64 `json:"selection_percent"`
     MaxLatencyTradeOff        int     `json:"max_latency_trade_off"`
     MaxNextRTT                int     `json:"max_next_rtt"`
     RouteSwitchThreshold      int     `json:"route_switch_threshold"`
@@ -810,8 +824,8 @@ func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
     data.RouteShaderName = model.Name.ValueString()
     data.ABTest = model.ABTest.ValueBool()
     data.AcceptableLatency = int(model.AcceptableLatency.ValueInt64())
-    data.AcceptablePacketLoss = float32(model.AcceptablePacketLoss.ValueFloat64())
-    data.PacketLossSustained = float32(model.PacketLossSustained.ValueFloat64())
+    data.AcceptablePacketLoss = model.AcceptablePacketLoss.ValueFloat64()
+    data.PacketLossSustained = model.PacketLossSustained.ValueFloat64()
     data.AnalysisOnly = model.AnalysisOnly.ValueBool()
     data.BandwidthEnvelopeUpKbps = int(model.BandwidthEnvelopeUpKbps.ValueInt64())
     data.BandwidthEnvelopeDownKbps = int(model.BandwidthEnvelopeDownKbps.ValueInt64())
@@ -820,7 +834,7 @@ func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
     data.Multipath = model.Multipath.ValueBool()
     data.ReduceLatency = model.ReduceLatency.ValueBool()
     data.ReducePacketLoss = model.ReducePacketLoss.ValueBool()
-    data.SelectionPercent = float32(model.SelectionPercent.ValueFloat64())
+    data.SelectionPercent = model.SelectionPercent.ValueFloat64()
     data.MaxLatencyTradeOff = int(model.MaxLatencyTradeOff.ValueInt64())
     data.MaxNextRTT = int(model.MaxNextRTT.ValueInt64())
     data.RouteSwitchThreshold = int(model.RouteSwitchThreshold.ValueInt64())
@@ -1003,20 +1017,24 @@ func RouteShadersSchema() datasource_schema.Schema {
 // -------------------------------------------------------------------
 
 type BuyerDatacenterSettingsData struct {
-    Id                 uint64 `json:"id"`
     BuyerId            uint64 `json:"buyer_id"`
     DatacenterId       uint64 `json:"datacenter_id"`
     EnableAcceleration bool   `json:"enable_acceleration"`
+}
+
+type BuyerDatacenterSettingsModel struct {
+    BuyerId                     types.Int64  `tfsdk:"buyer_id"`
+    DatacenterId                types.Int64  `tfsdk:"datacenter_id"`
+    EnableAcceleration          types.Bool   `tfsdk:"enable_acceleration"`
 }
 
 type BuyerDatacenterSettingsListModel struct {
     Settings []BuyerDatacenterSettingsModel `tfsdk:"settings"`
 }
 
-type BuyerDatacenterSettingsModel struct {
-    BuyerId             types.Int64  `tfsdk:"buyer_id"`
-    DatacenterId        types.Int64  `tfsdk:"datacenter_id"`
-    EnableAcceleration  types.Bool   `tfsdk:"enable_acceleration"`
+type CreateBuyerDatacenterSettingsResponse struct {
+    Settings BuyerDatacenterSettingsData    `json:"settings"`
+    Error    string                         `json:"error"`
 }
 
 type ReadBuyerDatacenterSettingsResponse struct {
@@ -1025,8 +1043,17 @@ type ReadBuyerDatacenterSettingsResponse struct {
 }
 
 type ReadBuyerDatacenterSettingsListResponse struct {
-    Settings     []BuyerDatacenterSettingsData  `json:"settings"`
-    Error        string                         `json:"error"`
+    Settings []BuyerDatacenterSettingsData  `json:"settings"`
+    Error    string                         `json:"error"`
+}
+
+type UpdateBuyerDatacenterSettingsResponse struct {
+    Settings BuyerDatacenterSettingsData    `json:"settings"`
+    Error    string                         `json:"error"`
+}
+
+type DeleteBuyerDatacenterSettingsResponse struct {
+    Error    string                         `json:"error"`
 }
 
 func BuyerDatacenterSettingsModelToData(model *BuyerDatacenterSettingsModel, data *BuyerDatacenterSettingsData) {

@@ -1,17 +1,17 @@
 TODO
 
-	Buyer resource update
-
-	------------
-
-	On create and update, need to feed back in quantized state, eg. especially for float64s
-
-	Without this, get stuck in an endless loop of updating and quantizing floats...
-
-	------------
-
 	Buyer datacenter settings resource
+
+	------------
 
 	Check all error messages in data sources
 
+	------------
+
 	Work out how to get defaults working =p
+
+	------------
+
+	Lock it down and move on to testing with terraform in dev
+
+	------------
