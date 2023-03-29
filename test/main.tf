@@ -88,7 +88,7 @@ resource "networknext_buyer" "test" {
 resource "networknext_buyer_datacenter_settings" "test" {
   buyer_id = networknext_buyer.test.id
   datacenter_id = networknext_datacenter.test.id
-  enable_acceleration = true
+  enable_acceleration = false
 }
 
 data "networknext_customers" "example" {}
@@ -102,6 +102,8 @@ data "networknext_relays" "example" {}
 data "networknext_route_shaders" "example" {}
 
 data "networknext_buyers" "example" {}
+
+data "networknext_buyer_datacenter_settings" "example" {}
 
 output "customers" {
   value = data.networknext_customers.example
@@ -125,4 +127,8 @@ output "route_shaders" {
 
 output "buyers" {
   value = data.networknext_buyers.example
+}
+
+output "buyer_datacenter_settings" {
+  value = data.networknext_buyer_datacenter_settings.example
 }

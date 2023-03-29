@@ -1060,15 +1060,15 @@ type DeleteBuyerDatacenterSettingsResponse struct {
 }
 
 func BuyerDatacenterSettingsModelToData(model *BuyerDatacenterSettingsModel, data *BuyerDatacenterSettingsData) {
-    model.BuyerId = types.Int64Value(int64(data.BuyerId))
-    model.DatacenterId = types.Int64Value(int64(data.DatacenterId))
-    model.EnableAcceleration = types.BoolValue(data.EnableAcceleration)
-}
-
-func BuyerDatacenterSettingsDataToModel(data *BuyerDatacenterSettingsData, model *BuyerDatacenterSettingsModel) {
     data.BuyerId = uint64(model.BuyerId.ValueInt64())
     data.DatacenterId = uint64(model.DatacenterId.ValueInt64())
     data.EnableAcceleration = model.EnableAcceleration.ValueBool()    
+}
+
+func BuyerDatacenterSettingsDataToModel(data *BuyerDatacenterSettingsData, model *BuyerDatacenterSettingsModel) {
+    model.BuyerId = types.Int64Value(int64(data.BuyerId))
+    model.DatacenterId = types.Int64Value(int64(data.DatacenterId))
+    model.EnableAcceleration = types.BoolValue(data.EnableAcceleration)
 }
 
 func BuyerDatacenterSettingsSchema() schema.Schema {
