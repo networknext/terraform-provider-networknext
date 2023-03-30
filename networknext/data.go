@@ -5,6 +5,9 @@ import (
     "github.com/hashicorp/terraform-plugin-framework/resource/schema"
     "github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
     "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+    "github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+    "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+    "github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
     datasource_schema "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 )
 
@@ -87,6 +90,8 @@ func CustomerSchema() schema.Schema {
             },
             "live": schema.BoolAttribute{
                 Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(true),
             },
             "debug": schema.BoolAttribute{
                 Optional: true,
@@ -182,10 +187,9 @@ func SellerSchema() schema.Schema {
                 Required: true,
             },
             "customer_id": schema.Int64Attribute{
-                Required: true,
-                // todo: this should have a default of 0, but I can't get it to work... =p
-                // Optional: true,
-                // Default: int64default.StaticValue(0),
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
             },
         },
     }
@@ -412,7 +416,9 @@ func DatacenterSchema() schema.Schema {
                 Required: true,
             },
             "native_name": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString(""),
             },
             "latitude": schema.Float64Attribute{
                 Required: true,
@@ -424,7 +430,9 @@ func DatacenterSchema() schema.Schema {
                 Required: true,
             },
             "notes": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString(""),
             },
         },
     }
@@ -598,25 +606,39 @@ func RelaySchema() schema.Schema {
                 Required: true,
             },
             "public_port": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(40000),
             },
             "internal_ip": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString("0.0.0.0"),
             },
             "internal_port": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
             },
             "internal_group": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString(""),
             },
             "ssh_ip": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString("0.0.0.0"),
             },
             "ssh_port": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
             },
             "ssh_user": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString("root"),
             },
             "private_key_base64": schema.StringAttribute{
                 Required: true,
@@ -625,19 +647,29 @@ func RelaySchema() schema.Schema {
                 Required: true,
             },
             "version": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString(""),
             },
             "mrc": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
             },
             "port_speed": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
             },
             "max_sessions": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
             },
             "notes": schema.StringAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: stringdefault.StaticString(""),
             },
         },
     }
