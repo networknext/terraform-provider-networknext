@@ -7,6 +7,7 @@ import (
     "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
     "github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
     "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+    "github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
     "github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
     datasource_schema "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 )
@@ -878,58 +879,94 @@ func RouteShaderSchema() schema.Schema {
                 Required: true,
             },
             "ab_test": schema.BoolAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(false),
             },
             "acceptable_latency": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(20),
             },
             "acceptable_packet_loss_instant": schema.Float64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: float64default.StaticFloat64(0.25),
             },
             "acceptable_packet_loss_sustained": schema.Float64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: float64default.StaticFloat64(0.1),
             },
             "analysis_only": schema.BoolAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(false),
             },
             "bandwidth_envelope_up_kbps": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(1024),
             },
             "bandwidth_envelope_down_kbps": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(1024),
             },
             "disable_network_next": schema.BoolAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(false),
             },
             "latency_reduction_threshold": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(10),
             },
             "multipath": schema.BoolAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(true),
             },
             "selection_percent": schema.Float64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: float64default.StaticFloat64(100.0),
             },
             "max_latency_trade_off": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(20),
             },
             "max_next_rtt": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(250),
             },
             "route_switch_threshold": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(10),
             },
             "route_select_threshold": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(5),
             },
             "rtt_veto": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(10),
             },
             "force_next": schema.BoolAttribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(false),
             },
             "route_diversity": schema.Int64Attribute{
-                Required: true,
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
             },
         },
     }

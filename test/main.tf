@@ -12,23 +12,23 @@ provider "networknext" {
 }
 
 resource "networknext_customer" "test" {
-  name = "Test Customer (update)"
+  name = "Test Customer"
   code = "test"
 }
 
 resource "networknext_seller" "test" {
-  name = "test (update)"
+  name = "test"
 }
 
 resource "networknext_datacenter" "test" {
-  name = "test (update)"
+  name = "test"
   seller_id = networknext_seller.test.id
   latitude = 100
   longitude = 50
 }
 
 resource "networknext_relay" "test" {
-  name = "test.relay (update)"
+  name = "test.relay"
   datacenter_id = networknext_datacenter.test.id
   public_ip = "127.0.0.1"
   public_key_base64="9SKtwe4Ear59iQyBOggxutzdtVLLc1YQ2qnArgiiz14="
@@ -36,29 +36,11 @@ resource "networknext_relay" "test" {
 }
 
 resource "networknext_route_shader" test {
-  name = "test (update)"
-  ab_test = false
-  acceptable_latency = 20
-  acceptable_packet_loss_instant = 1.0
-  acceptable_packet_loss_sustained = 0.1
-  analysis_only = false
-  bandwidth_envelope_up_kbps = 1024
-  bandwidth_envelope_down_kbps = 1024
-  disable_network_next = false
-  latency_reduction_threshold = 10
-  multipath = true
-  selection_percent = 100
-  max_latency_trade_off = 20
-  max_next_rtt = 250
-  route_switch_threshold = 10
-  route_select_threshold = 5
-  rtt_veto = 10
-  force_next = false
-  route_diversity = 0
+  name = "test"
 }
 
 resource "networknext_buyer" "test" {
-  name = "Test Buyer (update)"
+  name = "Test Buyer"
   customer_id = networknext_customer.test.id
   route_shader_id = networknext_route_shader.test.id
   public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
