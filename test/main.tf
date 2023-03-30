@@ -12,19 +12,19 @@ provider "networknext" {
 }
 
 resource "networknext_customer" "test" {
-  name = "Test Customer"
+  name = "Test Customer (update)"
   code = "test"
   live = true
   debug = false
 }
 
 resource "networknext_seller" "test" {
-  name = "test"
+  name = "test (update)"
   customer_id = 0
 }
 
 resource "networknext_datacenter" "test" {
-  name = "test"
+  name = "test (update)"
   native_name = "test native name"
   seller_id = networknext_seller.test.id
   latitude = 100
@@ -33,7 +33,7 @@ resource "networknext_datacenter" "test" {
 }
 
 resource "networknext_relay" "test" {
-  name = "test.relay"
+  name = "test.relay (update)"
   datacenter_id = networknext_datacenter.test.id
   public_ip = "127.0.0.1"
   public_port = 40000
@@ -53,33 +53,29 @@ resource "networknext_relay" "test" {
 }
 
 resource "networknext_route_shader" test {
-  name = "test"
+  name = "test (update)"
   ab_test = false
   acceptable_latency = 20
-  acceptable_packet_loss = 1.0
-  packet_loss_sustained = 0.1
+  acceptable_packet_loss_instant = 1.0
+  acceptable_packet_loss_sustained = 0.1
   analysis_only = false
   bandwidth_envelope_up_kbps = 1024
   bandwidth_envelope_down_kbps = 1024
   disable_network_next = false
-  latency_threshold = 10
+  latency_reduction_threshold = 10
   multipath = true
-  reduce_latency = true
-  reduce_packet_loss = true
   selection_percent = 100
   max_latency_trade_off = 20
   max_next_rtt = 250
   route_switch_threshold = 10
   route_select_threshold = 5
-  rtt_veto_default = 10
-  rtt_veto_multipath = 20
-  rtt_veto_packetloss = 30
+  rtt_veto = 10
   force_next = false
   route_diversity = 0
 }
 
 resource "networknext_buyer" "test" {
-  name = "Test Buyer"
+  name = "Test Buyer (update)"
   customer_id = networknext_customer.test.id
   route_shader_id = networknext_route_shader.test.id
   public_key_base64 = "leN7D7+9vr24uT4f1Ba8PEEvIQA/UkGZLlT+sdeLRHKsVqaZq723Zw=="
@@ -88,7 +84,7 @@ resource "networknext_buyer" "test" {
 resource "networknext_buyer_datacenter_settings" "test" {
   buyer_id = networknext_buyer.test.id
   datacenter_id = networknext_datacenter.test.id
-  enable_acceleration = false
+  enable_acceleration = true
 }
 
 data "networknext_customers" "example" {}

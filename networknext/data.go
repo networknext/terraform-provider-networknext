@@ -714,57 +714,49 @@ func RelaysSchema() datasource_schema.Schema {
 // -------------------------------------------------------------------
 
 type RouteShaderData struct {
-    RouteShaderId             uint64  `json:"route_shader_id"`
-    RouteShaderName           string  `json:"route_shader_name"`
-    ABTest                    bool    `json:"ab_test"`
-    AcceptableLatency         int     `json:"acceptable_latency"`
-    AcceptablePacketLoss      float64 `json:"acceptable_packet_loss"`
-    PacketLossSustained       float64 `json:"packet_loss_sustained"`
-    AnalysisOnly              bool    `json:"analysis_only"`
-    BandwidthEnvelopeUpKbps   int     `json:"bandwidth_envelope_up_kbps"`
-    BandwidthEnvelopeDownKbps int     `json:"bandwidth_envelope_down_kbps"`
-    DisableNetworkNext        bool    `json:"disable_network_next"`
-    LatencyThreshold          int     `json:"latency_threshold"`
-    Multipath                 bool    `json:"multipath"`
-    ReduceLatency             bool    `json:"reduce_latency"`
-    ReducePacketLoss          bool    `json:"reduce_packet_loss"`
-    SelectionPercent          float64 `json:"selection_percent"`
-    MaxLatencyTradeOff        int     `json:"max_latency_trade_off"`
-    MaxNextRTT                int     `json:"max_next_rtt"`
-    RouteSwitchThreshold      int     `json:"route_switch_threshold"`
-    RouteSelectThreshold      int     `json:"route_select_threshold"`
-    RTTVeto_Default           int     `json:"rtt_veto_default"`
-    RTTVeto_Multipath         int     `json:"rtt_veto_multipath"`
-    RTTVeto_PacketLoss        int     `json:"rtt_veto_packetloss"`
-    ForceNext                 bool    `json:"force_next"`
-    RouteDiversity            int     `json:"route_diversity"`
+    RouteShaderId                   uint64      `json:"route_shader_id"`
+    RouteShaderName                 string      `json:"route_shader_name"`
+    ABTest                          bool        `json:"ab_test"`
+    AcceptableLatency               int         `json:"acceptable_latency"`
+    AcceptablePacketLossInstant     float64     `json:"acceptable_packet_loss_instant"`
+    AcceptablePacketLossSustained   float64     `json:"acceptable_packet_loss_sustained"`
+    AnalysisOnly                    bool        `json:"analysis_only"`
+    BandwidthEnvelopeUpKbps         int         `json:"bandwidth_envelope_up_kbps"`
+    BandwidthEnvelopeDownKbps       int         `json:"bandwidth_envelope_down_kbps"`
+    DisableNetworkNext              bool        `json:"disable_network_next"`
+    LatencyReductionThreshold       int         `json:"latency_reduction_threshold"`
+    Multipath                       bool        `json:"multipath"`
+    SelectionPercent                float64     `json:"selection_percent"`
+    MaxLatencyTradeOff              int         `json:"max_latency_trade_off"`
+    MaxNextRTT                      int         `json:"max_next_rtt"`
+    RouteSwitchThreshold            int         `json:"route_switch_threshold"`
+    RouteSelectThreshold            int         `json:"route_select_threshold"`
+    RTTVeto                         int         `json:"rtt_veto"`
+    ForceNext                       bool        `json:"force_next"`
+    RouteDiversity                  int         `json:"route_diversity"`
 }
 
 type RouteShaderModel struct {
-    Id                        types.Int64   `tfsdk:"id"`
-    Name                      types.String  `tfsdk:"name"`
-    ABTest                    types.Bool    `tfsdk:"ab_test"`
-    AcceptableLatency         types.Int64   `tfsdk:"acceptable_latency"`
-    AcceptablePacketLoss      types.Float64 `tfsdk:"acceptable_packet_loss"`
-    PacketLossSustained       types.Float64 `tfsdk:"packet_loss_sustained"`
-    AnalysisOnly              types.Bool    `tfsdk:"analysis_only"`
-    BandwidthEnvelopeUpKbps   types.Int64   `tfsdk:"bandwidth_envelope_up_kbps"`
-    BandwidthEnvelopeDownKbps types.Int64   `tfsdk:"bandwidth_envelope_down_kbps"`
-    DisableNetworkNext        types.Bool    `tfsdk:"disable_network_next"`
-    LatencyThreshold          types.Int64   `tfsdk:"latency_threshold"`
-    Multipath                 types.Bool    `tfsdk:"multipath"`
-    ReduceLatency             types.Bool    `tfsdk:"reduce_latency"`
-    ReducePacketLoss          types.Bool    `tfsdk:"reduce_packet_loss"`
-    SelectionPercent          types.Float64 `tfsdk:"selection_percent"`
-    MaxLatencyTradeOff        types.Int64   `tfsdk:"max_latency_trade_off"`
-    MaxNextRTT                types.Int64   `tfsdk:"max_next_rtt"`
-    RouteSwitchThreshold      types.Int64   `tfsdk:"route_switch_threshold"`
-    RouteSelectThreshold      types.Int64   `tfsdk:"route_select_threshold"`
-    RTTVeto_Default           types.Int64   `tfsdk:"rtt_veto_default"`
-    RTTVeto_Multipath         types.Int64   `tfsdk:"rtt_veto_multipath"`
-    RTTVeto_PacketLoss        types.Int64   `tfsdk:"rtt_veto_packetloss"`
-    ForceNext                 types.Bool    `tfsdk:"force_next"`
-    RouteDiversity            types.Int64   `tfsdk:"route_diversity"`
+    Id                              types.Int64   `tfsdk:"id"`
+    Name                            types.String  `tfsdk:"name"`
+    ABTest                          types.Bool    `tfsdk:"ab_test"`
+    AcceptableLatency               types.Int64   `tfsdk:"acceptable_latency"`
+    AcceptablePacketLossInstant     types.Float64 `tfsdk:"acceptable_packet_loss_instant"`
+    AcceptablePacketLossSustained   types.Float64 `tfsdk:"acceptable_packet_loss_sustained"`
+    AnalysisOnly                    types.Bool    `tfsdk:"analysis_only"`
+    BandwidthEnvelopeUpKbps         types.Int64   `tfsdk:"bandwidth_envelope_up_kbps"`
+    BandwidthEnvelopeDownKbps       types.Int64   `tfsdk:"bandwidth_envelope_down_kbps"`
+    DisableNetworkNext              types.Bool    `tfsdk:"disable_network_next"`
+    LatencyReductionThreshold       types.Int64   `tfsdk:"latency_reduction_threshold"`
+    Multipath                       types.Bool    `tfsdk:"multipath"`
+    SelectionPercent                types.Float64 `tfsdk:"selection_percent"`
+    MaxLatencyTradeOff              types.Int64   `tfsdk:"max_latency_trade_off"`
+    MaxNextRTT                      types.Int64   `tfsdk:"max_next_rtt"`
+    RouteSwitchThreshold            types.Int64   `tfsdk:"route_switch_threshold"`
+    RouteSelectThreshold            types.Int64   `tfsdk:"route_select_threshold"`
+    RTTVeto                         types.Int64   `tfsdk:"rtt_veto"`
+    ForceNext                       types.Bool    `tfsdk:"force_next"`
+    RouteDiversity                  types.Int64   `tfsdk:"route_diversity"`
 }
 
 type RouteShadersModel struct {
@@ -800,24 +792,20 @@ func RouteShaderDataToModel(data *RouteShaderData, model *RouteShaderModel) {
     model.Name = types.StringValue(data.RouteShaderName)
     model.ABTest = types.BoolValue(data.ABTest)
     model.AcceptableLatency = types.Int64Value(int64(data.AcceptableLatency))
-    model.AcceptablePacketLoss = types.Float64Value(float64(data.AcceptablePacketLoss))
-    model.PacketLossSustained = types.Float64Value(float64(data.PacketLossSustained))
+    model.AcceptablePacketLossInstant = types.Float64Value(float64(data.AcceptablePacketLossInstant))
+    model.AcceptablePacketLossSustained = types.Float64Value(float64(data.AcceptablePacketLossSustained))
     model.AnalysisOnly = types.BoolValue(data.AnalysisOnly)
     model.BandwidthEnvelopeUpKbps = types.Int64Value(int64(data.BandwidthEnvelopeUpKbps))
     model.BandwidthEnvelopeDownKbps = types.Int64Value(int64(data.BandwidthEnvelopeDownKbps))
     model.DisableNetworkNext = types.BoolValue(data.DisableNetworkNext)
-    model.LatencyThreshold = types.Int64Value(int64(data.LatencyThreshold))
+    model.LatencyReductionThreshold = types.Int64Value(int64(data.LatencyReductionThreshold))
     model.Multipath = types.BoolValue(data.Multipath)
-    model.ReduceLatency = types.BoolValue(data.ReduceLatency)
-    model.ReducePacketLoss = types.BoolValue(data.ReducePacketLoss)
     model.SelectionPercent = types.Float64Value(float64(data.SelectionPercent))
     model.MaxLatencyTradeOff = types.Int64Value(int64(data.MaxLatencyTradeOff))
     model.MaxNextRTT = types.Int64Value(int64(data.MaxNextRTT))
     model.RouteSwitchThreshold = types.Int64Value(int64(data.RouteSwitchThreshold))
     model.RouteSelectThreshold = types.Int64Value(int64(data.RouteSelectThreshold))
-    model.RTTVeto_Default = types.Int64Value(int64(data.RTTVeto_Default))
-    model.RTTVeto_Multipath = types.Int64Value(int64(data.RTTVeto_Multipath))
-    model.RTTVeto_PacketLoss = types.Int64Value(int64(data.RTTVeto_PacketLoss))
+    model.RTTVeto = types.Int64Value(int64(data.RTTVeto))
     model.ForceNext = types.BoolValue(data.ForceNext)
     model.RouteDiversity = types.Int64Value(int64(data.RouteDiversity))
 }
@@ -827,24 +815,20 @@ func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
     data.RouteShaderName = model.Name.ValueString()
     data.ABTest = model.ABTest.ValueBool()
     data.AcceptableLatency = int(model.AcceptableLatency.ValueInt64())
-    data.AcceptablePacketLoss = model.AcceptablePacketLoss.ValueFloat64()
-    data.PacketLossSustained = model.PacketLossSustained.ValueFloat64()
+    data.AcceptablePacketLossInstant = model.AcceptablePacketLossInstant.ValueFloat64()
+    data.AcceptablePacketLossSustained = model.AcceptablePacketLossSustained.ValueFloat64()
     data.AnalysisOnly = model.AnalysisOnly.ValueBool()
     data.BandwidthEnvelopeUpKbps = int(model.BandwidthEnvelopeUpKbps.ValueInt64())
     data.BandwidthEnvelopeDownKbps = int(model.BandwidthEnvelopeDownKbps.ValueInt64())
     data.DisableNetworkNext = model.DisableNetworkNext.ValueBool()
-    data.LatencyThreshold = int(model.LatencyThreshold.ValueInt64())
+    data.LatencyReductionThreshold = int(model.LatencyReductionThreshold.ValueInt64())
     data.Multipath = model.Multipath.ValueBool()
-    data.ReduceLatency = model.ReduceLatency.ValueBool()
-    data.ReducePacketLoss = model.ReducePacketLoss.ValueBool()
     data.SelectionPercent = model.SelectionPercent.ValueFloat64()
     data.MaxLatencyTradeOff = int(model.MaxLatencyTradeOff.ValueInt64())
     data.MaxNextRTT = int(model.MaxNextRTT.ValueInt64())
     data.RouteSwitchThreshold = int(model.RouteSwitchThreshold.ValueInt64())
     data.RouteSelectThreshold = int(model.RouteSelectThreshold.ValueInt64())
-    data.RTTVeto_Default = int(model.RTTVeto_Default.ValueInt64())
-    data.RTTVeto_Multipath = int(model.RTTVeto_Multipath.ValueInt64())
-    data.RTTVeto_PacketLoss = int(model.RTTVeto_PacketLoss.ValueInt64())
+    data.RTTVeto = int(model.RTTVeto.ValueInt64())
     data.ForceNext = model.ForceNext.ValueBool()
     data.RouteDiversity = int(model.RouteDiversity.ValueInt64())
 }
@@ -867,10 +851,10 @@ func RouteShaderSchema() schema.Schema {
             "acceptable_latency": schema.Int64Attribute{
                 Required: true,
             },
-            "acceptable_packet_loss": schema.Float64Attribute{
+            "acceptable_packet_loss_instant": schema.Float64Attribute{
                 Required: true,
             },
-            "packet_loss_sustained": schema.Float64Attribute{
+            "acceptable_packet_loss_sustained": schema.Float64Attribute{
                 Required: true,
             },
             "analysis_only": schema.BoolAttribute{
@@ -885,16 +869,10 @@ func RouteShaderSchema() schema.Schema {
             "disable_network_next": schema.BoolAttribute{
                 Required: true,
             },
-            "latency_threshold": schema.Int64Attribute{
+            "latency_reduction_threshold": schema.Int64Attribute{
                 Required: true,
             },
             "multipath": schema.BoolAttribute{
-                Required: true,
-            },
-            "reduce_latency": schema.BoolAttribute{
-                Required: true,
-            },
-            "reduce_packet_loss": schema.BoolAttribute{
                 Required: true,
             },
             "selection_percent": schema.Float64Attribute{
@@ -912,13 +890,7 @@ func RouteShaderSchema() schema.Schema {
             "route_select_threshold": schema.Int64Attribute{
                 Required: true,
             },
-            "rtt_veto_default": schema.Int64Attribute{
-                Required: true,
-            },
-            "rtt_veto_multipath": schema.Int64Attribute{
-                Required: true,
-            },
-            "rtt_veto_packetloss": schema.Int64Attribute{
+            "rtt_veto": schema.Int64Attribute{
                 Required: true,
             },
             "force_next": schema.BoolAttribute{
@@ -950,10 +922,10 @@ func RouteShadersSchema() datasource_schema.Schema {
                         "acceptable_latency": datasource_schema.Int64Attribute{
                             Required: true,
                         },
-                        "acceptable_packet_loss": datasource_schema.Float64Attribute{
+                        "acceptable_packet_loss_instant": datasource_schema.Float64Attribute{
                             Required: true,
                         },
-                        "packet_loss_sustained": datasource_schema.Float64Attribute{
+                        "acceptable_packet_loss_sustained": datasource_schema.Float64Attribute{
                             Required: true,
                         },
                         "analysis_only": datasource_schema.BoolAttribute{
@@ -968,16 +940,10 @@ func RouteShadersSchema() datasource_schema.Schema {
                         "disable_network_next": datasource_schema.BoolAttribute{
                             Required: true,
                         },
-                        "latency_threshold": datasource_schema.Int64Attribute{
+                        "latency_reduction_threshold": datasource_schema.Int64Attribute{
                             Required: true,
                         },
                         "multipath": datasource_schema.BoolAttribute{
-                            Required: true,
-                        },
-                        "reduce_latency": datasource_schema.BoolAttribute{
-                            Required: true,
-                        },
-                        "reduce_packet_loss": datasource_schema.BoolAttribute{
                             Required: true,
                         },
                         "selection_percent": datasource_schema.Float64Attribute{
@@ -995,13 +961,7 @@ func RouteShadersSchema() datasource_schema.Schema {
                         "route_select_threshold": datasource_schema.Int64Attribute{
                             Required: true,
                         },
-                        "rtt_veto_default": datasource_schema.Int64Attribute{
-                            Required: true,
-                        },
-                        "rtt_veto_multipath": datasource_schema.Int64Attribute{
-                            Required: true,
-                        },
-                        "rtt_veto_packetloss": datasource_schema.Int64Attribute{
+                        "rtt_veto": datasource_schema.Int64Attribute{
                             Required: true,
                         },
                         "force_next": datasource_schema.BoolAttribute{
