@@ -1231,14 +1231,18 @@ func BuyerDatacenterSettingsDataToModel(data *BuyerDatacenterSettingsData, model
 
 func BuyerDatacenterSettingsSchema() schema.Schema {
     return schema.Schema{
+        Description: "Manages buyer datacenter settings.",
         Attributes: map[string]schema.Attribute{
             "buyer_id": schema.Int64Attribute{
+                Description: "The buyer id this setting belongs to.",
                 Required: true,
             },
             "datacenter_id": schema.Int64Attribute{
+                Description: "The datacenter id this setting applies to.",
                 Required: true,
             },
             "enable_acceleration": schema.BoolAttribute{
+                Description: "Set to true to enable acceleration to this datacenter from the buyer",
                 Required: true,
             },
         },
@@ -1247,18 +1251,22 @@ func BuyerDatacenterSettingsSchema() schema.Schema {
 
 func BuyerDatacenterSettingsListSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
+        Description: "Fetches the list of buyer datacenter settings.",
         Attributes: map[string]datasource_schema.Attribute{
             "settings": datasource_schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: datasource_schema.NestedAttributeObject{
                     Attributes: map[string]datasource_schema.Attribute{
                         "buyer_id": datasource_schema.Int64Attribute{
+                            Description: "The buyer id this setting belongs to.",
                             Required: true,
                         },
                         "datacenter_id": datasource_schema.Int64Attribute{
+                            Description: "The datacenter id this setting applies to.",
                             Required: true,
                         },
                         "enable_acceleration": datasource_schema.BoolAttribute{
+                            Description: "Set to true to enable acceleration to this datacenter from the buyer",
                             Required: true,
                         },
                     },
