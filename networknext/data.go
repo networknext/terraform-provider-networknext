@@ -955,102 +955,123 @@ func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
 
 func RouteShaderSchema() schema.Schema {
     return schema.Schema{
+        Description: "Manages a route shader.",
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
+                Description: "The id of the route shader. Automatically generated when route shaders are created.",
                 Computed: true,
                 PlanModifiers: []planmodifier.Int64{
                     int64planmodifier.UseStateForUnknown(),
                 },
             },
             "name": schema.StringAttribute{
+                Description: "The name of the route shader. Generally, it's best to set it to the same name as the buyer that will use it. Typically, there is one route shader per-buyer.",
                 Required: true,
             },
             "ab_test": schema.BoolAttribute{
+                Description: "If true then AB test mode is enabled. 50%% of users will be eligible for acceleration, and 50%% will not be eligible for acceleration. In the accelerated group, players are only accelerated if the remaining route shader parameters determine they should be accelerated.",
                 Optional: true,
                 Computed: true,
                 Default: booldefault.StaticBool(false),
             },
             "acceptable_latency": schema.Int64Attribute{
+                Description: "The amount of latency that is acceptable in milliseconds. Any latency above this is eligible for acceleration. For example, setting this value to 50ms would exclude any players with latency < 50ms from being accelerated. Default is 20ms",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(20),
             },
             "acceptable_packet_loss_instant": schema.Float64Attribute{
+                Description: "The instantaneous packet loss that is acceptable. For example, setting to 1%% will allow packet loss up to 1%% in a 10 second period before enabling acceleration. Default is 0.25%%",
                 Optional: true,
                 Computed: true,
                 Default: float64default.StaticFloat64(0.25),
             },
             "acceptable_packet_loss_sustained": schema.Float64Attribute{
+                Description: "The sustained packet loss that is acceptable. For example, setting to 0.1%% will allow packet loss up to 0.1%% in a 30 second period before enabling acceleration. Default is 0.1%%",
                 Optional: true,
                 Computed: true,
                 Default: float64default.StaticFloat64(0.1),
             },
             "analysis_only": schema.BoolAttribute{
+                Description: "Set this to true and acceleration is disabled. Analytics data will still be gathered from players of any buyer who use this route shader. Use this when you want to gather network perforance data for players, but you want accelerated turned off. Default is false.",
                 Optional: true,
                 Computed: true,
                 Default: booldefault.StaticBool(false),
             },
             "bandwidth_envelope_up_kbps": schema.Int64Attribute{
+                Description: "The maximum amount of acceleration bandwidth up in the client to server direction in kilobits per-second (kbps). Exceeding this amount of bandwidth for a session will result in packets above the limit not being accelerated. Default value is 1024 (1mbps).",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(1024),
             },
             "bandwidth_envelope_down_kbps": schema.Int64Attribute{
+                Description: "The maximum amount of acceleration bandwidth down in the server to client direction in kilobits per-second (kbps). Exceeding this amount of bandwidth for a session will result in packets above the limit not being accelerated. Default value is 1024 (1mbps).",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(1024),
             },
             "disable_network_next": schema.BoolAttribute{
+                Description: "Set this to true and network next is completely disabled for players belonging to any buyer using this route shader. No acceleration will be applied and no data will be collected.",
                 Optional: true,
                 Computed: true,
                 Default: booldefault.StaticBool(false),
             },
             "latency_reduction_threshold": schema.Int64Attribute{
+                Description: "The minimum latency reduction threshold in milliseconds. A latency reduction greater than or equal to this number in milliseconds must be predicted in order to accelerate the player. For example, 10ms would only accelerate players if a latency reduction >= 10ms is predicted. Default is 10ms.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(10),
             },
             "multipath": schema.BoolAttribute{
+                Description: "If this is set to true then packets will be sent across the direct route (default internet path), as well as the network next path when a player is accelerated. Recommend setting this to true always. Default value is true.",
                 Optional: true,
                 Computed: true,
                 Default: booldefault.StaticBool(true),
             },
             "selection_percent": schema.Float64Attribute{
+                Description: "The percentage of players eligible for acceleration. For example, setting this to 10%% would only accelerate 1 in 10 players. Default value is 100%% (all players eligible for acceleration).",
                 Optional: true,
                 Computed: true,
                 Default: float64default.StaticFloat64(100.0),
             },
             "max_latency_trade_off": schema.Int64Attribute{
+                Description: "The maximum amount of latency to trade for reduced packet loss. Packet loss above a certain amount is generally considered worse than latency. Trade up to this amount of latency to take a route with reduced packet loss. IMPORTANT: Network Next will still prefer the lowest latency route available. Default value is 20ms.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(20),
             },
             "max_next_rtt": schema.Int64Attribute{
+                Description: "The maximum network next latency allowed. There is no point patting yourself on the back when you reduce 500ms latency to 450ms. 450ms is still completely unplayable! Set this value to the maximum reasonable accelerated latency that makes sense for your game. Network Next will not accelerate a player if their predicted post-acceleration latency is higher than this value. Default value is 250ms.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(250),
             },
             "route_switch_threshold": schema.Int64Attribute{
+                Description: "If a player is already being accelerated, and a better route is available with a reduction of at least this much milliseconds from the current route, then switch to it. Don't set this too low or sessions will switch routes every 10 seconds due to natural fluctuation. Default value is 10ms.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(10),
             },
             "route_select_threshold": schema.Int64Attribute{
+                Description: "When initially selecting a route, find routes within this amount of milliseconds of the best available route and consider them to be equal, randomly selecting between them. Don't set this too low, or you won't get effective load balancing across relays. Default value is 5ms.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(5),
             },
             "rtt_veto": schema.Int64Attribute{
+                Description: "If the accelerated latency becomes worse than the direct latency (default internet route) by this amount of milliseconds, then veto the session and stop accelerating the player. This is to avoid players hopping on/off of network next when latency fluctuation occurs. Don't set this too low, or players with fluctuating latency (due to edge issues or wifi) will fall off network next due to temporary high latency conditions. Default value is 20ms.",
                 Optional: true,
                 Computed: true,
-                Default: int64default.StaticInt64(10),
+                Default: int64default.StaticInt64(20),
             },
             "force_next": schema.BoolAttribute{
+                Description: "Force all players to be accelerated. This is useful for testing, or if you have a small professional player base for whom you want to enable acceleration BEFORE anything goes wrong, instead of being reactive and only accelerating them after something goes wrong. Default is false.",
                 Optional: true,
                 Computed: true,
                 Default: booldefault.StaticBool(false),
             },
             "route_diversity": schema.Int64Attribute{
+                Description: "The minimum amount of distinct viable routes that must be available for a player to be accelerated. This setting can be useful to limit players in remote regions from taking network next when there is only one relay available to them. Only players with mulitple distinct paths will be accelerated, so there are backups if one relay becomse unroutable for this player. Don't set this too high or players with bad edge network conditions won't get accelerated. Default value is 0.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(0),
@@ -1061,69 +1082,90 @@ func RouteShaderSchema() schema.Schema {
 
 func RouteShadersSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
+        Description: "Fetches the list of route shaders.",
         Attributes: map[string]datasource_schema.Attribute{
             "route_shaders": datasource_schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: datasource_schema.NestedAttributeObject{
                     Attributes: map[string]datasource_schema.Attribute{
                         "id": datasource_schema.Int64Attribute{
+                            Description: "The id of the route shader. Automatically generated when route shaders are created.",
                             Computed: true,
                         },
                         "name": datasource_schema.StringAttribute{
+                            Description: "The name of the route shader. Generally, it's best to set it to the same name as the buyer that will use it. Typically, there is one route shader per-buyer.",
                             Required: true,
                         },
                         "ab_test": datasource_schema.BoolAttribute{
+                            Description: "If true then AB test mode is enabled. 50%% of users will be eligible for acceleration, and 50%% will not be eligible for acceleration. In the accelerated group, players are only accelerated if the remaining route shader parameters determine they should be accelerated.",
                             Required: true,
                         },
                         "acceptable_latency": datasource_schema.Int64Attribute{
+                            Description: "The amount of latency that is acceptable in milliseconds. Any latency above this is eligible for acceleration. For example, setting this value to 50ms would exclude any players with latency < 50ms from being accelerated. Default is 20ms",
                             Required: true,
                         },
                         "acceptable_packet_loss_instant": datasource_schema.Float64Attribute{
+                            Description: "The instantaneous packet loss that is acceptable. For example, setting to 1%% will allow packet loss up to 1%% in a 10 second period before enabling acceleration. Default is 0.25%%",
                             Required: true,
                         },
                         "acceptable_packet_loss_sustained": datasource_schema.Float64Attribute{
+                            Description: "The sustained packet loss that is acceptable. For example, setting to 0.1%% will allow packet loss up to 0.1%% in a 30 second period before enabling acceleration. Default is 0.1%%",
                             Required: true,
                         },
                         "analysis_only": datasource_schema.BoolAttribute{
+                            Description: "Set this to true and acceleration is disabled. Analytics data will still be gathered from players of any buyer who use this route shader. Use this when you want to gather network perforance data for players, but you want accelerated turned off. Default is false.",
                             Required: true,
                         },
                         "bandwidth_envelope_up_kbps": datasource_schema.Int64Attribute{
+                            Description: "The maximum amount of acceleration bandwidth up in the client to server direction in kilobits per-second (kbps). Exceeding this amount of bandwidth for a session will result in packets above the limit not being accelerated. Default value is 1024 (1mbps).",
                             Required: true,
                         },
                         "bandwidth_envelope_down_kbps": datasource_schema.Int64Attribute{
+                            Description: "The maximum amount of acceleration bandwidth down in the server to client direction in kilobits per-second (kbps). Exceeding this amount of bandwidth for a session will result in packets above the limit not being accelerated. Default value is 1024 (1mbps).",
                             Required: true,
                         },
                         "disable_network_next": datasource_schema.BoolAttribute{
+                            Description: "Set this to true and network next is completely disabled for players belonging to any buyer using this route shader. No acceleration will be applied and no data will be collected.",
                             Required: true,
                         },
                         "latency_reduction_threshold": datasource_schema.Int64Attribute{
+                            Description: "The minimum latency reduction threshold in milliseconds. A latency reduction greater than or equal to this number in milliseconds must be predicted in order to accelerate the player. For example, 10ms would only accelerate players if a latency reduction >= 10ms is predicted. Default is 10ms.",
                             Required: true,
                         },
                         "multipath": datasource_schema.BoolAttribute{
+                            Description: "If this is set to true then packets will be sent across the direct route (default internet path), as well as the network next path when a player is accelerated. Recommend setting this to true always. Default value is true.",
                             Required: true,
                         },
                         "selection_percent": datasource_schema.Float64Attribute{
+                            Description: "The percentage of players eligible for acceleration. For example, setting this to 10%% would only accelerate 1 in 10 players. Default value is 100%% (all players eligible for acceleration).",
                             Required: true,
                         },
                         "max_latency_trade_off": datasource_schema.Int64Attribute{
+                            Description: "The maximum amount of latency to trade for reduced packet loss. Packet loss above a certain amount is generally considered worse than latency. Trade up to this amount of latency to take a route with reduced packet loss. IMPORTANT: Network Next will still prefer the lowest latency route available. Default value is 20ms.",
                             Required: true,
                         },
                         "max_next_rtt": datasource_schema.Int64Attribute{
+                            Description: "The maximum network next latency allowed. There is no point patting yourself on the back when you reduce 500ms latency to 450ms. 450ms is still completely unplayable! Set this value to the maximum reasonable accelerated latency that makes sense for your game. Network Next will not accelerate a player if their predicted post-acceleration latency is higher than this value. Default value is 250ms.",
                             Required: true,
                         },
                         "route_switch_threshold": datasource_schema.Int64Attribute{
+                            Description: "If a player is already being accelerated, and a better route is available with a reduction of at least this much milliseconds from the current route, then switch to it. Don't set this too low or sessions will switch routes every 10 seconds due to natural fluctuation. Default value is 10ms.",
                             Required: true,
                         },
                         "route_select_threshold": datasource_schema.Int64Attribute{
+                            Description: "When initially selecting a route, find routes within this amount of milliseconds of the best available route and consider them to be equal, randomly selecting between them. Don't set this too low, or you won't get effective load balancing across relays. Default value is 5ms.",
                             Required: true,
                         },
                         "rtt_veto": datasource_schema.Int64Attribute{
+                            Description: "If the accelerated latency becomes worse than the direct latency (default internet route) by this amount of milliseconds, then veto the session and stop accelerating the player. This is to avoid players hopping on/off of network next when latency fluctuation occurs. Don't set this too low, or players with fluctuating latency (due to edge issues or wifi) will fall off network next due to temporary high latency conditions. Default value is 20ms.",
                             Required: true,
                         },
                         "force_next": datasource_schema.BoolAttribute{
+                            Description: "Force all players to be accelerated. This is useful for testing, or if you have a small professional player base for whom you want to enable acceleration BEFORE anything goes wrong, instead of being reactive and only accelerating them after something goes wrong. Default is false.",
                             Required: true,
                         },
                         "route_diversity": datasource_schema.Int64Attribute{
+                            Description: "The minimum amount of distinct viable routes that must be available for a player to be accelerated. This setting can be useful to limit players in remote regions from taking network next when there is only one relay available to them. Only players with mulitple distinct paths will be accelerated, so there are backups if one relay becomse unroutable for this player. Don't set this too high or players with bad edge network conditions won't get accelerated. Default value is 0.",
                             Required: true,
                         },
                     },
