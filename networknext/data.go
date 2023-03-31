@@ -78,23 +78,28 @@ func CustomerSchema() schema.Schema {
     return schema.Schema{
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
+                Description: "The id of the customer. Automatically generated when customers are created.",
                 Computed: true,
                 PlanModifiers: []planmodifier.Int64{
                     int64planmodifier.UseStateForUnknown(),
                 },
             },
             "name": schema.StringAttribute{
+                Description: "The name of the customer. For example, \"Epic Games\", \"Valve\" or \"Riot\".",
                 Required: true,
             },
             "code": schema.StringAttribute{
+                Description: "Short customer code. For example, \"epic\", \"valve\" or \"riot\"", 
                 Required: true,
             },
             "live": schema.BoolAttribute{
+                Description: "If true then the customer is live and can use network next.", 
                 Optional: true,
                 Computed: true,
                 Default: booldefault.StaticBool(true),
             },
             "debug": schema.BoolAttribute{
+                Description: "If true then additional debug information is displayed in the network next client to assist with debugging.", 
                 Optional: true,
             },
         },
@@ -103,24 +108,30 @@ func CustomerSchema() schema.Schema {
 
 func CustomersSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
+        Description: "Fetches the list of customers.",
         Attributes: map[string]datasource_schema.Attribute{
             "customers": datasource_schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: datasource_schema.NestedAttributeObject{
                     Attributes: map[string]datasource_schema.Attribute{
                         "id": datasource_schema.Int64Attribute{
+                            Description: "The id of the customer. Automatically generated when customers are created.",
                             Computed: true,
                         },
                         "name": datasource_schema.StringAttribute{
+                            Description: "The name of the customer. For example, \"Epic Games\", \"Valve\" or \"Riot\".",
                             Computed: true,
                         },
                         "code": datasource_schema.StringAttribute{
+                            Description: "Short customer code. For example, \"epic\", \"valve\" or \"riot\"", 
                             Computed: true,
                         },
                         "live": datasource_schema.BoolAttribute{
+                            Description: "If true then the customer is live and can use network next.", 
                             Computed: true,
                         },
                         "debug": datasource_schema.BoolAttribute{
+                            Description: "If true then additional debug information is displayed in the network next client to assist with debugging.", 
                             Computed: true,
                         },
                     },
