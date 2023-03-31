@@ -32,13 +32,39 @@ func (p *networknextProvider) Metadata(_ context.Context, _ provider.MetadataReq
     resp.TypeName = "networknext"
 }
 
+/*
+func (p *hashicupsProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
+    resp.Schema = schema.Schema{
+        Description: "Interact with HashiCups.",
+        Attributes: map[string]schema.Attribute{
+            "host": schema.StringAttribute{
+                Description: "URI for HashiCups API. May also be provided via HASHICUPS_HOST environment variable.",
+                Optional:    true,
+            },
+            "username": schema.StringAttribute{
+                Description: "Username for HashiCups API. May also be provided via HASHICUPS_USERNAME environment variable.",
+                Optional:    true,
+            },
+            "password": schema.StringAttribute{
+                Description: "Password for HashiCups API. May also be provided via HASHICUPS_PASSWORD environment variable.",
+                Optional:    true,
+                Sensitive:   true,
+            },
+        },
+    }
+}
+*/
+
 func (p *networknextProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
     resp.Schema = schema.Schema{
+        Description: "Interact with Network Next.",
         Attributes: map[string]schema.Attribute{
             "hostname": schema.StringAttribute{
+                Description: "URI for Network Next API. May also be provided via NETWORKNEXT_HOSTNAME environment variable.",
                 Optional: true,
             },
             "api_key": schema.StringAttribute{
+                Description: "Your API key for the Network Next API. May also be provided via NETWORKNEXT_API_KEY environment variable.",
                 Optional:  true,
                 Sensitive: true,
             },
