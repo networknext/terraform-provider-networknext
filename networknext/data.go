@@ -76,6 +76,7 @@ func CustomerDataToModel(data *CustomerData, model *CustomerModel) {
 
 func CustomerSchema() schema.Schema {
     return schema.Schema{
+        Description: "Manages a customer.",
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
                 Description: "The id of the customer. Automatically generated when customers are created.",
@@ -188,17 +189,21 @@ func SellerModelToData(model *SellerModel, data *SellerData) {
 
 func SellerSchema() schema.Schema {
     return schema.Schema{
+        Description: "Manages a seller.",
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
+                Description: "The id of the seller. Automatically generated when sellers are created.",
                 Computed: true,
                 PlanModifiers: []planmodifier.Int64{
                     int64planmodifier.UseStateForUnknown(),
                 },
             },
             "name": schema.StringAttribute{
+                Description: "The name of the seller. For example, \"google\", \"amazon\" or \"akamai\"", 
                 Required: true,
             },
             "customer_id": schema.Int64Attribute{
+                Description: "Optional. The id of the customer that this seller is associated with. Reserved for future functionality where customers can be both buyers and sellers. Defaults to 0.", 
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(0),
@@ -209,18 +214,22 @@ func SellerSchema() schema.Schema {
 
 func SellersSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
+        Description: "Fetches the list of sellers.",
         Attributes: map[string]datasource_schema.Attribute{
             "sellers": schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: schema.NestedAttributeObject{
                     Attributes: map[string]schema.Attribute{
                         "id": schema.Int64Attribute{
+                            Description: "The id of the seller. Automatically generated when sellers are created.",
                             Computed: true,
                         },
                         "name": schema.StringAttribute{
+                            Description: "The name of the seller. For example, \"google\", \"amazon\" or \"akamai\"", 
                             Computed: true,
                         },
                         "customer_id": schema.Int64Attribute{
+                            Description: "Optional. The id of the customer that this seller is associated with. Reserved for future functionality where customers can be both buyers and sellers. Defaults to 0.", 
                             Computed: true,
                         },
                     },
