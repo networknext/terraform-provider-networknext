@@ -303,23 +303,29 @@ func BuyerModelToData(model *BuyerModel, data *BuyerData) {
 
 func BuyerSchema() schema.Schema {
     return schema.Schema{
+        Description: "Manages a buyer.",
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
+                Description: "The id of the buyer. Automatically generated when buyers are created.",
                 Computed: true,
                 PlanModifiers: []planmodifier.Int64{
                     int64planmodifier.UseStateForUnknown(),
                 },
             },
             "name": schema.StringAttribute{
+                Description: "The name of the buyer. For example, \"riot\", \"valve\" or \"respawn\"", 
                 Required: true,
             },
             "public_key_base64": schema.StringAttribute{
+                Description: "The buyer public key base64 string. To generate a keypair run 'keygen' in the SDK. Keep the private portion secret, and paste the public key into this field for the buyer.", 
                 Required: true,
             },
             "customer_id": schema.Int64Attribute{
+                Description: "The id of the customer this buyer is linked to.", 
                 Required: true,
             },
             "route_shader_id": schema.Int64Attribute{
+                Description: "The id of the route shader for this buyer. The route shader configures when to accelerate traffic for this buyer.", 
                 Required: true,
             },
         },
@@ -328,24 +334,31 @@ func BuyerSchema() schema.Schema {
 
 func BuyersSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
+        Description: "Fetches the list of buyers.",
         Attributes: map[string]datasource_schema.Attribute{
             "buyers": schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: schema.NestedAttributeObject{
                     Attributes: map[string]schema.Attribute{
                         "id": schema.Int64Attribute{
+                            Description: "The id of the buyer. Automatically generated when buyers are created.",
                             Computed: true,
                         },
                         "name": schema.StringAttribute{
+                            Description: "The name of the buyer. For example, \"riot\", \"valve\" or \"respawn\"", 
                             Computed: true,
                         },
                         "public_key_base64": schema.StringAttribute{
+                            Description: "The buyer public key base64 string. To generate a keypair run 'keygen' in the SDK. Keep the private portion secret, and paste the public key into this field for the buyer.", 
                             Computed: true,
                         },
                         "customer_id": schema.Int64Attribute{
+            
+                            Description: "The id of the customer this buyer is linked to.", 
                             Computed: true,
                         },
                         "route_shader_id": schema.Int64Attribute{
+                            Description: "The id of the route shader for this buyer. The route shader configures when to accelerate traffic for this buyer.", 
                             Computed: true,
                         },
                     },
@@ -426,31 +439,39 @@ func DatacenterModelToData(model *DatacenterModel, data *DatacenterData) {
 
 func DatacenterSchema() schema.Schema {
     return schema.Schema{
+        Description: "Manages datacenters.",
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
+                Description: "The id of the datacenter. Automatically generated when buyers are created.",
                 Computed: true,
                 PlanModifiers: []planmodifier.Int64{
                     int64planmodifier.UseStateForUnknown(),
                 },
             },
             "name": schema.StringAttribute{
+                Description: "The name of the datacenter. Must be in the format [seller].[location] with optional datacenter number. For example: google.losangeles.1, vultr.chicago, amazon.virginia.2",
                 Required: true,
             },
             "native_name": schema.StringAttribute{
+                Description: "The native datacenter name. Used to associate the network next name of a datacenter with the native name of the datacenter on that platform. For example, 'google.taiwan.1' has a native name of 'asia-east1-a'",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString(""),
             },
             "latitude": schema.Float64Attribute{
+                Description: "The approximate latitude of the datacenter.",
                 Required: true,
             },
             "longitude": schema.Float64Attribute{
+                Description: "The approximate longitude of the datacenter.",
                 Required: true,
             },
             "seller_id": schema.Int64Attribute{
+                Description: "The id of the seller this relay belongs to.",
                 Required: true,
             },
             "notes": schema.StringAttribute{
+                Description: "Optional notes about this datacenter.",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString(""),
@@ -461,30 +482,38 @@ func DatacenterSchema() schema.Schema {
 
 func DatacentersSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
+        Description: "Fetches the list of datacenters.",
         Attributes: map[string]datasource_schema.Attribute{
             "datacenters": datasource_schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: datasource_schema.NestedAttributeObject{
                     Attributes: map[string]datasource_schema.Attribute{
                         "id": schema.Int64Attribute{
+                            Description: "The id of the datacenter. Automatically generated when buyers are created.",
                             Computed: true,
                         },
                         "name": schema.StringAttribute{
+                            Description: "The name of the datacenter. Must be in the format [seller].[location] with optional datacenter number. For example: google.losangeles.1, vultr.chicago, amazon.virginia.2",
                             Computed: true,
                         },
                         "native_name": schema.StringAttribute{
+                            Description: "The native datacenter name. Used to associate the network next name of a datacenter with the native name of the datacenter on that platform. For example, 'google.taiwan.1' has a native name of 'asia-east1-a'",
                             Computed: true,
                         },
                         "longitude": schema.Float64Attribute{
+                            Description: "The approximate latitude of the datacenter.",
                             Computed: true,
                         },
                         "latitude": schema.Float64Attribute{
+                            Description: "The approximate longitude of the datacenter.",
                             Computed: true,
                         },
                         "seller_id": schema.Int64Attribute{
+                            Description: "The id of the seller this relay belongs to.",
                             Computed: true,
                         },
                         "notes": schema.StringAttribute{
+                            Description: "Optional notes about this datacenter.",
                             Computed: true,
                         },
                     },
