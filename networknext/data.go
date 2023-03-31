@@ -442,7 +442,7 @@ func DatacenterSchema() schema.Schema {
         Description: "Manages datacenters.",
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
-                Description: "The id of the datacenter. Automatically generated when buyers are created.",
+                Description: "The id of the datacenter. Automatically generated when datacenters are created.",
                 Computed: true,
                 PlanModifiers: []planmodifier.Int64{
                     int64planmodifier.UseStateForUnknown(),
@@ -489,7 +489,7 @@ func DatacentersSchema() datasource_schema.Schema {
                 NestedObject: datasource_schema.NestedAttributeObject{
                     Attributes: map[string]datasource_schema.Attribute{
                         "id": schema.Int64Attribute{
-                            Description: "The id of the datacenter. Automatically generated when buyers are created.",
+                            Description: "The id of the datacenter. Automatically generated when datacenters are created.",
                             Computed: true,
                         },
                         "name": schema.StringAttribute{
@@ -639,84 +639,103 @@ func RelayDataToModel(data *RelayData, model *RelayModel) {
 
 func RelaySchema() schema.Schema {
     return schema.Schema{
+        Description: "Manages a relay.",
         Attributes: map[string]schema.Attribute{
             "id": schema.Int64Attribute{
+                Description: "The id of the relay. Automatically generated when relays are created.",
                 Computed: true,
                 PlanModifiers: []planmodifier.Int64{
                     int64planmodifier.UseStateForUnknown(),
                 },
             },
             "name": schema.StringAttribute{
+                Description: "The name of the relay. The name must be in the form of [datacenter]<.variant>. For example, \"google.losangeles.1\" (same name as datacenter for one relay in the datacenter), or \"amazon.virginia.2.a\", \"amazon.virginia.2.b\" (for two relays in the same datacenter).",
                 Required: true,
             },
             "datacenter_id": schema.Int64Attribute{
+                Description: "The id of the datacenter this relay is in.",
                 Required: true,
             },
             "public_ip": schema.StringAttribute{
+                Description: "The public IP address of the relay. For example, \"45.23.66.10\".",
                 Required: true,
             },
             "public_port": schema.Int64Attribute{
+                Description: "The public UDP port of the relay. By default it is 40000. Make sure this port is open on the firewall to receive UDP packets.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(40000),
             },
             "internal_ip": schema.StringAttribute{
+                Description: "The internal IP address of the relay. Use this only when a seller has an internal network between multiple relays that provide cost or performance benefits. Default value is \"0.0.0.0\" which disables the internal address.",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString("0.0.0.0"),
             },
             "internal_port": schema.Int64Attribute{
+                Description: "The internal UDP port of the relay. Default value is 0, which uses the same port as the public port. Only set if you need to override to a different port.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(0),
             },
             "internal_group": schema.StringAttribute{
+                Description: "The internal group of the relay. Relays only communicate with internal addresses when they are in the same internal group. Use this when sellers (like amazon) can only use private addresses between a subset of relays. For amazon, set this string to the relay region, then relays will only use the internal addresses for other relays in the same region. Default value is \"\" which lets all relays for a seller communicate with each other via internal address when provided.",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString(""),
             },
             "ssh_ip": schema.StringAttribute{
+                Description: "The SSH address of the relay. The default value is \"0.0.0.0\" which uses the public address to SSH into. Set this only if you have a specific management IP address that you need to use when SSH'ing into a relay.",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString("0.0.0.0"),
             },
             "ssh_port": schema.Int64Attribute{
+                Description: "The TCP port to SSH into. Set to 22 by default.",
                 Optional: true,
                 Computed: true,
-                Default: int64default.StaticInt64(0),
+                Default: int64default.StaticInt64(22),
             },
             "ssh_user": schema.StringAttribute{
+                Description: "The username to SSH in as. Defaults to root. Other common usernames include \"ubuntu\". Seller specific.",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString("root"),
             },
             "private_key_base64": schema.StringAttribute{
+                Description: "The relay private key as base64.",
                 Required: true,
             },
             "public_key_base64": schema.StringAttribute{
+                Description: "The relay public key as base64.",
                 Required: true,
             },
             "version": schema.StringAttribute{
+                Description: "The version of the relay. Default value is \"\". Leave as empty, and you can manage relay versions manually with the next tool. Set to a specific versioen, eg. \"1.0.19\" and the relay will automatically upgrade itself to the relay binary in google cloud storage corresponding to the version you set.",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString(""),
             },
             "mrc": schema.Int64Attribute{
+                Description: "Monthly recurring cost for this relay in USD. Useful for keeping track of how much relays cost. Default value is zero.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(0),
             },
             "port_speed": schema.Int64Attribute{
+                Description: "The speed of the network port in megabits per-second (mbps). Useful for keeping track of relays with 1gbps (1,000) vs. 10gbps (10,000) speeds.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(0),
             },
             "max_sessions": schema.Int64Attribute{
+                Description: "The maximum number of sessions allowed across this relay at any time. Once this number is exceeded, the network next backend will not send additional sessions across this relay. Default is zero which means unlimited.",
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(0),
             },
             "notes": schema.StringAttribute{
+                Description: "Optional free form notes to store information about this relay.",
                 Optional: true,
                 Computed: true,
                 Default: stringdefault.StaticString(""),
@@ -727,63 +746,82 @@ func RelaySchema() schema.Schema {
 
 func RelaysSchema() datasource_schema.Schema {
     return datasource_schema.Schema{
+        Description: "Fetches the list of relays.",
         Attributes: map[string]datasource_schema.Attribute{
             "relays": datasource_schema.ListNestedAttribute{
                 Computed: true,
                 NestedObject: datasource_schema.NestedAttributeObject{
                     Attributes: map[string]datasource_schema.Attribute{
                         "id": datasource_schema.Int64Attribute{
+                            Description: "The id of the relay. Automatically generated when relays are created.",
                             Computed: true,
                         },
                         "name": datasource_schema.StringAttribute{
+                            Description: "The name of the relay. The name must be in the form of [datacenter]<.variant>. For example, \"google.losangeles.1\" (same name as datacenter for one relay in the datacenter), or \"amazon.virginia.2.a\", \"amazon.virginia.2.b\" (for two relays in the same datacenter).",
                             Computed: true,
                         },
                         "datacenter_id": datasource_schema.Int64Attribute{
+                            Description: "The id of the datacenter this relay is in.",
                             Computed: true,
                         },
                         "public_ip": datasource_schema.StringAttribute{
+                            Description: "The public IP address of the relay. For example, \"45.23.66.10\".",
                             Computed: true,
                         },
                         "public_port": datasource_schema.Int64Attribute{
+                            Description: "The public UDP port of the relay. By default it is 40000. Make sure this port is open on the firewall to receive UDP packets.",
                             Computed: true,
                         },
                         "internal_ip": datasource_schema.StringAttribute{
+                            Description: "The internal IP address of the relay. Use this only when a seller has an internal network between multiple relays that provide cost or performance benefits. Default value is \"0.0.0.0\" which disables the internal address.",
                             Computed: true,
                         },
                         "internal_port": datasource_schema.Int64Attribute{
+                            Description: "The internal UDP port of the relay. Default value is 0, which uses the same port as the public port. Only set if you need to override to a different port.",
                             Computed: true,
                         },
                         "internal_group": datasource_schema.StringAttribute{
+                            Description: "The internal group of the relay. Relays only communicate with internal addresses when they are in the same internal group. Use this when sellers (like amazon) can only use private addresses between a subset of relays. For amazon, set this string to the relay region, then relays will only use the internal addresses for other relays in the same region. Default value is \"\" which lets all relays for a seller communicate with each other via internal address when provided.",
                             Computed: true,
                         },
                         "ssh_ip": datasource_schema.StringAttribute{
+                            Description: "The SSH address of the relay. The default value is \"0.0.0.0\" which uses the public address to SSH into. Set this only if you have a specific management IP address that you need to use when SSH'ing into a relay.",
                             Computed: true,
                         },
                         "ssh_port": datasource_schema.Int64Attribute{
+                            Description: "The TCP port to SSH into. Set to 22 by default.",
                             Computed: true,
                         },
                         "ssh_user": datasource_schema.StringAttribute{
-                            Computed: true,
-                        },
-                        "public_key_base64": datasource_schema.StringAttribute{
+                            Description: "The username to SSH in as. Defaults to root. Other common usernames include \"ubuntu\". Seller specific.",
                             Computed: true,
                         },
                         "private_key_base64": datasource_schema.StringAttribute{
+                            Description: "The relay private key as base64.",
+                            Computed: true,
+                        },
+                        "public_key_base64": datasource_schema.StringAttribute{
+                            Description: "The relay public key as base64.",
                             Computed: true,
                         },
                         "version": datasource_schema.StringAttribute{
+                            Description: "The version of the relay. Default value is \"\". Leave as empty, and you can manage relay versions manually with the next tool. Set to a specific versioen, eg. \"1.0.19\" and the relay will automatically upgrade itself to the relay binary in google cloud storage corresponding to the version you set.",
                             Computed: true,
                         },
                         "mrc": datasource_schema.Int64Attribute{
+                            Description: "Monthly recurring cost for this relay in USD. Useful for keeping track of how much relays cost. Default value is zero.",
                             Computed: true,
                         },
                         "port_speed": datasource_schema.Int64Attribute{
+                            Description: "The speed of the network port in megabits per-second (mbps). Useful for keeping track of relays with 1gbps (1,000) vs. 10gbps (10,000) speeds.",
                             Computed: true,
                         },
                         "max_sessions": datasource_schema.Int64Attribute{
+                            Description: "The maximum number of sessions allowed across this relay at any time. Once this number is exceeded, the network next backend will not send additional sessions across this relay. Default is zero which means unlimited.",
                             Computed: true,
                         },
                         "notes": datasource_schema.StringAttribute{
+                            Description: "Optional free form notes to store information about this relay.",
                             Computed: true,
                         },
                     },
