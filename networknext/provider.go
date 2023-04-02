@@ -158,6 +158,8 @@ func (p *networknextProvider) DataSources(_ context.Context) []func() datasource
         NewRelaysDataSource,
         NewRouteShadersDataSource,
         NewBuyerDatacenterSettingsDataSource,
+        NewBuyerKeypairsDataSource,
+        NewRelayKeypairsDataSource,
     }
 }
 
