@@ -12,6 +12,6 @@ import (
 
 func main() {
     providerserver.Serve(context.Background(), networknext.New, providerserver.ServeOpts{
-        Address: "networknext.com/networknext/networknext",
+        Address: "networknext/networknext",
     })
 }

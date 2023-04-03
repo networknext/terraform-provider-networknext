@@ -1,7 +1,8 @@
+
 terraform {
   required_providers {
     networknext = {
-      source = "networknext.com/networknext/networknext"
+      source = "networknext/networknext"
     }
   }
 }
