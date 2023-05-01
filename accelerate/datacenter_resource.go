@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -56,8 +56,8 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext datacenter",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create datacenter",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -66,8 +66,8 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext datacenter",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create datacenter",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -96,8 +96,8 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext datacenter",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read datacenter",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -106,8 +106,8 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext datacenter",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to read datacenter",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -140,8 +140,8 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext datacenter",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update datacenter",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -150,8 +150,8 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext datacenter",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update datacenter",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -180,16 +180,18 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext datacenter",
-            "Could not delete datacenter, unexpected error: "+err.Error(),
+            "Error deleting datacenter",
+            "An unexpected error occurred when calling the network next accelerate API. "+
+                "Please check that your network next instance is running and properly configured.\n\n"+
+                "Network Next Client Error: "+err.Error(),
         )
         return
     }
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext datacenter",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete datacenter",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

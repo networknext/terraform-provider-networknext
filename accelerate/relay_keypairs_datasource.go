@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -42,8 +42,8 @@ func (d *relayKeypairsDataSource) Read(ctx context.Context, req datasource.ReadR
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to get networknext relay keypairs",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to get relay keypairs",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -52,8 +52,8 @@ func (d *relayKeypairsDataSource) Read(ctx context.Context, req datasource.ReadR
 
     if relayKeypairsResponse.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to get networknext relay keypairs",
-            "The networknext API returned an error: "+relayKeypairsResponse.Error,
+            "Unable to get relay keypairs",
+            "The network next accelerate API returned an error: "+relayKeypairsResponse.Error,
         )
         return
     }

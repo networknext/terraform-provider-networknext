@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -56,8 +56,8 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext customer",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create customer",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -66,8 +66,8 @@ func (r *customerResource) Create(ctx context.Context, req resource.CreateReques
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext customer",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create customer",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -96,8 +96,8 @@ func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, r
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext customer",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read customer",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -106,8 +106,8 @@ func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, r
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext customer",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to read customer",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -140,8 +140,8 @@ func (r *customerResource) Update(ctx context.Context, req resource.UpdateReques
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext customer",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update customer",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -150,8 +150,8 @@ func (r *customerResource) Update(ctx context.Context, req resource.UpdateReques
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext customer",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update customer",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -180,16 +180,18 @@ func (r *customerResource) Delete(ctx context.Context, req resource.DeleteReques
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext customer",
-            "Could not delete customer, unexpected error: "+err.Error(),
+            "Error deleting customer",
+            "An unexpected error occurred when calling the network next accelerate API. "+
+                "Please check that your network next instance is running and properly configured.\n\n"+
+                "Network Next Client Error: "+err.Error(),
         )
         return
     }
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext customer",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete customer",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

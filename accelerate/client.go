@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -21,13 +21,13 @@ func NewClient(ctx context.Context, hostname string, api_key string) (*Client, e
     client := Client{hostname, api_key}
     response, err := client.GetText(ctx, "ping")
     if err != nil {
-        return nil, fmt.Errorf("could not ping networknext API: %v", err)
+        return nil, fmt.Errorf("could not ping network next accelerate API: %v", err)
     }
     if response == "Not Authorized" {
-        return nil, fmt.Errorf("could not authenticate with networknext API")
+        return nil, fmt.Errorf("could not authenticate with network next accelerate API")
     }
     if response != "pong" {
-        return nil, fmt.Errorf("invalid response from networknext API ping: '%s'", response)
+        return nil, fmt.Errorf("invalid response from network next accelerate API ping: '%s'", response)
     }
     return &client, nil
 }
@@ -38,8 +38,6 @@ func (client *Client) GetText(ctx context.Context, path string) (string, error) 
 
     ctx = tflog.SetField(ctx, "networknext_url", url)
     ctx = tflog.SetField(ctx, "networknext_api_key", client.APIKey)
-
-    tflog.Debug(ctx, "Network Next client GetText")
 
     var err error
     var response *http.Response

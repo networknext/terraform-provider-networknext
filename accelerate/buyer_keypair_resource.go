@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -56,8 +56,8 @@ func (r *buyerKeypairResource) Create(ctx context.Context, req resource.CreateRe
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext buyer keypair",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create buyer keypair",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -66,8 +66,8 @@ func (r *buyerKeypairResource) Create(ctx context.Context, req resource.CreateRe
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext buyer keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create buyer keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -96,8 +96,8 @@ func (r *buyerKeypairResource) Read(ctx context.Context, req resource.ReadReques
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext buyer keypair",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read buyer keypair",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -106,8 +106,8 @@ func (r *buyerKeypairResource) Read(ctx context.Context, req resource.ReadReques
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext buyer keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to read buyer keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -140,8 +140,8 @@ func (r *buyerKeypairResource) Update(ctx context.Context, req resource.UpdateRe
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext buyer keypair",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update buyer keypair",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -150,8 +150,8 @@ func (r *buyerKeypairResource) Update(ctx context.Context, req resource.UpdateRe
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext buyer keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update buyer keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -180,16 +180,18 @@ func (r *buyerKeypairResource) Delete(ctx context.Context, req resource.DeleteRe
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext buyer keypair",
-            "Could not delete buyer keypair, unexpected error: "+err.Error(),
+            "Error deleting buyer keypair",
+            "An unexpected error occurred when calling the network next accelerate API. "+
+                "Please check that your network next instance is running and properly configured.\n\n"+
+                "Network Next Client Error: "+err.Error(),
         )
         return
     }
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext buyer keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete buyer keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

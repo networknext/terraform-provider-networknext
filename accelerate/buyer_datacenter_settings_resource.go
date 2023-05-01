@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -55,8 +55,8 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext buyer datacenter settings",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create buyer datacenter settings",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -65,8 +65,8 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext buyer datacenter settings",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create buyer datacenter settings",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -93,8 +93,8 @@ func (r *buyerDatacenterSettingsResource) Read(ctx context.Context, req resource
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext buyer datacenter settings",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read buyer datacenter settings",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -103,8 +103,8 @@ func (r *buyerDatacenterSettingsResource) Read(ctx context.Context, req resource
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext buyer datacenter settings",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to read buyer datacenter settings",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -137,8 +137,8 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext buyer datacenter settings",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update buyer datacenter settings",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -147,8 +147,8 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext buyer datacenter settings",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update buyer datacenter settings",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -178,16 +178,18 @@ func (r *buyerDatacenterSettingsResource) Delete(ctx context.Context, req resour
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext buyer datacenter settings",
-            "Could not delete buyer datacenter settings, unexpected error: "+err.Error(),
+            "Error deleting buyer datacenter settings",
+            "An unexpected error occurred when calling the network next accelerate API. "+
+                "Please check that your network next instance is running and properly configured.\n\n"+
+                "Network Next Client Error: "+err.Error(),
         )
         return
     }
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext buyer datacenter settings",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete buyer datacenter settings",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

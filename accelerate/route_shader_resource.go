@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -55,8 +55,8 @@ func (r *routeShaderResource) Create(ctx context.Context, req resource.CreateReq
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext route shader",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create route shader",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -65,8 +65,8 @@ func (r *routeShaderResource) Create(ctx context.Context, req resource.CreateReq
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext route shader",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create route shader",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -95,8 +95,8 @@ func (r *routeShaderResource) Read(ctx context.Context, req resource.ReadRequest
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext route shader",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read route shader",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -105,8 +105,8 @@ func (r *routeShaderResource) Read(ctx context.Context, req resource.ReadRequest
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext route shader",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to read route shader",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -139,8 +139,8 @@ func (r *routeShaderResource) Update(ctx context.Context, req resource.UpdateReq
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext route shader",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update route shader",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -149,8 +149,8 @@ func (r *routeShaderResource) Update(ctx context.Context, req resource.UpdateReq
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext route shader",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update route shader",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -179,7 +179,7 @@ func (r *routeShaderResource) Delete(ctx context.Context, req resource.DeleteReq
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext route shader",
+            "Error deleting route shader",
             "Could not delete route shader, unexpected error: "+err.Error(),
         )
         return
@@ -187,8 +187,8 @@ func (r *routeShaderResource) Delete(ctx context.Context, req resource.DeleteReq
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext route shader",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete route shader",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

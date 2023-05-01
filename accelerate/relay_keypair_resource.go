@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -56,8 +56,8 @@ func (r *relayKeypairResource) Create(ctx context.Context, req resource.CreateRe
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext relay keypair",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create relay keypair",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -66,8 +66,8 @@ func (r *relayKeypairResource) Create(ctx context.Context, req resource.CreateRe
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext relay keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create relay keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -96,8 +96,8 @@ func (r *relayKeypairResource) Read(ctx context.Context, req resource.ReadReques
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext relay keypair",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read relay keypair",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -106,8 +106,8 @@ func (r *relayKeypairResource) Read(ctx context.Context, req resource.ReadReques
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext relay keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to read relay keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -140,8 +140,8 @@ func (r *relayKeypairResource) Update(ctx context.Context, req resource.UpdateRe
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext relay keypair",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update relay keypair",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -150,8 +150,8 @@ func (r *relayKeypairResource) Update(ctx context.Context, req resource.UpdateRe
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext relay keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update relay keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -180,7 +180,7 @@ func (r *relayKeypairResource) Delete(ctx context.Context, req resource.DeleteRe
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext relay keypair",
+            "Error deleting relay keypair",
             "Could not delete relay keypair, unexpected error: "+err.Error(),
         )
         return
@@ -188,8 +188,8 @@ func (r *relayKeypairResource) Delete(ctx context.Context, req resource.DeleteRe
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext relay keypair",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete relay keypair",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

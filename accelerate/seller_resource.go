@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -56,8 +56,8 @@ func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest,
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext seller",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create seller",
+            "An unexpected error occurred when calling the network network accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -66,8 +66,8 @@ func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest,
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext seller",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create seller",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -101,8 +101,8 @@ func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, res
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext seller",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read seller",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -111,8 +111,8 @@ func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, res
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext seller",
-            "The networknext API returned an error while trying to read a seller. "+
+            "Unable to read seller",
+            "The network next accelerate API returned an error while trying to read a seller. "+
                 "Network Next Client Error: "+response.Error,
         )
         return
@@ -146,8 +146,8 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext seller",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update seller",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -156,8 +156,8 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext seller",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update seller",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -186,7 +186,7 @@ func (r *sellerResource) Delete(ctx context.Context, req resource.DeleteRequest,
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext seller",
+            "Error deleting seller",
             "Could not delete seller, unexpected error: "+err.Error(),
         )
         return
@@ -194,8 +194,8 @@ func (r *sellerResource) Delete(ctx context.Context, req resource.DeleteRequest,
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext seller",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete seller",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -42,8 +42,8 @@ func (d *buyerDatacenterSettingsDataSource) Read(ctx context.Context, req dataso
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to get networknext buyer datacenter settings",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to get buyer datacenter settings",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -52,8 +52,8 @@ func (d *buyerDatacenterSettingsDataSource) Read(ctx context.Context, req dataso
 
     if buyerDatacenterSettingsListResponse.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to get networknext buyer datacenter settings",
-            "The networknext API returned an error: "+buyerDatacenterSettingsListResponse.Error,
+            "Unable to get buyer datacenter settings",
+            "The network next accelerate API returned an error: "+buyerDatacenterSettingsListResponse.Error,
         )
         return
     }

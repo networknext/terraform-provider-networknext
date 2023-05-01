@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -42,8 +42,8 @@ func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest,
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to get networknext relays",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to get relays",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -52,8 +52,8 @@ func (d *relaysDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 
     if relaysResponse.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to get networknext relays",
-            "An error occurred when calling the networknext API to get relays. "+
+            "Unable to get relays",
+            "An error occurred when calling the network next accelerate API to get relays. "+
                 "Network Next Client Error: "+relaysResponse.Error,
         )
         return

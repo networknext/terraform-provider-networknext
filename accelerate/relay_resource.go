@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -56,8 +56,8 @@ func (r *relayResource) Create(ctx context.Context, req resource.CreateRequest, 
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext relay",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to create relay",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -66,8 +66,8 @@ func (r *relayResource) Create(ctx context.Context, req resource.CreateRequest, 
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to create networknext relay",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to create relay",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -96,8 +96,8 @@ func (r *relayResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
     if err != nil {        
         resp.Diagnostics.AddError(
-            "Unable to read networknext relay",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to read relay",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -106,8 +106,8 @@ func (r *relayResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to read networknext relay",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to read relay",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -140,8 +140,8 @@ func (r *relayResource) Update(ctx context.Context, req resource.UpdateRequest, 
     
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to update networknext relay",
-            "An unexpected error occurred when calling the networknext API. "+
+            "Unable to update relay",
+            "An unexpected error occurred when calling the network next accelerate API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -150,8 +150,8 @@ func (r *relayResource) Update(ctx context.Context, req resource.UpdateRequest, 
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to update networknext relay",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to update relay",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }
@@ -180,16 +180,18 @@ func (r *relayResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 
     if err != nil {
         resp.Diagnostics.AddError(
-            "Error deleting networknext relay",
-            "Could not delete relay, unexpected error: "+err.Error(),
+            "Error deleting relay",
+            "An unexpected error occurred when calling the network next accelerate API. "+
+                "Please check that your network next instance is running and properly configured.\n\n"+
+                "Network Next Client Error: "+err.Error(),
         )
         return
     }
 
     if response.Error != "" {
         resp.Diagnostics.AddError(
-            "Unable to delete networknext relay",
-            "The networknext API returned an error: "+response.Error,
+            "Unable to delete relay",
+            "The network next accelerate API returned an error: "+response.Error,
         )
         return
     }

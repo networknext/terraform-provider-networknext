@@ -1,4 +1,4 @@
-package networknext
+package accelerate
 
 import (
     "context"
@@ -14,34 +14,34 @@ import (
 )
 
 var (
-    _ provider.Provider = &networknextProvider{}
+    _ provider.Provider = &accelerateProvider{}
 )
 
-type networknextProvider struct{}
+type accelerateProvider struct{}
 
-type networknextProviderModel struct {
+type accelerateProviderModel struct {
     HostName types.String `tfsdk:"hostname"`
     APIKey   types.String `tfsdk:"api_key"`
 }
 
 func New() provider.Provider {
-    return &networknextProvider{}
+    return &accelerateProvider{}
 }
 
-func (p *networknextProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
-    resp.TypeName = "networknext"
+func (p *accelerateProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
+    resp.TypeName = "accelerate"
 }
 
-func (p *networknextProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (p *accelerateProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
     resp.Schema = schema.Schema{
         Description: "Configure Network Next.",
         Attributes: map[string]schema.Attribute{
             "hostname": schema.StringAttribute{
-                Description: "The URI for the Network Next API. May also be provided via NETWORKNEXT_HOSTNAME environment variable.",
+                Description: "The URI for the Network Next Accelerate API. May also be provided via ACCELERATE_HOSTNAME environment variable.",
                 Optional: true,
             },
             "api_key": schema.StringAttribute{
-                Description: "The API Key that allows interaction with the API. May also be provided via NETWORKNEXT_API_KEY environment variable.",
+                Description: "The API Key that allows interaction with the Network Next Accelerate API. May also be provided via ACCELERATE_API_KEY environment variable.",
                 Optional:  true,
                 Sensitive: true,
             },
@@ -49,13 +49,13 @@ func (p *networknextProvider) Schema(_ context.Context, _ provider.SchemaRequest
     }
 }
 
-func (p *networknextProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+func (p *accelerateProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 
-    tflog.Info(ctx, "Configuring networknext client")
+    tflog.Info(ctx, "Configuring network next accelerate client")
 
     // retrieve provider data from configuration
 
-    var config networknextProviderModel
+    var config accelerateProviderModel
     diags := req.Config.Get(ctx, &config)
     resp.Diagnostics.Append(diags...)
     if resp.Diagnostics.HasError() {
@@ -67,18 +67,18 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
     if config.HostName.IsUnknown() {
         resp.Diagnostics.AddAttributeError(
             path.Root("hostname"),
-            "Unknown networknext API hostname",
-            "The provider cannot create the networknext API client as there is an unknown configuration value for the API hostname. "+
-                "Either target apply the source of the value first, set the value statically in the configuration, or use the NETWORKNEXT_HOSTNAME environment variable.",
+            "Unknown network next accelerate API hostname",
+            "The provider cannot create the accelerate API client as there is an unknown configuration value for the API hostname. "+
+                "Either target apply the source of the value first, set the value statically in the configuration, or use the ACCELERATE_HOSTNAME environment variable.",
         )
     }
 
     if config.APIKey.IsUnknown() {
         resp.Diagnostics.AddAttributeError(
             path.Root("api_key"),
-            "Unknown networknext API key",
-            "The provider cannot create the networknext API client as there is an unknown configuration value for the networknext API key. "+
-                "Either target apply the source of the value first, set the value statically in the configuration, or use the NETWORKNEXT_API_KEY environment variable.",
+            "Unknown network next accelerate API key",
+            "The provider cannot create the accelerate API client as there is an unknown configuration value for the accelerate API key. "+
+                "Either target apply the source of the value first, set the value statically in the configuration, or use the ACCELERATE_API_KEY environment variable.",
         )
     }
 
@@ -88,8 +88,8 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
 
     // default values to environment variables, but override with Terraform configuration value if set.
 
-    hostname := os.Getenv("NETWORKNEXT_HOSTNAME")
-    api_key := os.Getenv("NETWORKNEXT_API_KEY")
+    hostname := os.Getenv("ACCELERATE_HOSTNAME")
+    api_key := os.Getenv("ACCELERATE_API_KEY")
 
     if !config.HostName.IsNull() {
         hostname = config.HostName.ValueString()
@@ -104,9 +104,9 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
     if hostname == "" {
         resp.Diagnostics.AddAttributeError(
             path.Root("hostname"),
-            "Missing networknext API hostname",
-            "The provider cannot create the networknext API client as there is a missing or empty value for the networknext API hostname. "+
-                "Set the hostname value in the configuration or use the NETWORKNEXT_HOSTNAME environment variable. "+
+            "Missing network next accelerate API hostname",
+            "The provider cannot create the accelerate API client as there is a missing or empty value for the accelerate API hostname. "+
+                "Set the hostname value in the configuration or use the ACCELERATE_HOSTNAME environment variable. "+
                 "If either is already set, ensure the value is not empty.",
         )
     }
@@ -114,9 +114,9 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
     if api_key == "" {
         resp.Diagnostics.AddAttributeError(
             path.Root("api_key"),
-            "Missing networknext API key",
-            "The provider cannot create the networknext API client as there is a missing or empty value for the networknext API key. "+
-                "Set the api_key value in the configuration or use the NETWORKNEXT_API_KEY environment variable. "+
+            "Missing network next accelerate API key",
+            "The provider cannot create the accelerate API client as there is a missing or empty value for the accelerate API key. "+
+                "Set the api_key value in the configuration or use the ACCELERATE_API_KEY environment variable. "+
                 "If either is already set, ensure the value is not empty.",
         )
     }
@@ -125,17 +125,17 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
         return
     }
 
-    ctx = tflog.SetField(ctx, "networknext_hostname", hostname)
-    ctx = tflog.SetField(ctx, "networknext_api_key", api_key)
-    ctx = tflog.MaskFieldValuesWithFieldKeys(ctx, "networknext_api_key")
+    ctx = tflog.SetField(ctx, "accelerate_hostname", hostname)
+    ctx = tflog.SetField(ctx, "accelerate_api_key", api_key)
+    ctx = tflog.MaskFieldValuesWithFieldKeys(ctx, "accelerate_api_key")
     
-    tflog.Debug(ctx, "Creating networknext client")
+    tflog.Debug(ctx, "Creating network next accelerate client")
 
     client, err := NewClient(ctx, hostname, api_key)
     if err != nil {
         resp.Diagnostics.AddError(
-            "Unable to create networknext API client",
-            "An error occurred when creating the networknext API client. "+
+            "Unable to create network next accelerate API client",
+            "An error occurred when creating the network next accelerate API client. "+
                 "Please check that the hostname is correct and your api key is valid.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -146,10 +146,10 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
 
     resp.ResourceData = client
 
-    tflog.Info(ctx, "Configured networknext client", map[string]any{"success": true})
+    tflog.Info(ctx, "Configured network next accelerate client", map[string]any{"success": true})
 }
 
-func (p *networknextProvider) DataSources(_ context.Context) []func() datasource.DataSource {
+func (p *accelerateProvider) DataSources(_ context.Context) []func() datasource.DataSource {
     return []func() datasource.DataSource {
         NewCustomersDataSource,
         NewBuyersDataSource,
@@ -163,7 +163,7 @@ func (p *networknextProvider) DataSources(_ context.Context) []func() datasource
     }
 }
 
-func (p *networknextProvider) Resources(_ context.Context) []func() resource.Resource {
+func (p *accelerateProvider) Resources(_ context.Context) []func() resource.Resource {
     return []func() resource.Resource {
         NewCustomerResource,
         NewSellerResource,
