@@ -1,4 +1,4 @@
-package accelerate
+package networknext
 
 import (
     "github.com/hashicorp/terraform-plugin-framework/types"
@@ -102,6 +102,8 @@ func CustomerSchema() schema.Schema {
             "debug": schema.BoolAttribute{
                 Description: "If true then additional debug information is displayed in the network next client to assist with debugging.", 
                 Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(false),
             },
         },
     }

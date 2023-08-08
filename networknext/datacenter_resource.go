@@ -1,4 +1,4 @@
-package accelerate
+package networknext
 
 import (
     "context"
@@ -57,7 +57,7 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create datacenter",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -67,7 +67,7 @@ func (r *datacenterResource) Create(ctx context.Context, req resource.CreateRequ
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to create datacenter",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -97,7 +97,7 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
     if err != nil {        
         resp.Diagnostics.AddError(
             "Unable to read datacenter",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -107,7 +107,7 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read datacenter",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -141,7 +141,7 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update datacenter",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -151,7 +151,7 @@ func (r *datacenterResource) Update(ctx context.Context, req resource.UpdateRequ
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to update datacenter",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -181,7 +181,7 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
     if err != nil {
         resp.Diagnostics.AddError(
             "Error deleting datacenter",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -191,7 +191,7 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to delete datacenter",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }

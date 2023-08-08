@@ -1,4 +1,4 @@
-package accelerate
+package networknext
 
 import (
     "context"
@@ -56,7 +56,7 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create buyer datacenter settings",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -66,7 +66,7 @@ func (r *buyerDatacenterSettingsResource) Create(ctx context.Context, req resour
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to create buyer datacenter settings",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -94,7 +94,7 @@ func (r *buyerDatacenterSettingsResource) Read(ctx context.Context, req resource
     if err != nil {        
         resp.Diagnostics.AddError(
             "Unable to read buyer datacenter settings",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -104,7 +104,7 @@ func (r *buyerDatacenterSettingsResource) Read(ctx context.Context, req resource
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read buyer datacenter settings",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -138,7 +138,7 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update buyer datacenter settings",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -148,7 +148,7 @@ func (r *buyerDatacenterSettingsResource) Update(ctx context.Context, req resour
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to update buyer datacenter settings",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -179,7 +179,7 @@ func (r *buyerDatacenterSettingsResource) Delete(ctx context.Context, req resour
     if err != nil {
         resp.Diagnostics.AddError(
             "Error deleting buyer datacenter settings",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -189,7 +189,7 @@ func (r *buyerDatacenterSettingsResource) Delete(ctx context.Context, req resour
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to delete buyer datacenter settings",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }

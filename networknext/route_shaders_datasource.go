@@ -1,4 +1,4 @@
-package accelerate
+package networknext
 
 import (
     "context"
@@ -43,7 +43,7 @@ func (d *routeShadersDataSource) Read(ctx context.Context, req datasource.ReadRe
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to get route shaders",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -53,7 +53,7 @@ func (d *routeShadersDataSource) Read(ctx context.Context, req datasource.ReadRe
     if routeShadersResponse.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to get route shaders",
-            "The network next accelerate API returned an error: "+routeShadersResponse.Error,
+            "The network next API returned an error: "+routeShadersResponse.Error,
         )
         return
     }

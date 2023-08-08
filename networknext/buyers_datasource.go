@@ -1,4 +1,4 @@
-package accelerate
+package networknext
 
 import (
     "context"
@@ -43,7 +43,7 @@ func (d *buyersDataSource) Read(ctx context.Context, req datasource.ReadRequest,
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to get buyers",
-            "An error occurred when calling the network next accelerate API. "+
+            "An error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -53,7 +53,7 @@ func (d *buyersDataSource) Read(ctx context.Context, req datasource.ReadRequest,
     if buyersResponse.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to get buyers",
-            "An error occurred when calling the network next accelerate API to get buyers. "+
+            "An error occurred when calling the network next API to get buyers. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+buyersResponse.Error,
         )

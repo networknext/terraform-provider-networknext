@@ -4,7 +4,10 @@ generate:
 	go generate ./...
 
 install:
-	go install .
+	# FML
+	mkdir -p ~/.terraform.d/plugins/networknext.com/networknext/networknext/1.0.0/darwin_amd64
+	GOBIN=~/.terraform.d/plugins/networknext.com/networknext/networknext/1.0.0/darwin_amd64 go install .
+
 
 test:
 	go test -count=1 -parallel=4 ./...

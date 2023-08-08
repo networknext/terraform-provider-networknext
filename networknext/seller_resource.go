@@ -1,4 +1,4 @@
-package accelerate
+package networknext
 
 import (
     "context"
@@ -57,7 +57,7 @@ func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest,
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to create seller",
-            "An unexpected error occurred when calling the network network accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -67,7 +67,7 @@ func (r *sellerResource) Create(ctx context.Context, req resource.CreateRequest,
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to create seller",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -102,7 +102,7 @@ func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, res
     if err != nil {        
         resp.Diagnostics.AddError(
             "Unable to read seller",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -112,7 +112,7 @@ func (r *sellerResource) Read(ctx context.Context, req resource.ReadRequest, res
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to read seller",
-            "The network next accelerate API returned an error while trying to read a seller. "+
+            "The network next API returned an error while trying to read a seller. "+
                 "Network Next Client Error: "+response.Error,
         )
         return
@@ -147,7 +147,7 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
     if err != nil {
         resp.Diagnostics.AddError(
             "Unable to update seller",
-            "An unexpected error occurred when calling the network next accelerate API. "+
+            "An unexpected error occurred when calling the network next API. "+
                 "Please check that your network next instance is running and properly configured.\n\n"+
                 "Network Next Client Error: "+err.Error(),
         )
@@ -157,7 +157,7 @@ func (r *sellerResource) Update(ctx context.Context, req resource.UpdateRequest,
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to update seller",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }
@@ -195,7 +195,7 @@ func (r *sellerResource) Delete(ctx context.Context, req resource.DeleteRequest,
     if response.Error != "" {
         resp.Diagnostics.AddError(
             "Unable to delete seller",
-            "The network next accelerate API returned an error: "+response.Error,
+            "The network next API returned an error: "+response.Error,
         )
         return
     }

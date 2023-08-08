@@ -1,4 +1,4 @@
-package accelerate
+package networknext
 
 import (
     "context"
@@ -21,13 +21,13 @@ func NewClient(ctx context.Context, hostname string, api_key string) (*Client, e
     client := Client{hostname, api_key}
     response, err := client.GetText(ctx, "ping")
     if err != nil {
-        return nil, fmt.Errorf("could not ping network next accelerate API: %v", err)
+        return nil, fmt.Errorf("could not ping the network next API: %v", err)
     }
     if response == "Not Authorized" {
-        return nil, fmt.Errorf("could not authenticate with network next accelerate API")
+        return nil, fmt.Errorf("could not authenticate with the network next API")
     }
     if response != "pong" {
-        return nil, fmt.Errorf("invalid response from network next accelerate API ping: '%s'", response)
+        return nil, fmt.Errorf("invalid response from network next API ping: '%s'", response)
     }
     return &client, nil
 }
