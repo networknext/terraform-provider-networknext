@@ -37,11 +37,11 @@ func (p *networknextProvider) Schema(_ context.Context, _ provider.SchemaRequest
         Description: "Configure Network Next.",
         Attributes: map[string]schema.Attribute{
             "hostname": schema.StringAttribute{
-                Description: "The URI for the Network Next Accelerate API. May also be provided via ACCELERATE_HOSTNAME environment variable.",
+                Description: "The URI for the Network Next API. May also be provided via NETWORK_NEXT_HOSTNAME environment variable.",
                 Optional: true,
             },
             "api_key": schema.StringAttribute{
-                Description: "The API Key that allows interaction with the Network Next Accelerate API. May also be provided via ACCELERATE_API_KEY environment variable.",
+                Description: "The API Key that allows interaction with the Network Next API. May also be provided via NETWORK_NEXT_API_KEY environment variable.",
                 Optional:  true,
                 Sensitive: true,
             },

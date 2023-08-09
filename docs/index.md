@@ -76,5 +76,5 @@ resource "networknext_buyer_datacenter_settings" "example" {
 
 ### Optional
 
-- `api_key` (String, Sensitive) The API Key that allows interaction with the Network Next Accelerate API. May also be provided via ACCELERATE_API_KEY environment variable.
-- `hostname` (String) The URI for the Network Next Accelerate API. May also be provided via ACCELERATE_HOSTNAME environment variable.
+- `api_key` (String, Sensitive) The API Key that allows interaction with the Network Next API. May also be provided via NETWORK_NEXT_API_KEY environment variable.
+- `hostname` (String) The URI for the Network Next API. May also be provided via NETWORK_NEXT_HOSTNAME environment variable.
