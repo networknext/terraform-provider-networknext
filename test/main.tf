@@ -118,17 +118,19 @@ output "route_shaders" {
 
 # ---------------------------------------------------------
 
-
-
-
-
-
-
-
-
-/*
-
 resource "networknext_buyer_keypair" "test" {}
+
+data "networknext_buyer_keypairs" "test" {
+  depends_on = [
+    networknext_buyer_keypair.test,
+  ]
+}
+
+output "buyer_keypairs" {
+  value = data.networknext_buyer_keypairs.test
+}
+
+# ---------------------------------------------------------
 
 resource "networknext_buyer" "test" {
   name = "Test Buyer"
@@ -137,17 +139,22 @@ resource "networknext_buyer" "test" {
   public_key_base64 = networknext_buyer_keypair.test.public_key_base64
 }
 
-resource "networknext_buyer_datacenter_settings" "test" {
-  buyer_id = networknext_buyer.test.id
-  datacenter_id = networknext_datacenter.test.id
-  enable_acceleration = true
-}
-
-
 data "networknext_buyers" "test" {
   depends_on = [
     networknext_buyer.test,
   ]
+}
+
+output "buyers" {
+  value = data.networknext_buyers.test
+}
+
+# ---------------------------------------------------------
+
+resource "networknext_buyer_datacenter_settings" "test" {
+  buyer_id = networknext_buyer.test.id
+  datacenter_id = networknext_datacenter.test.id
+  enable_acceleration = true
 }
 
 data "networknext_buyer_datacenter_settings" "test" {
@@ -156,21 +163,8 @@ data "networknext_buyer_datacenter_settings" "test" {
   ]
 }
 
-#data "networknext_buyer_keypairs" "test" {
-#  depends_on = [
-#    networknext_buyer_keypairs.test,
-#  ]
-#}
-
-output "buyers" {
-  value = data.networknext_buyers.test
-}
-
 output "buyer_datacenter_settings" {
   value = data.networknext_buyer_datacenter_settings.test
 }
 
-#output "buyer_keypairs" {
-#  value = data.networknext_buyer_keypairs.test
-#}
-*/
+# ---------------------------------------------------------
