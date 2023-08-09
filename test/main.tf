@@ -33,6 +33,68 @@ output "customers" {
 
 # ---------------------------------------------------------
 
+resource "networknext_seller" "test" {
+  name = "test"
+}
+
+data "networknext_sellers" "test" {
+  depends_on = [
+    networknext_seller.test,
+  ]
+}
+
+output "sellers" {
+  value = data.networknext_sellers.test
+}
+
+# ---------------------------------------------------------
+
+resource "networknext_datacenter" "test" {
+  name = "test"
+  seller_id = networknext_seller.test.id
+  latitude = 100
+  longitude = 50
+}
+
+data "networknext_datacenters" "test" {
+  depends_on = [
+    networknext_datacenter.test,
+  ]
+}
+
+output "datacenters" {
+  value = data.networknext_datacenters.test
+}
+
+# ---------------------------------------------------------
+
+resource "networknext_relay_keypair" "test" {}
+
+data "networknext_relay_keypairs" "test" {
+  depends_on = [
+    resource.networknext_relay_keypair.test,
+  ]
+}
+
+output "relay_keypairs" {
+  value = data.networknext_relay_keypairs.test
+}
+
+# ---------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -46,19 +108,6 @@ output "customers" {
 
 
 /*
-resource "networknext_seller" "test" {
-  name = "test"
-}
-
-resource "networknext_datacenter" "test" {
-  name = "test"
-  seller_id = networknext_seller.test.id
-  latitude = 100
-  longitude = 50
-}
-
-resource "networknext_relay_keypair" "test" {}
-
 resource "networknext_relay" "test" {
   name = "test.relay"
   datacenter_id = networknext_datacenter.test.id
@@ -66,6 +115,8 @@ resource "networknext_relay" "test" {
   public_key_base64=networknext_relay_keypair.test.public_key_base64
   private_key_base64=networknext_relay_keypair.test.private_key_base64
 }
+
+# ---------------------------------------------------------
 
 resource "networknext_route_shader" test {
   name = "test"
@@ -84,25 +135,6 @@ resource "networknext_buyer_datacenter_settings" "test" {
   buyer_id = networknext_buyer.test.id
   datacenter_id = networknext_datacenter.test.id
   enable_acceleration = true
-}
-
-/*
-data "networknext_customers" "test" {
-  depends_on = [
-    networknext_customer.test,
-  ]
-}
-
-data "networknext_sellers" "test" {
-  depends_on = [
-    networknext_seller.test,
-  ]
-}
-
-data "networknext_datacenters" "test" {
-  depends_on = [
-    networknext_datacenter.test,
-  ]
 }
 
 data "networknext_relays" "test" {
@@ -135,21 +167,6 @@ data "networknext_buyer_datacenter_settings" "test" {
 #  ]
 #}
 
-data "networknext_relay_keypairs" "test" {
-  depends_on = [
-    networknext_relay_keypairs.test,
-  ]
-}
-
-
-output "sellers" {
-  value = data.networknext_sellers.test
-}
-
-output "datacenters" {
-  value = data.networknext_datacenters.test
-}
-
 output "relays" {
   value = data.networknext_relays.test
 }
@@ -168,9 +185,5 @@ output "buyer_datacenter_settings" {
 
 #output "buyer_keypairs" {
 #  value = data.networknext_buyer_keypairs.test
-#}
-
-#output "relay_keypairs" {
-#  value = data.networknext_relay_keypairs.test
 #}
 */
