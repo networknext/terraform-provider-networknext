@@ -896,7 +896,7 @@ type ReadRouteShaderResponse struct {
 }
 
 type ReadRouteShadersResponse struct {
-    RouteShaders []RouteShaderData `json:"route_shader"`
+    RouteShaders []RouteShaderData `json:"route_shaders"`
     Error        string            `json:"error"`
 }
 

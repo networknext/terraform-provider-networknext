@@ -82,22 +82,41 @@ output "relay_keypairs" {
 
 # ---------------------------------------------------------
 
+resource "networknext_relay" "test" {
+  name = "test.relay"
+  datacenter_id = networknext_datacenter.test.id
+  public_ip = "127.0.0.1"
+  public_key_base64=networknext_relay_keypair.test.public_key_base64
+  private_key_base64=networknext_relay_keypair.test.private_key_base64
+}
 
+data "networknext_relays" "test" {
+  depends_on = [
+    networknext_relay.test,
+  ]
+}
 
+output "relays" {
+  value = data.networknext_relays.test
+}
 
+# ---------------------------------------------------------
 
+resource "networknext_route_shader" test {
+  name = "test"
+}
 
+data "networknext_route_shaders" "test" {
+  depends_on = [
+    networknext_route_shader.test,
+  ]
+}
 
+output "route_shaders" {
+  value = data.networknext_route_shaders.test
+}
 
-
-
-
-
-
-
-
-
-
+# ---------------------------------------------------------
 
 
 
@@ -108,19 +127,6 @@ output "relay_keypairs" {
 
 
 /*
-resource "networknext_relay" "test" {
-  name = "test.relay"
-  datacenter_id = networknext_datacenter.test.id
-  public_ip = "127.0.0.1"
-  public_key_base64=networknext_relay_keypair.test.public_key_base64
-  private_key_base64=networknext_relay_keypair.test.private_key_base64
-}
-
-# ---------------------------------------------------------
-
-resource "networknext_route_shader" test {
-  name = "test"
-}
 
 resource "networknext_buyer_keypair" "test" {}
 
@@ -137,17 +143,6 @@ resource "networknext_buyer_datacenter_settings" "test" {
   enable_acceleration = true
 }
 
-data "networknext_relays" "test" {
-  depends_on = [
-    networknext_relay.test,
-  ]
-}
-
-data "networknext_route_shaders" "test" {
-  depends_on = [
-    networknext_route_shader.test,
-  ]
-}
 
 data "networknext_buyers" "test" {
   depends_on = [
@@ -166,14 +161,6 @@ data "networknext_buyer_datacenter_settings" "test" {
 #    networknext_buyer_keypairs.test,
 #  ]
 #}
-
-output "relays" {
-  value = data.networknext_relays.test
-}
-
-output "route_shaders" {
-  value = data.networknext_route_shaders.test
-}
 
 output "buyers" {
   value = data.networknext_buyers.test
