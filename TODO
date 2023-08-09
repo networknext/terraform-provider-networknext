@@ -1,0 +1,51 @@
+DONE
+
+	Worked out how to run provider locally. Gross.
+
+	Customer is working but it seems if "debug" is omitted, it gets into a loop where it keeps trying to change debug value to 1.
+
+	What is going on with the debug flag for customers?
+
+	Fixed. Just needed defaults and to be marked computed.
+
+	There is a problem with relay keypair. It seems that the relay keypair create is not returning correct values?
+
+	Also, once the relay keypair is thought to be created, the api can't read it:
+
+		"The network next API returned an error: could not read relay keypair: pq: column "relay_keypair_id" does not exist"
+
+	Looks like the relay keypair resourec is totally fucked, but it looks like it's probably broken on the API side.
+
+	Relay keypair was totally broken. Making progress fixing it, I don't think it ever worked...
+
+	Yes. It was totally broken.
+
+	Relay resource looks fine.
+
+	Route shader resource creates, but the list of route shaders doesn't seem to be correct.
+
+	Copy paste bug in provider model.
+
+	Apply the same fixes to the buyer keypair
+
+	Buyer keypairs is returning NULL.
+
+	Wrong model data was set on buyer keypair post create. fixed.
+
+	All resources and data work fine.
+
+TODO
+
+	Add the relay keypair to the API func test. Clearly it was never properly tested.
+
+	Add buyer keypair to API func test as well.
+
+	-------------
+
+	Work out how to publish the provider
+
+	-------------
+
+	Implement a functional test using the published provider
+
+	-------------
