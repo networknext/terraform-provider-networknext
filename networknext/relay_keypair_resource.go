@@ -6,7 +6,6 @@ import (
     
     "github.com/hashicorp/terraform-plugin-framework/path"
     "github.com/hashicorp/terraform-plugin-framework/resource"
-    "github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
@@ -72,7 +71,7 @@ func (r *relayKeypairResource) Create(ctx context.Context, req resource.CreateRe
         return
     }
 
-    plan.Id = types.Int64Value(int64(response.RelayKeypair.RelayKeypairId))
+    RelayKeypairDataToModel(&response.RelayKeypair, &plan)
 
     diags = resp.State.Set(ctx, plan)
     resp.Diagnostics.Append(diags...)

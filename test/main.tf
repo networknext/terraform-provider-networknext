@@ -72,7 +72,7 @@ resource "networknext_relay_keypair" "test" {}
 
 data "networknext_relay_keypairs" "test" {
   depends_on = [
-    resource.networknext_relay_keypair.test,
+    networknext_relay_keypair.test,
   ]
 }
 
