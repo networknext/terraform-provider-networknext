@@ -36,6 +36,10 @@ DONE
 
 TODO
 
+	Update all api.go logs so they are one liner -- will work better with concurrency that way.
+
+	-------------
+
 	Add the relay keypair to the API func test. Clearly it was never properly tested.
 
 	Add buyer keypair to API func test as well.
