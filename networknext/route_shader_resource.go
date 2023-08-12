@@ -91,7 +91,7 @@ func (r *routeShaderResource) Read(ctx context.Context, req resource.ReadRequest
 
     response := ReadRouteShaderResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/route_shader/%x", int64(state.Id.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/route_shader/%d", int64(state.Id.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -175,7 +175,7 @@ func (r *routeShaderResource) Delete(ctx context.Context, req resource.DeleteReq
 
     var response UpdateRouteShaderResponse
 
-    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_route_shader/%x", uint64(id)), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_route_shader/%d", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

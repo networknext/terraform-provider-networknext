@@ -91,7 +91,7 @@ func (r *relayKeypairResource) Read(ctx context.Context, req resource.ReadReques
 
     response := ReadRelayKeypairResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/relay_keypair/%x", int64(state.Id.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/relay_keypair/%d", int64(state.Id.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -175,7 +175,7 @@ func (r *relayKeypairResource) Delete(ctx context.Context, req resource.DeleteRe
 
     var response UpdateRelayKeypairResponse
 
-    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_relay_keypair/%x", uint64(id)), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_relay_keypair/%d", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

@@ -92,7 +92,7 @@ func (r *datacenterResource) Read(ctx context.Context, req resource.ReadRequest,
 
     response := ReadDatacenterResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/datacenter/%x", int64(state.Id.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/datacenter/%d", int64(state.Id.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -176,7 +176,7 @@ func (r *datacenterResource) Delete(ctx context.Context, req resource.DeleteRequ
 
     var response UpdateDatacenterResponse
 
-    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_datacenter/%x", uint64(id)), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_datacenter/%d", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

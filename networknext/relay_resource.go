@@ -92,7 +92,7 @@ func (r *relayResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
     response := ReadRelayResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/relay/%x", int64(state.Id.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/relay/%d", int64(state.Id.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -176,7 +176,7 @@ func (r *relayResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 
     var response UpdateRelayResponse
 
-    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_relay/%x", uint64(id)), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_relay/%d", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

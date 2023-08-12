@@ -91,7 +91,7 @@ func (r *buyerKeypairResource) Read(ctx context.Context, req resource.ReadReques
 
     response := ReadBuyerKeypairResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer_keypair/%x", int64(state.Id.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer_keypair/%d", int64(state.Id.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(

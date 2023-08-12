@@ -92,7 +92,7 @@ func (r *buyerResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
     response := ReadBuyerResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer/%x", int64(state.Id.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer/%d", int64(state.Id.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -176,7 +176,7 @@ func (r *buyerResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 
     var response UpdateBuyerResponse
 
-    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_buyer/%x", uint64(id)), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_buyer/%d", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

@@ -89,7 +89,7 @@ func (r *buyerDatacenterSettingsResource) Read(ctx context.Context, req resource
 
     response := ReadBuyerDatacenterSettingsResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer_datacenter_settings/%x/%x", uint64(state.BuyerId.ValueInt64()), uint64(state.DatacenterId.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/buyer_datacenter_settings/%d/%d", uint64(state.BuyerId.ValueInt64()), uint64(state.DatacenterId.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -174,7 +174,7 @@ func (r *buyerDatacenterSettingsResource) Delete(ctx context.Context, req resour
 
     var response UpdateBuyerDatacenterSettingsResponse
 
-    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_buyer_datacenter_settings/%x/%x", uint64(buyerId), uint64(datacenterId)), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_buyer_datacenter_settings/%d/%d", uint64(buyerId), uint64(datacenterId)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(

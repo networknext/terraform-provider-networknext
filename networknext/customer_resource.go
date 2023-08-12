@@ -92,7 +92,7 @@ func (r *customerResource) Read(ctx context.Context, req resource.ReadRequest, r
 
     response := ReadCustomerResponse{}
 
-    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/customer/%x", int64(state.Id.ValueInt64())), &response)
+    err := r.client.GetJSON(ctx, fmt.Sprintf("admin/customer/%d", int64(state.Id.ValueInt64())), &response)
 
     if err != nil {        
         resp.Diagnostics.AddError(
@@ -176,7 +176,7 @@ func (r *customerResource) Delete(ctx context.Context, req resource.DeleteReques
 
     var response UpdateCustomerResponse
 
-    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_customer/%x", uint64(id)), &response)
+    err := r.client.Delete(ctx, fmt.Sprintf("admin/delete_customer/%d", uint64(id)), &response)
 
     if err != nil {
         resp.Diagnostics.AddError(
