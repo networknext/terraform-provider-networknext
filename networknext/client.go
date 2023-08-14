@@ -8,6 +8,7 @@ import (
     "time"
     "fmt"
     "io/ioutil"
+    "strings"
 
     "github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -26,7 +27,7 @@ func NewClient(ctx context.Context, hostname string, api_key string) (*Client, e
     if response == "Not Authorized" {
         return nil, fmt.Errorf("could not authenticate with the network next API")
     }
-    if response != "pong" {
+    if !strings.Contains(response, "pong") {
         return nil, fmt.Errorf("invalid response from network next API ping: '%s'", response)
     }
     return &client, nil
