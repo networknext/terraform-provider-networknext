@@ -17,11 +17,8 @@ Manages a seller.
 
 ### Required
 
-- `name` (String) The name of the seller. For example, "google", "amazon" or "akamai"
-
-### Optional
-
-- `customer_id` (Number) Optional. The id of the customer that this seller is associated with. Reserved for future functionality where customers can be both buyers and sellers. Defaults to 0.
+- `code` (String) Short seller code. For example, "google", "amazon" or "akamai"
+- `name` (String) The name of the seller. For example, "Google", "Amazon" or "Akamai"
 
 ### Read-Only
 

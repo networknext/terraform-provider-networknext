@@ -5,10 +5,10 @@ generate:
 
 install:
 	# FML
-	mkdir -p ~/.terraform.d/plugins/networknext.com/networknext/networknext/5.0.5/darwin_amd64
+	mkdir -p ~/.terraform.d/plugins/networknext.com/networknext/networknext/5.0.6/darwin_amd64
 	rm -rf test/.terraform*
 	rm -rf test/terraform*
-	GOBIN=~/.terraform.d/plugins/networknext.com/networknext/networknext/5.0.5/darwin_amd64 go install .
+	GOBIN=~/.terraform.d/plugins/networknext.com/networknext/networknext/5.0.6/darwin_amd64 go install .
 	cd test && terraform init
 
 test:

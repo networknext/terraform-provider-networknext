@@ -3,7 +3,7 @@ terraform {
   required_providers {
     networknext = {
       source = "networknext.com/networknext/networknext"
-      version = "5.0.3"
+      version = "5.0.6"
     }
   }
 }
@@ -15,26 +15,9 @@ provider "networknext" {
 
 # ---------------------------------------------------------
 
-resource "networknext_customer" "test" {
-  name = "Test Customer"
-  code = "test"
-  debug = true
-}
-
-data "networknext_customers" "test" {
-  depends_on = [
-    networknext_customer.test,
-  ]
-}
-
-output "customers" {
-  value = data.networknext_customers.test
-}
-
-# ---------------------------------------------------------
-
 resource "networknext_seller" "test" {
-  name = "test"
+  name = "Test"
+  code = "test"
 }
 
 data "networknext_sellers" "test" {
@@ -50,7 +33,7 @@ output "sellers" {
 # ---------------------------------------------------------
 
 resource "networknext_datacenter" "test" {
-  name = "test"
+  name = "Test"
   seller_id = networknext_seller.test.id
   latitude = 100
   longitude = 50
@@ -120,9 +103,11 @@ output "route_shaders" {
 
 resource "networknext_buyer" "test" {
   name = "Test Buyer"
-  customer_id = networknext_customer.test.id
+  code = "test"
   route_shader_id = networknext_route_shader.test.id
   public_key_base64 = "231208941298479184789"
+  live = true
+  debug = true
 }
 
 data "networknext_buyers" "test" {

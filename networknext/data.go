@@ -14,148 +14,16 @@ import (
 
 // -------------------------------------------------------------------
 
-type CustomerData struct {
-    CustomerId   uint64 `json:"customer_id"`
-    CustomerName string `json:"customer_name"`
-    CustomerCode string `json:"customer_code"`
-    Live         bool   `json:"live"`
-    Debug        bool   `json:"debug"`
-}
-
-type CustomersModel struct {
-    Customers []CustomerModel `tfsdk:"customers"`
-}
-
-type CustomerModel struct {
-    Id    types.Int64  `tfsdk:"id"`
-    Name  types.String `tfsdk:"name"`
-    Code  types.String `tfsdk:"code"`
-    Live  types.Bool   `tfsdk:"live"`
-    Debug types.Bool   `tfsdk:"debug"`
-}
-
-type CreateCustomerResponse struct {
-    Customer CustomerData `json:"customer"`
-    Error    string       `json:"error"`
-}
-
-type ReadCustomerResponse struct {
-    Customer CustomerData `json:"customer"`
-    Error    string       `json:"error"`
-}
-
-type ReadCustomersResponse struct {
-    Customers []CustomerData `json:"customers"`
-    Error     string         `json:"error"`
-}
-
-type UpdateCustomerResponse struct {
-    Customer CustomerData `json:"customer"`
-    Error    string       `json:"error"`
-}
-
-type DeleteCustomerResponse struct {
-    Error    string       `json:"error"`
-}
-
-func CustomerModelToData(model *CustomerModel, data *CustomerData) {
-    data.CustomerId = uint64(model.Id.ValueInt64())
-    data.CustomerName = model.Name.ValueString()
-    data.CustomerCode = model.Code.ValueString()
-    data.Live = model.Live.ValueBool()
-    data.Debug = model.Debug.ValueBool()    
-}
-
-func CustomerDataToModel(data *CustomerData, model *CustomerModel) {
-    model.Id = types.Int64Value(int64(data.CustomerId))
-    model.Name = types.StringValue(data.CustomerName)
-    model.Code = types.StringValue(data.CustomerCode)
-    model.Live = types.BoolValue(data.Live)
-    model.Debug = types.BoolValue(data.Debug)
-}
-
-func CustomerSchema() schema.Schema {
-    return schema.Schema{
-        Description: "Manages a customer.",
-        Attributes: map[string]schema.Attribute{
-            "id": schema.Int64Attribute{
-                Description: "The id of the customer. Automatically generated when customers are created.",
-                Computed: true,
-                PlanModifiers: []planmodifier.Int64{
-                    int64planmodifier.UseStateForUnknown(),
-                },
-            },
-            "name": schema.StringAttribute{
-                Description: "The name of the customer. For example, \"Epic Games\", \"Valve\" or \"Riot\".",
-                Required: true,
-            },
-            "code": schema.StringAttribute{
-                Description: "Short customer code. For example, \"epic\", \"valve\" or \"riot\"", 
-                Required: true,
-            },
-            "live": schema.BoolAttribute{
-                Description: "If true then the customer is live and can use network next.", 
-                Optional: true,
-                Computed: true,
-                Default: booldefault.StaticBool(true),
-            },
-            "debug": schema.BoolAttribute{
-                Description: "If true then additional debug information is displayed in the network next client to assist with debugging.", 
-                Optional: true,
-                Computed: true,
-                Default: booldefault.StaticBool(false),
-            },
-        },
-    }
-}
-
-func CustomersSchema() datasource_schema.Schema {
-    return datasource_schema.Schema{
-        Description: "Fetches the list of customers.",
-        Attributes: map[string]datasource_schema.Attribute{
-            "customers": datasource_schema.ListNestedAttribute{
-                Computed: true,
-                NestedObject: datasource_schema.NestedAttributeObject{
-                    Attributes: map[string]datasource_schema.Attribute{
-                        "id": datasource_schema.Int64Attribute{
-                            Description: "The id of the customer. Automatically generated when customers are created.",
-                            Computed: true,
-                        },
-                        "name": datasource_schema.StringAttribute{
-                            Description: "The name of the customer. For example, \"Epic Games\", \"Valve\" or \"Riot\".",
-                            Computed: true,
-                        },
-                        "code": datasource_schema.StringAttribute{
-                            Description: "Short customer code. For example, \"epic\", \"valve\" or \"riot\"", 
-                            Computed: true,
-                        },
-                        "live": datasource_schema.BoolAttribute{
-                            Description: "If true then the customer is live and can use network next.", 
-                            Computed: true,
-                        },
-                        "debug": datasource_schema.BoolAttribute{
-                            Description: "If true then additional debug information is displayed in the network next client to assist with debugging.", 
-                            Computed: true,
-                        },
-                    },
-                },
-            },
-        },
-    }
-}
-
-// -------------------------------------------------------------------
-
 type SellerData struct {
     SellerId         uint64 `json:"seller_id"`
     SellerName       string `json:"seller_name"`
-    CustomerId      uint64 `json:"customer_id"`
+    SellerCode       string `json:"seller_code"`
 }
 
 type SellerModel struct {
     Id              types.Int64  `tfsdk:"id"`
     Name            types.String `tfsdk:"name"`
-    CustomerId      types.Int64  `tfsdk:"customer_id"`
+    Code            types.String `tfsdk:"code"`
 }
 
 type SellersModel struct {
@@ -180,13 +48,13 @@ type UpdateSellerResponse struct {
 func SellerDataToModel(data *SellerData, model *SellerModel) {
     model.Id = types.Int64Value(int64(data.SellerId))
     model.Name = types.StringValue(data.SellerName)
-    model.CustomerId = types.Int64Value(int64(data.CustomerId))
+    model.Code = types.StringValue(data.SellerCode)
 }
 
 func SellerModelToData(model *SellerModel, data *SellerData) {
     data.SellerId = uint64(model.Id.ValueInt64())
     data.SellerName = model.Name.ValueString()
-    data.CustomerId = uint64(model.CustomerId.ValueInt64())    
+    data.SellerCode = model.Code.ValueString()
 }
 
 func SellerSchema() schema.Schema {
@@ -201,14 +69,12 @@ func SellerSchema() schema.Schema {
                 },
             },
             "name": schema.StringAttribute{
-                Description: "The name of the seller. For example, \"google\", \"amazon\" or \"akamai\"", 
+                Description: "The name of the seller. For example, \"Google\", \"Amazon\" or \"Akamai\"", 
                 Required: true,
             },
-            "customer_id": schema.Int64Attribute{
-                Description: "Optional. The id of the customer that this seller is associated with. Reserved for future functionality where customers can be both buyers and sellers. Defaults to 0.", 
-                Optional: true,
-                Computed: true,
-                Default: int64default.StaticInt64(0),
+            "code": schema.StringAttribute{
+                Description: "Short seller code. For example, \"google\", \"amazon\" or \"akamai\"", 
+                Required: true,
             },
         },
     }
@@ -227,11 +93,11 @@ func SellersSchema() datasource_schema.Schema {
                             Computed: true,
                         },
                         "name": schema.StringAttribute{
-                            Description: "The name of the seller. For example, \"google\", \"amazon\" or \"akamai\"", 
+                            Description: "The name of the seller. For example, \"Google\", \"Amazon\" or \"Akamai\"", 
                             Computed: true,
                         },
-                        "customer_id": schema.Int64Attribute{
-                            Description: "Optional. The id of the customer that this seller is associated with. Reserved for future functionality where customers can be both buyers and sellers. Defaults to 0.", 
+                        "code": schema.StringAttribute{
+                            Description: "A short code for the seller. For example, \"google\", \"amazon\" or \"akamai\"", 
                             Computed: true,
                         },
                     },
@@ -246,17 +112,21 @@ func SellersSchema() datasource_schema.Schema {
 type BuyerData struct {
     BuyerId         uint64 `json:"buyer_id"`
     BuyerName       string `json:"buyer_name"`
+    BuyerCode       string `json:"buyer_code"`
     PublicKeyBase64 string `json:"public_key_base64"`
-    CustomerId      uint64 `json:"customer_id"`
     RouteShaderId   uint64 `json:"route_shader_id"`
+    Live            bool   `json:"live"`
+    Debug           bool   `json:"debug"`
 }
 
 type BuyerModel struct {
     Id              types.Int64  `tfsdk:"id"`
     Name            types.String `tfsdk:"name"`
+    Code            types.String `tfsdk:"code"`
     PublicKeyBase64 types.String `tfsdk:"public_key_base64"`
-    CustomerId      types.Int64  `tfsdk:"customer_id"`
     RouteShaderId   types.Int64  `tfsdk:"route_shader_id"`
+    Live            types.Bool   `tfsdk:"live"`
+    Debug           types.Bool   `tfsdk:"debug"`
 }
 
 type BuyersModel struct {
@@ -290,17 +160,21 @@ type DeleteBuyerResponse struct {
 func BuyerDataToModel(data *BuyerData, model *BuyerModel) {
     model.Id = types.Int64Value(int64(data.BuyerId))
     model.Name = types.StringValue(data.BuyerName)
+    model.Code = types.StringValue(data.BuyerCode)
     model.PublicKeyBase64 = types.StringValue(data.PublicKeyBase64)
-    model.CustomerId = types.Int64Value(int64(data.CustomerId))
     model.RouteShaderId = types.Int64Value(int64(data.RouteShaderId))
+    model.Live = types.BoolValue(data.Live)
+    model.Debug = types.BoolValue(data.Debug)
 }   
 
 func BuyerModelToData(model *BuyerModel, data *BuyerData) {
     data.BuyerId = uint64(model.Id.ValueInt64())
     data.BuyerName = model.Name.ValueString()
+    data.BuyerCode = model.Code.ValueString()
     data.PublicKeyBase64 = model.PublicKeyBase64.ValueString()
-    data.CustomerId = uint64(model.CustomerId.ValueInt64())
     data.RouteShaderId = uint64(model.RouteShaderId.ValueInt64())
+    data.Live = model.Live.ValueBool()
+    data.Debug = model.Debug.ValueBool()
 }
 
 func BuyerSchema() schema.Schema {
@@ -315,21 +189,33 @@ func BuyerSchema() schema.Schema {
                 },
             },
             "name": schema.StringAttribute{
-                Description: "The name of the buyer. For example, \"riot\", \"valve\" or \"respawn\"", 
+                Description: "The name of the buyer. For example, \"Riot Games\", \"Valve\" or \"Respawn Entertainment\"", 
+                Required: true,
+            },
+            "code": schema.StringAttribute{
+                Description: "A short buyer code. For example, \"riot\", \"valve\" or \"respawn\"", 
                 Required: true,
             },
             "public_key_base64": schema.StringAttribute{
                 Description: "The buyer public key base64 string. To generate a keypair run 'keygen' in the SDK. Keep the private portion secret, and paste the public key into this field for the buyer.", 
                 Required: true,
             },
-            "customer_id": schema.Int64Attribute{
-                Description: "The id of the customer this buyer is linked to.", 
-                Required: true,
-            },
             "route_shader_id": schema.Int64Attribute{
                 Description: "The id of the route shader for this buyer. The route shader configures when to accelerate traffic for this buyer.", 
                 Required: true,
             },
+            "live": schema.BoolAttribute{
+                Description: "If true then the buyer is live and can use network next.",
+                Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(true),
+            },
+            "debug": schema.BoolAttribute{
+                Description: "If true then additional debug information is displayed in the network next client to assist with debugging.",
+                Optional: true,
+                Computed: true,
+                Default: booldefault.StaticBool(false),
+            },    
         },
     }    
 }
@@ -347,22 +233,33 @@ func BuyersSchema() datasource_schema.Schema {
                             Computed: true,
                         },
                         "name": schema.StringAttribute{
-                            Description: "The name of the buyer. For example, \"riot\", \"valve\" or \"respawn\"", 
+                            Description: "The name of the buyer. For example, \"Riot Games\", \"Valve\" or \"Respawn Entertainment\"", 
+                            Computed: true,
+                        },
+                        "code": schema.StringAttribute{
+                            Description: "Short buyer code. For example, \"riot\", \"valve\" or \"respawn\"", 
                             Computed: true,
                         },
                         "public_key_base64": schema.StringAttribute{
                             Description: "The buyer public key base64 string. To generate a keypair run 'keygen' in the SDK. Keep the private portion secret, and paste the public key into this field for the buyer.", 
                             Computed: true,
                         },
-                        "customer_id": schema.Int64Attribute{
-            
-                            Description: "The id of the customer this buyer is linked to.", 
-                            Computed: true,
-                        },
                         "route_shader_id": schema.Int64Attribute{
                             Description: "The id of the route shader for this buyer. The route shader configures when to accelerate traffic for this buyer.", 
                             Computed: true,
                         },
+                        "live": schema.BoolAttribute{
+                            Description: "If true then the buyer is live and can use network next.",
+                            Optional: true,
+                            Computed: true,
+                            Default: booldefault.StaticBool(true),
+                        },
+                        "debug": schema.BoolAttribute{
+                            Description: "If true then additional debug information is displayed in the network next client to assist with debugging.",
+                            Optional: true,
+                            Computed: true,
+                            Default: booldefault.StaticBool(false),
+                        },    
                     },
                 },
             },

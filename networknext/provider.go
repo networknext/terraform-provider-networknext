@@ -151,7 +151,6 @@ func (p *networknextProvider) Configure(ctx context.Context, req provider.Config
 
 func (p *networknextProvider) DataSources(_ context.Context) []func() datasource.DataSource {
     return []func() datasource.DataSource {
-        NewCustomersDataSource,
         NewBuyersDataSource,
         NewSellersDataSource,
         NewDatacentersDataSource,
@@ -164,7 +163,6 @@ func (p *networknextProvider) DataSources(_ context.Context) []func() datasource
 
 func (p *networknextProvider) Resources(_ context.Context) []func() resource.Resource {
     return []func() resource.Resource {
-        NewCustomerResource,
         NewSellerResource,
         NewBuyerResource,
         NewDatacenterResource,

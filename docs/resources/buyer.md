@@ -17,10 +17,15 @@ Manages a buyer.
 
 ### Required
 
-- `customer_id` (Number) The id of the customer this buyer is linked to.
-- `name` (String) The name of the buyer. For example, "riot", "valve" or "respawn"
+- `code` (String) A short buyer code. For example, "riot", "valve" or "respawn"
+- `name` (String) The name of the buyer. For example, "Riot Games", "Valve" or "Respawn Entertainment"
 - `public_key_base64` (String) The buyer public key base64 string. To generate a keypair run 'keygen' in the SDK. Keep the private portion secret, and paste the public key into this field for the buyer.
 - `route_shader_id` (Number) The id of the route shader for this buyer. The route shader configures when to accelerate traffic for this buyer.
+
+### Optional
+
+- `debug` (Boolean) If true then additional debug information is displayed in the network next client to assist with debugging.
+- `live` (Boolean) If true then the buyer is live and can use network next.
 
 ### Read-Only
 
