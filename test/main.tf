@@ -3,14 +3,14 @@ terraform {
   required_providers {
     networknext = {
       source = "networknext.com/networknext/networknext"
-      version = "5.0.6"
+      version = "5.0.7"
     }
   }
 }
 
 provider "networknext" {
-  hostname = "http://localhost:50000"
-  api_key  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZGF0YWJhc2UiOnRydWUsInBvcnRhbCI6dHJ1ZX0.QFPdb-RcP8wyoaOIBYeB_X6uA7jefGPVxm2VevJvpwU"
+  hostname = "https://api-dev.virtualgo.net"
+  api_key  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwicG9ydGFsIjp0cnVlLCJpc3MiOiJuZXh0IGtleWdlbiIsImlhdCI6MTcyOTc5MjUwNH0.C4MgcHkTa98uYqALSrgidUGI_97g6Nvu8zsW4dhjah0"
 }
 
 # ---------------------------------------------------------
@@ -105,7 +105,7 @@ resource "networknext_buyer" "test" {
   name = "Test Buyer"
   code = "test"
   route_shader_id = networknext_route_shader.test.id
-  public_key_base64 = "231208941298479184789"
+  public_key_base64 = "2zphaxziT6mWaU9wYbUJ4R2WY4kmrci3gqNpUWv30wiC9lSn9PHbhQ=="
   live = true
   debug = true
 }

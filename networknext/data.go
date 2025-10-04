@@ -442,6 +442,7 @@ type RelayData struct {
     MRC              int    `json:"mrc"`
     PortSpeed        int    `json:"port_speed"`
     MaxSessions      int    `json:"max_sessions"`
+    BandwidthPrice   int    `json:"bandwidth_price"`
     Notes            string `json:"notes"`
 }
 
@@ -463,6 +464,7 @@ type RelayModel struct {
     MRC              types.Int64   `tfsdk:"mrc"`
     PortSpeed        types.Int64   `tfsdk:"port_speed"`
     MaxSessions      types.Int64   `tfsdk:"max_sessions"`
+    BandwidthPrice   types.Int64   `tfsdk:"bandwidth_price"`
     Notes            types.String  `tfsdk:"notes"`
 }
 
@@ -512,6 +514,7 @@ func RelayModelToData(model *RelayModel, data *RelayData) {
     data.MRC = int(model.MRC.ValueInt64())
     data.PortSpeed = int(model.PortSpeed.ValueInt64())
     data.MaxSessions = int(model.MaxSessions.ValueInt64())
+    data.BandwidthPrice = int(model.BandwidthPrice.ValueInt64())
     data.Notes = model.Notes.ValueString()
 }
 
@@ -533,6 +536,7 @@ func RelayDataToModel(data *RelayData, model *RelayModel) {
     model.MRC = types.Int64Value(int64(data.MRC))
     model.PortSpeed = types.Int64Value(int64(data.PortSpeed))
     model.MaxSessions = types.Int64Value(int64(data.MaxSessions))
+    model.BandwidthPrice = types.Int64Value(int64(data.BandwidthPrice))
     model.Notes = types.StringValue(data.Notes)
 }
 
@@ -633,6 +637,12 @@ func RelaySchema() schema.Schema {
                 Computed: true,
                 Default: int64default.StaticInt64(0),
             },
+            "bandwidth_price": schema.Int64Attribute{
+                Description: "An integer value representing the bandwidth price for this relay. Used to prefer cheaper bare metal routes over more expensive cloud routes.",
+                Optional: true,
+                Computed: true,
+                Default: int64default.StaticInt64(0),
+            },
             "notes": schema.StringAttribute{
                 Description: "Optional free form notes to store information about this relay.",
                 Optional: true,
@@ -717,6 +727,10 @@ func RelaysSchema() datasource_schema.Schema {
                         },
                         "max_sessions": datasource_schema.Int64Attribute{
                             Description: "The maximum number of sessions allowed across this relay at any time. Once this number is exceeded, the network next backend will not send additional sessions across this relay. Default is zero which means unlimited.",
+                            Computed: true,
+                        },
+                        "bandwidth_price": datasource_schema.Int64Attribute{
+                            Description: "An integer value representing the bandwidth price for this relay. Used to prefer cheaper bare metal routes over more expensive cloud routes.",
                             Computed: true,
                         },
                         "notes": datasource_schema.StringAttribute{

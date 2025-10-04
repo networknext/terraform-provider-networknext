@@ -29,6 +29,7 @@ Optional:
 
 Read-Only:
 
+- `code` (String) Short buyer code. For example, "riot", "valve" or "respawn"
 - `id` (Number) The id of the buyer. Automatically generated when buyers are created.
 - `name` (String) The name of the buyer. For example, "Riot Games", "Valve" or "Respawn Entertainment"
 - `public_key_base64` (String) The buyer public key base64 string. To generate a keypair run 'keygen' in the SDK. Keep the private portion secret, and paste the public key into this field for the buyer.
