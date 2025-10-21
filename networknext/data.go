@@ -751,22 +751,16 @@ type RouteShaderData struct {
     RouteShaderName                 string      `json:"route_shader_name"`
     ABTest                          bool        `json:"ab_test"`
     AcceptableLatency               int         `json:"acceptable_latency"`
-    AcceptablePacketLossInstant     float64     `json:"acceptable_packet_loss_instant"`
-    AcceptablePacketLossSustained   float64     `json:"acceptable_packet_loss_sustained"`
-    AnalysisOnly                    bool        `json:"analysis_only"`
+    AcceptablePacketLoss            float64     `json:"acceptable_packet_loss"`
     BandwidthEnvelopeUpKbps         int         `json:"bandwidth_envelope_up_kbps"`
     BandwidthEnvelopeDownKbps       int         `json:"bandwidth_envelope_down_kbps"`
     DisableNetworkNext              bool        `json:"disable_network_next"`
     LatencyReductionThreshold       int         `json:"latency_reduction_threshold"`
-    Multipath                       bool        `json:"multipath"`
     SelectionPercent                float64     `json:"selection_percent"`
     MaxLatencyTradeOff              int         `json:"max_latency_trade_off"`
-    MaxNextRTT                      int         `json:"max_next_rtt"`
     RouteSwitchThreshold            int         `json:"route_switch_threshold"`
     RouteSelectThreshold            int         `json:"route_select_threshold"`
-    RTTVeto                         int         `json:"rtt_veto"`
     ForceNext                       bool        `json:"force_next"`
-    RouteDiversity                  int         `json:"route_diversity"`
 }
 
 type RouteShaderModel struct {
@@ -774,22 +768,16 @@ type RouteShaderModel struct {
     Name                            types.String  `tfsdk:"name"`
     ABTest                          types.Bool    `tfsdk:"ab_test"`
     AcceptableLatency               types.Int64   `tfsdk:"acceptable_latency"`
-    AcceptablePacketLossInstant     types.Float64 `tfsdk:"acceptable_packet_loss_instant"`
-    AcceptablePacketLossSustained   types.Float64 `tfsdk:"acceptable_packet_loss_sustained"`
-    AnalysisOnly                    types.Bool    `tfsdk:"analysis_only"`
+    AcceptablePacketLoss            types.Float64 `tfsdk:"acceptable_packet_loss"`
     BandwidthEnvelopeUpKbps         types.Int64   `tfsdk:"bandwidth_envelope_up_kbps"`
     BandwidthEnvelopeDownKbps       types.Int64   `tfsdk:"bandwidth_envelope_down_kbps"`
     DisableNetworkNext              types.Bool    `tfsdk:"disable_network_next"`
     LatencyReductionThreshold       types.Int64   `tfsdk:"latency_reduction_threshold"`
-    Multipath                       types.Bool    `tfsdk:"multipath"`
     SelectionPercent                types.Float64 `tfsdk:"selection_percent"`
     MaxLatencyTradeOff              types.Int64   `tfsdk:"max_latency_trade_off"`
-    MaxNextRTT                      types.Int64   `tfsdk:"max_next_rtt"`
     RouteSwitchThreshold            types.Int64   `tfsdk:"route_switch_threshold"`
     RouteSelectThreshold            types.Int64   `tfsdk:"route_select_threshold"`
-    RTTVeto                         types.Int64   `tfsdk:"rtt_veto"`
     ForceNext                       types.Bool    `tfsdk:"force_next"`
-    RouteDiversity                  types.Int64   `tfsdk:"route_diversity"`
 }
 
 type RouteShadersModel struct {
@@ -825,22 +813,16 @@ func RouteShaderDataToModel(data *RouteShaderData, model *RouteShaderModel) {
     model.Name = types.StringValue(data.RouteShaderName)
     model.ABTest = types.BoolValue(data.ABTest)
     model.AcceptableLatency = types.Int64Value(int64(data.AcceptableLatency))
-    model.AcceptablePacketLossInstant = types.Float64Value(float64(data.AcceptablePacketLossInstant))
-    model.AcceptablePacketLossSustained = types.Float64Value(float64(data.AcceptablePacketLossSustained))
-    model.AnalysisOnly = types.BoolValue(data.AnalysisOnly)
+    model.AcceptablePacketLoss = types.Float64Value(float64(data.AcceptablePacketLoss))
     model.BandwidthEnvelopeUpKbps = types.Int64Value(int64(data.BandwidthEnvelopeUpKbps))
     model.BandwidthEnvelopeDownKbps = types.Int64Value(int64(data.BandwidthEnvelopeDownKbps))
     model.DisableNetworkNext = types.BoolValue(data.DisableNetworkNext)
     model.LatencyReductionThreshold = types.Int64Value(int64(data.LatencyReductionThreshold))
-    model.Multipath = types.BoolValue(data.Multipath)
     model.SelectionPercent = types.Float64Value(float64(data.SelectionPercent))
     model.MaxLatencyTradeOff = types.Int64Value(int64(data.MaxLatencyTradeOff))
-    model.MaxNextRTT = types.Int64Value(int64(data.MaxNextRTT))
     model.RouteSwitchThreshold = types.Int64Value(int64(data.RouteSwitchThreshold))
     model.RouteSelectThreshold = types.Int64Value(int64(data.RouteSelectThreshold))
-    model.RTTVeto = types.Int64Value(int64(data.RTTVeto))
     model.ForceNext = types.BoolValue(data.ForceNext)
-    model.RouteDiversity = types.Int64Value(int64(data.RouteDiversity))
 }
 
 func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
@@ -848,22 +830,16 @@ func RouteShaderModelToData(model *RouteShaderModel, data *RouteShaderData) {
     data.RouteShaderName = model.Name.ValueString()
     data.ABTest = model.ABTest.ValueBool()
     data.AcceptableLatency = int(model.AcceptableLatency.ValueInt64())
-    data.AcceptablePacketLossInstant = model.AcceptablePacketLossInstant.ValueFloat64()
-    data.AcceptablePacketLossSustained = model.AcceptablePacketLossSustained.ValueFloat64()
-    data.AnalysisOnly = model.AnalysisOnly.ValueBool()
+    data.AcceptablePacketLoss = model.AcceptablePacketLoss.ValueFloat64()
     data.BandwidthEnvelopeUpKbps = int(model.BandwidthEnvelopeUpKbps.ValueInt64())
     data.BandwidthEnvelopeDownKbps = int(model.BandwidthEnvelopeDownKbps.ValueInt64())
     data.DisableNetworkNext = model.DisableNetworkNext.ValueBool()
     data.LatencyReductionThreshold = int(model.LatencyReductionThreshold.ValueInt64())
-    data.Multipath = model.Multipath.ValueBool()
     data.SelectionPercent = model.SelectionPercent.ValueFloat64()
     data.MaxLatencyTradeOff = int(model.MaxLatencyTradeOff.ValueInt64())
-    data.MaxNextRTT = int(model.MaxNextRTT.ValueInt64())
     data.RouteSwitchThreshold = int(model.RouteSwitchThreshold.ValueInt64())
     data.RouteSelectThreshold = int(model.RouteSelectThreshold.ValueInt64())
-    data.RTTVeto = int(model.RTTVeto.ValueInt64())
     data.ForceNext = model.ForceNext.ValueBool()
-    data.RouteDiversity = int(model.RouteDiversity.ValueInt64())
 }
 
 func RouteShaderSchema() schema.Schema {
@@ -893,23 +869,11 @@ func RouteShaderSchema() schema.Schema {
                 Computed: true,
                 Default: int64default.StaticInt64(20),
             },
-            "acceptable_packet_loss_instant": schema.Float64Attribute{
-                Description: "The instantaneous packet loss that is acceptable. For example, setting to 1%% will allow packet loss up to 1%% in a 10 second period before enabling acceleration. Default is 0.25%%",
+            "acceptable_packet_loss": schema.Float64Attribute{
+                Description: "The packet loss that is acceptable. For example, setting to 1%% will allow packet loss up to 1%% before enabling acceleration. Default is 0.25%%",
                 Optional: true,
                 Computed: true,
                 Default: float64default.StaticFloat64(0.25),
-            },
-            "acceptable_packet_loss_sustained": schema.Float64Attribute{
-                Description: "The sustained packet loss that is acceptable. For example, setting to 0.1%% will allow packet loss up to 0.1%% in a 30 second period before enabling acceleration. Default is 0.1%%",
-                Optional: true,
-                Computed: true,
-                Default: float64default.StaticFloat64(0.1),
-            },
-            "analysis_only": schema.BoolAttribute{
-                Description: "Set this to true and acceleration is disabled. Analytics data will still be gathered from players of any buyer who use this route shader. Use this when you want to gather network perforance data for players, but you want accelerated turned off. Default is false.",
-                Optional: true,
-                Computed: true,
-                Default: booldefault.StaticBool(false),
             },
             "bandwidth_envelope_up_kbps": schema.Int64Attribute{
                 Description: "The maximum amount of acceleration bandwidth up in the client to server direction in kilobits per-second (kbps). Exceeding this amount of bandwidth for a session will result in packets above the limit not being accelerated. Default value is 1024 (1mbps).",
@@ -935,12 +899,6 @@ func RouteShaderSchema() schema.Schema {
                 Computed: true,
                 Default: int64default.StaticInt64(10),
             },
-            "multipath": schema.BoolAttribute{
-                Description: "If this is set to true then packets will be sent across the direct route (default internet path), as well as the network next path when a player is accelerated. Recommend setting this to true always. Default value is true.",
-                Optional: true,
-                Computed: true,
-                Default: booldefault.StaticBool(true),
-            },
             "selection_percent": schema.Float64Attribute{
                 Description: "The percentage of players eligible for acceleration. For example, setting this to 10%% would only accelerate 1 in 10 players. Default value is 100%% (all players eligible for acceleration).",
                 Optional: true,
@@ -952,12 +910,6 @@ func RouteShaderSchema() schema.Schema {
                 Optional: true,
                 Computed: true,
                 Default: int64default.StaticInt64(20),
-            },
-            "max_next_rtt": schema.Int64Attribute{
-                Description: "The maximum network next latency allowed. There is no point patting yourself on the back when you reduce 500ms latency to 450ms. 450ms is still completely unplayable! Set this value to the maximum reasonable accelerated latency that makes sense for your game. Network Next will not accelerate a player if their predicted post-acceleration latency is higher than this value. Default value is 250ms.",
-                Optional: true,
-                Computed: true,
-                Default: int64default.StaticInt64(250),
             },
             "route_switch_threshold": schema.Int64Attribute{
                 Description: "If a player is already being accelerated, and a better route is available with a reduction of at least this much milliseconds from the current route, then switch to it. Don't set this too low or sessions will switch routes every 10 seconds due to natural fluctuation. Default value is 10ms.",
@@ -971,23 +923,11 @@ func RouteShaderSchema() schema.Schema {
                 Computed: true,
                 Default: int64default.StaticInt64(5),
             },
-            "rtt_veto": schema.Int64Attribute{
-                Description: "If the accelerated latency becomes worse than the direct latency (default internet route) by this amount of milliseconds, then veto the session and stop accelerating the player. This is to avoid players hopping on/off of network next when latency fluctuation occurs. Don't set this too low, or players with fluctuating latency (due to edge issues or wifi) will fall off network next due to temporary high latency conditions. Default value is 20ms.",
-                Optional: true,
-                Computed: true,
-                Default: int64default.StaticInt64(20),
-            },
             "force_next": schema.BoolAttribute{
                 Description: "Force all players to be accelerated. This is useful for testing, or if you have a small professional player base for whom you want to enable acceleration BEFORE anything goes wrong, instead of being reactive and only accelerating them after something goes wrong. Default is false.",
                 Optional: true,
                 Computed: true,
                 Default: booldefault.StaticBool(false),
-            },
-            "route_diversity": schema.Int64Attribute{
-                Description: "The minimum amount of distinct viable routes that must be available for a player to be accelerated. This setting can be useful to limit players in remote regions from taking network next when there is only one relay available to them. Only players with mulitple distinct paths will be accelerated, so there are backups if one relay becomse unroutable for this player. Don't set this too high or players with bad edge network conditions won't get accelerated. Default value is 0.",
-                Optional: true,
-                Computed: true,
-                Default: int64default.StaticInt64(0),
             },
         },
     }
